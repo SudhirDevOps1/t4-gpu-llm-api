@@ -23,14 +23,14 @@
           },
           colors: {
             obsidian: {
-              950: '#07080a',
-              900: '#0c0e12',
-              850: '#11141a',
-              800: '#171b23',
-              750: '#1f242e',
-              700: '#2a313e',
+              950: 'var(--bg-main)',
+              900: 'var(--bg-surface)',
+              850: 'var(--bg-surface-elevated)',
+              800: 'var(--bg-surface-hover)',
+              750: 'var(--border-subtle)',
+              700: 'var(--border-strong)',
             },
-            accent: {
+            brand: {
               emerald: '#10b981',
               cyan: '#06b6d4',
               violet: '#8b5cf6',
@@ -39,19 +39,23 @@
             }
           },
           boxShadow: {
-            'glow-emerald': '0 0 25px -5px rgba(16, 185, 129, 0.25)',
-            'glow-cyan': '0 0 25px -5px rgba(6, 182, 212, 0.25)',
-            'glow-violet': '0 0 25px -5px rgba(139, 92, 246, 0.25)',
-            'inner-subtle': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.05)',
+            'glow-emerald': '0 0 25px -5px rgba(16, 185, 129, 0.3)',
+            'glow-cyan': '0 0 25px -5px rgba(6, 182, 212, 0.3)',
+            'glow-violet': '0 0 25px -5px rgba(139, 92, 246, 0.3)',
           },
           animation: {
             'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            'fade-up': 'fadeUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            'fade-up': 'fadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            'cursor-blink': 'blink 1s step-end infinite',
           },
           keyframes: {
             fadeUp: {
-              '0%': { opacity: '0', transform: 'translateY(10px)' },
+              '0%': { opacity: '0', transform: 'translateY(12px)' },
               '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            blink: {
+              '0%, 100%': { opacity: '1' },
+              '50%': { opacity: '0' },
             }
           }
         }
@@ -61,27 +65,58 @@
 
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- DOMPurify for Bulletproof XSS Protection -->
+  <!-- DOMPurify for XSS Protection -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.9/purify.min.js"></script>
   <!-- Marked Markdown Parser -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <!-- Highlight.js with Atom One Dark Skin -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  <!-- KaTeX for LaTeX Math -->
+  <!-- KaTeX for Math -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 
   <style>
+    /* Dynamic Theme Variables */
+    :root {
+      --bg-main: #07080a;
+      --bg-surface: #0d1015;
+      --bg-surface-elevated: #13171f;
+      --bg-surface-hover: #1a202c;
+      --border-subtle: #222938;
+      --border-strong: #2f384c;
+      --accent-color: #10b981;
+    }
+
+    body.theme-midnight {
+      --bg-main: #060913;
+      --bg-surface: #0a0f20;
+      --bg-surface-elevated: #101830;
+      --bg-surface-hover: #182244;
+      --border-subtle: #1f2c56;
+      --border-strong: #2d3f75;
+      --accent-color: #38bdf8;
+    }
+
+    body.theme-cyberpunk {
+      --bg-main: #08060d;
+      --bg-surface: #100b1a;
+      --bg-surface-elevated: #191228;
+      --bg-surface-hover: #231938;
+      --border-subtle: #332352;
+      --border-strong: #4d357a;
+      --accent-color: #a855f7;
+    }
+
     /* Custom Scrollbar */
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: #2a313e; border-radius: 9999px; }
-    ::-webkit-scrollbar-thumb:hover { background: #3b4455; }
+    ::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
 
     /* Radial Background Mesh */
     .bg-mesh {
-      background-color: #07080a;
+      background-color: var(--bg-main);
       background-image: 
         radial-gradient(at 50% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 65%),
         radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.04) 0px, transparent 50%),
@@ -91,19 +126,19 @@
     /* Code Window & Mac Dots */
     .code-window {
       border-radius: 0.875rem;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: #0f1217;
+      border: 1px solid var(--border-subtle);
+      background: #0b0d13;
       margin: 1rem 0;
       overflow: hidden;
-      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
     }
     .code-window-bar {
-      background: #141820;
+      background: #11141c;
       padding: 0.5rem 0.85rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      border-bottom: 1px solid var(--border-subtle);
     }
     .mac-dots {
       display: flex;
@@ -114,14 +149,14 @@
 
     /* Markdown Styling */
     .prose code { font-family: 'JetBrains Mono', monospace; font-size: 0.85em; }
-    .prose p { margin-bottom: 0.85rem; line-height: 1.7; }
+    .prose p { margin-bottom: 0.85rem; line-height: 1.75; }
     .prose p:last-child { margin-bottom: 0; }
-    .prose table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 1rem 0; font-size: 0.85rem; border-radius: 0.5rem; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); }
-    .prose th, .prose td { border-bottom: 1px solid rgba(255,255,255,0.08); padding: 0.65rem 0.85rem; text-align: left; }
-    .prose th { background: #171b23; font-weight: 600; color: #f3f4f6; }
+    .prose table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 1rem 0; font-size: 0.85rem; border-radius: 0.5rem; overflow: hidden; border: 1px solid var(--border-subtle); }
+    .prose th, .prose td { border-bottom: 1px solid var(--border-subtle); padding: 0.65rem 0.85rem; text-align: left; }
+    .prose th { background: var(--bg-surface-elevated); font-weight: 600; color: #f3f4f6; }
     .prose tr:last-child td { border-bottom: none; }
     .prose tr:nth-child(even) { background: rgba(255, 255, 255, 0.015); }
-    .prose blockquote { border-left: 3px solid #10b981; padding-left: 1rem; color: #9ca3af; font-style: italic; margin: 0.85rem 0; }
+    .prose blockquote { border-left: 3px solid var(--accent-color); padding-left: 1rem; color: #9ca3af; font-style: italic; margin: 0.85rem 0; }
     .prose a { color: #34d399; text-decoration: underline; text-underline-offset: 3px; font-weight: 500; }
     .prose ul, .prose ol { padding-left: 1.5rem; margin-bottom: 0.85rem; }
     .prose li { margin-bottom: 0.35rem; }
@@ -156,18 +191,27 @@
       line-height: 1.65;
       border-top: 1px solid rgba(56, 189, 248, 0.1);
     }
+    .streaming-cursor {
+      display: inline-block;
+      width: 6px;
+      height: 14px;
+      background-color: #10b981;
+      margin-left: 3px;
+      vertical-align: middle;
+      border-radius: 1px;
+    }
   </style>
 </head>
-<body class="bg-mesh text-zinc-100 h-screen flex overflow-hidden font-sans antialiased selection:bg-accent-emerald/30 selection:text-emerald-300">
+<body class="bg-mesh text-zinc-100 h-screen flex overflow-hidden font-sans antialiased selection:bg-brand-emerald/30 selection:text-emerald-300">
 
   <!-- Sidebar -->
-  <aside id="sidebar" class="w-80 bg-obsidian-900/95 backdrop-blur-xl border-r border-obsidian-750/70 flex flex-col transition-all duration-300 z-30 shrink-0 relative">
+  <aside id="sidebar" class="w-80 bg-obsidian-900/95 backdrop-blur-2xl border-r border-obsidian-750 flex flex-col transition-all duration-300 z-30 shrink-0 relative">
     
     <!-- Top Brand & Status -->
-    <div class="h-16 px-4 border-b border-obsidian-750/70 flex items-center justify-between">
+    <div class="h-16 px-4 border-b border-obsidian-750 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-accent-emerald via-teal-500 to-accent-cyan p-0.5 shadow-glow-emerald">
-          <div class="w-full h-full bg-obsidian-900 rounded-[10px] flex items-center justify-center font-bold text-accent-emerald text-sm">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-emerald via-teal-500 to-brand-cyan p-0.5 shadow-glow-emerald">
+          <div class="w-full h-full bg-obsidian-950 rounded-[10px] flex items-center justify-center font-bold text-brand-emerald text-sm">
             ⚡
           </div>
         </div>
@@ -181,10 +225,18 @@
           </div>
         </div>
       </div>
-      <button onclick="newChat()" class="text-xs bg-obsidian-800 hover:bg-obsidian-750 text-zinc-200 hover:text-white px-3 py-1.5 rounded-xl border border-obsidian-700/80 flex items-center gap-1.5 transition active:scale-95 shadow-sm font-medium" title="New Chat (Ctrl+O)">
-        <i data-lucide="plus" class="w-3.5 h-3.5 text-accent-emerald"></i>
+      <button onclick="newChat()" class="text-xs bg-obsidian-850 hover:bg-obsidian-800 text-zinc-200 hover:text-white px-3 py-1.5 rounded-xl border border-obsidian-750 flex items-center gap-1.5 transition active:scale-95 shadow-sm font-medium" title="New Chat (Ctrl+O)">
+        <i data-lucide="plus" class="w-3.5 h-3.5 text-brand-emerald"></i>
         <span>New</span>
       </button>
+    </div>
+
+    <!-- Live Cost Savings Pill -->
+    <div class="px-4 py-2 border-b border-obsidian-750/60 bg-gradient-to-r from-emerald-950/20 to-teal-950/20 flex items-center justify-between text-[11px] font-mono">
+      <span class="text-zinc-400 flex items-center gap-1">
+        <span>💰</span> Saved vs GPT-4o:
+      </span>
+      <span id="savingsCounter" class="text-brand-emerald font-bold">$0.00</span>
     </div>
 
     <!-- Search Conversations -->
@@ -192,7 +244,7 @@
       <div class="relative">
         <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-2.5 text-zinc-500"></i>
         <input id="searchChats" type="text" placeholder="Search chats... (Ctrl+K)" oninput="filterChats(this.value)"
-               class="w-full bg-obsidian-850/80 border border-obsidian-750 rounded-xl pl-9 pr-3 py-2 text-xs text-zinc-300 placeholder-zinc-500 focus:outline-none focus:border-accent-emerald focus:ring-1 focus:ring-accent-emerald/20 transition shadow-inner" />
+               class="w-full bg-obsidian-850/80 border border-obsidian-750 rounded-xl pl-9 pr-3 py-2 text-xs text-zinc-300 placeholder-zinc-500 focus:outline-none focus:border-brand-emerald focus:ring-1 focus:ring-brand-emerald/20 transition shadow-inner" />
       </div>
     </div>
 
@@ -200,29 +252,29 @@
     <div class="px-3 py-2.5 border-b border-obsidian-750/40 bg-obsidian-950/40">
       <div class="text-[10px] uppercase font-bold text-zinc-500 tracking-wider mb-2 px-1 flex items-center justify-between">
         <span>Expert Personas</span>
-        <span class="text-[9px] text-accent-emerald font-mono">1-Click</span>
+        <span class="text-[9px] text-brand-emerald font-mono">1-Click</span>
       </div>
       <div class="grid grid-cols-2 gap-1.5">
         <button onclick="applyPersona('architect')" class="p-2 rounded-lg bg-obsidian-850/70 hover:bg-obsidian-800 border border-obsidian-750/60 text-left transition group">
-          <div class="text-[11px] font-semibold text-zinc-300 group-hover:text-accent-emerald flex items-center gap-1">
+          <div class="text-[11px] font-semibold text-zinc-300 group-hover:text-brand-emerald flex items-center gap-1">
             <span>🏛️</span> Architect
           </div>
           <div class="text-[9px] text-zinc-500 truncate">System design & DB</div>
         </button>
         <button onclick="applyPersona('coder')" class="p-2 rounded-lg bg-obsidian-850/70 hover:bg-obsidian-800 border border-obsidian-750/60 text-left transition group">
-          <div class="text-[11px] font-semibold text-zinc-300 group-hover:text-accent-cyan flex items-center gap-1">
+          <div class="text-[11px] font-semibold text-zinc-300 group-hover:text-brand-cyan flex items-center gap-1">
             <span>💻</span> Coder Pro
           </div>
           <div class="text-[9px] text-zinc-500 truncate">Clean code & async</div>
         </button>
         <button onclick="applyPersona('auditor')" class="p-2 rounded-lg bg-obsidian-850/70 hover:bg-obsidian-800 border border-obsidian-750/60 text-left transition group">
-          <div class="text-[11px] font-semibold text-zinc-300 group-hover:text-accent-rose flex items-center gap-1">
+          <div class="text-[11px] font-semibold text-zinc-300 group-hover:text-brand-rose flex items-center gap-1">
             <span>🛡️</span> Security
           </div>
           <div class="text-[9px] text-zinc-500 truncate">Vulnerabilities & OWASP</div>
         </button>
         <button onclick="applyPersona('tester')" class="p-2 rounded-lg bg-obsidian-850/70 hover:bg-obsidian-800 border border-obsidian-750/60 text-left transition group">
-          <div class="text-[11px] font-semibold text-zinc-300 group-hover:text-accent-violet flex items-center gap-1">
+          <div class="text-[11px] font-semibold text-zinc-300 group-hover:text-brand-violet flex items-center gap-1">
             <span>🧪</span> QA & Tests
           </div>
           <div class="text-[9px] text-zinc-500 truncate">Pytest, Jest, Mocks</div>
@@ -239,21 +291,33 @@
       <div id="chatList" class="space-y-1 text-xs"></div>
     </div>
 
-    <!-- Footer Controls -->
-    <div class="p-3 border-t border-obsidian-750/70 bg-obsidian-950/60 flex items-center justify-between">
-      <button onclick="openSettingsModal()" class="flex items-center gap-2 text-xs text-zinc-400 hover:text-zinc-100 transition p-1.5 rounded-xl hover:bg-obsidian-800 font-medium">
-        <i data-lucide="sliders-horizontal" class="w-4 h-4 text-accent-emerald"></i>
-        <span>Settings & API</span>
-      </button>
+    <!-- Theme & Audio Quick Bar -->
+    <div class="px-4 py-2 border-t border-obsidian-750/50 bg-obsidian-950/40 flex items-center justify-between text-xs text-zinc-400">
+      <div class="flex items-center gap-1.5">
+        <button onclick="cycleTheme()" title="Switch Theme (Obsidian, Midnight, Cyberpunk)" class="p-1.5 hover:bg-obsidian-800 rounded-lg text-zinc-400 hover:text-white transition">
+          <i data-lucide="palette" class="w-4 h-4"></i>
+        </button>
+        <button onclick="toggleAudio()" id="audioBtn" title="Toggle Generation Sound" class="p-1.5 hover:bg-obsidian-800 rounded-lg text-brand-emerald transition">
+          <i data-lucide="volume-2" class="w-4 h-4"></i>
+        </button>
+      </div>
 
       <div class="flex items-center gap-1">
-        <button onclick="exportChatMarkdown()" title="Export Markdown" class="p-2 text-zinc-400 hover:text-white hover:bg-obsidian-800 rounded-lg transition">
+        <button onclick="exportChatMarkdown()" title="Export Markdown" class="p-1.5 text-zinc-400 hover:text-white hover:bg-obsidian-800 rounded-lg transition">
           <i data-lucide="file-down" class="w-4 h-4"></i>
         </button>
-        <button onclick="clearAllChats()" title="Clear All History" class="p-2 text-zinc-500 hover:text-rose-400 hover:bg-obsidian-800 rounded-lg transition">
+        <button onclick="clearAllChats()" title="Clear All History" class="p-1.5 text-zinc-500 hover:text-rose-400 hover:bg-obsidian-800 rounded-lg transition">
           <i data-lucide="trash" class="w-4 h-4"></i>
         </button>
       </div>
+    </div>
+
+    <!-- Footer Controls -->
+    <div class="p-3 border-t border-obsidian-750/70 bg-obsidian-950/70 flex items-center justify-between">
+      <button onclick="openSettingsModal()" class="flex-1 flex items-center justify-center gap-2 text-xs text-zinc-300 hover:text-white transition py-2 px-3 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 font-medium">
+        <i data-lucide="sliders-horizontal" class="w-4 h-4 text-brand-emerald"></i>
+        <span>Settings & Endpoints</span>
+      </button>
     </div>
   </aside>
 
@@ -271,7 +335,7 @@
         <div class="flex items-center gap-2">
           <div class="relative">
             <select id="quickModelSelect" onchange="switchModel(this.value)" 
-                    class="appearance-none bg-obsidian-850/90 border border-obsidian-700/80 hover:border-obsidian-600 rounded-xl pl-3.5 pr-8 py-2 text-xs font-mono font-medium text-emerald-400 focus:outline-none focus:ring-1 focus:ring-accent-emerald transition cursor-pointer shadow-sm">
+                    class="appearance-none bg-obsidian-850/90 border border-obsidian-700/80 hover:border-obsidian-600 rounded-xl pl-3.5 pr-8 py-2 text-xs font-mono font-medium text-emerald-400 focus:outline-none focus:ring-1 focus:ring-brand-emerald transition cursor-pointer shadow-sm">
               <optgroup label="Coding Models (SOTA)">
                 <option value="qwen2.5-coder:7b" selected>qwen2.5-coder:7b (Best Coding)</option>
                 <option value="qwen2.5-coder:1.5b">qwen2.5-coder:1.5b (Ultra Fast)</option>
@@ -302,8 +366,8 @@
       <!-- Realtime Token Metrics HUD -->
       <div class="flex items-center gap-3">
         <div id="metricsHUD" class="hidden sm:flex items-center gap-2.5 bg-obsidian-850/80 border border-obsidian-750 px-3.5 py-1.5 rounded-xl font-mono text-[11px] text-zinc-400 shadow-inner">
-          <span id="statTps" class="text-accent-emerald font-semibold flex items-center gap-1">
-            <i data-lucide="zap" class="w-3 h-3 text-accent-emerald"></i>
+          <span id="statTps" class="text-brand-emerald font-semibold flex items-center gap-1">
+            <i data-lucide="zap" class="w-3 h-3 text-brand-emerald"></i>
             <span>0.0 tok/s</span>
           </span>
           <span class="text-zinc-600">&bull;</span>
@@ -318,11 +382,11 @@
     </header>
 
     <!-- Messages Container -->
-    <div id="messagesContainer" class="flex-1 overflow-y-auto px-4 py-8 space-y-6 max-w-4xl w-full mx-auto">
+    <div id="messagesContainer" onscroll="handleScroll(this)" class="flex-1 overflow-y-auto px-4 py-8 space-y-6 max-w-4xl w-full mx-auto relative">
       <!-- Welcome Hero State -->
       <div id="welcomeScreen" class="py-12 px-4 max-w-2xl mx-auto text-center space-y-6 animate-fade-up">
-        <div class="inline-flex p-4 rounded-3xl bg-gradient-to-br from-obsidian-800 to-obsidian-850 border border-obsidian-700/80 shadow-glow-emerald">
-          <i data-lucide="sparkles" class="w-10 h-10 text-accent-emerald"></i>
+        <div class="inline-flex p-4 rounded-3xl bg-gradient-to-br from-obsidian-850 to-obsidian-900 border border-obsidian-750 shadow-glow-emerald">
+          <i data-lucide="sparkles" class="w-10 h-10 text-brand-emerald"></i>
         </div>
         
         <div class="space-y-2">
@@ -335,8 +399,8 @@
         <!-- Quick Launch Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left pt-3">
           <div onclick="useQuickPrompt('Write a clean Python script using asyncio and aiohttp for concurrent HTTP requests with rate limiting.')" 
-               class="p-4 rounded-2xl bg-obsidian-850/80 hover:bg-obsidian-800/90 border border-obsidian-750/80 hover:border-accent-emerald/40 cursor-pointer transition group shadow-sm">
-            <div class="flex items-center gap-2 text-accent-emerald font-semibold text-xs mb-1">
+               class="p-4 rounded-2xl bg-obsidian-850/80 hover:bg-obsidian-800/90 border border-obsidian-750 hover:border-brand-emerald/40 cursor-pointer transition group shadow-sm">
+            <div class="flex items-center gap-2 text-brand-emerald font-semibold text-xs mb-1">
               <i data-lucide="code-2" class="w-4 h-4"></i>
               <span>Async Python Engine</span>
             </div>
@@ -344,8 +408,8 @@
           </div>
 
           <div onclick="useQuickPrompt('Explain how DeepSeek-R1 uses reinforcement learning and test-time compute scaling to outperform proprietary models.')" 
-               class="p-4 rounded-2xl bg-obsidian-850/80 hover:bg-obsidian-800/90 border border-obsidian-750/80 hover:border-accent-cyan/40 cursor-pointer transition group shadow-sm">
-            <div class="flex items-center gap-2 text-accent-cyan font-semibold text-xs mb-1">
+               class="p-4 rounded-2xl bg-obsidian-850/80 hover:bg-obsidian-800/90 border border-obsidian-750 hover:border-brand-cyan/40 cursor-pointer transition group shadow-sm">
+            <div class="flex items-center gap-2 text-brand-cyan font-semibold text-xs mb-1">
               <i data-lucide="brain-circuit" class="w-4 h-4"></i>
               <span>DeepSeek-R1 Deep Dive</span>
             </div>
@@ -353,8 +417,8 @@
           </div>
 
           <div onclick="useQuickPrompt('Design an ultra-fast Redis caching strategy for a microservices backend with cache stampede protection.')" 
-               class="p-4 rounded-2xl bg-obsidian-850/80 hover:bg-obsidian-800/90 border border-obsidian-750/80 hover:border-accent-amber/40 cursor-pointer transition group shadow-sm">
-            <div class="flex items-center gap-2 text-accent-amber font-semibold text-xs mb-1">
+               class="p-4 rounded-2xl bg-obsidian-850/80 hover:bg-obsidian-800/90 border border-obsidian-750 hover:border-brand-amber/40 cursor-pointer transition group shadow-sm">
+            <div class="flex items-center gap-2 text-brand-amber font-semibold text-xs mb-1">
               <i data-lucide="database" class="w-4 h-4"></i>
               <span>Distributed Caching</span>
             </div>
@@ -362,8 +426,8 @@
           </div>
 
           <div onclick="useQuickPrompt('Audit this code for security vulnerabilities, memory safety issues, and OWASP Top 10 risks:')" 
-               class="p-4 rounded-2xl bg-obsidian-850/80 hover:bg-obsidian-800/90 border border-obsidian-750/80 hover:border-accent-rose/40 cursor-pointer transition group shadow-sm">
-            <div class="flex items-center gap-2 text-accent-rose font-semibold text-xs mb-1">
+               class="p-4 rounded-2xl bg-obsidian-850/80 hover:bg-obsidian-800/90 border border-obsidian-750 hover:border-brand-rose/40 cursor-pointer transition group shadow-sm">
+            <div class="flex items-center gap-2 text-brand-rose font-semibold text-xs mb-1">
               <i data-lucide="shield-check" class="w-4 h-4"></i>
               <span>Security & Code Audit</span>
             </div>
@@ -373,39 +437,69 @@
       </div>
     </div>
 
+    <!-- Scroll-to-Bottom Floating Pill -->
+    <button id="scrollBottomBtn" onclick="scrollToBottom()" class="hidden fixed right-8 bottom-28 z-20 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-white p-2.5 rounded-full shadow-2xl transition active:scale-95 flex items-center justify-center">
+      <i data-lucide="arrow-down" class="w-4 h-4 text-brand-emerald"></i>
+    </button>
+
     <!-- Floating Command Island -->
     <div class="border-t border-obsidian-750/70 bg-obsidian-950/85 backdrop-blur-2xl p-4">
       <div class="max-w-4xl mx-auto space-y-2.5">
         
+        <!-- Attached Files Capsule Area -->
+        <div id="fileAttachmentArea" class="hidden flex items-center gap-2 pb-1">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-obsidian-800 border border-obsidian-700 text-xs text-zinc-300">
+            <i data-lucide="file" class="w-3.5 h-3.5 text-brand-emerald"></i>
+            <span id="attachedFileName" class="truncate max-w-[200px]">file.txt</span>
+            <button onclick="removeAttachedFile()" class="text-zinc-500 hover:text-rose-400 ml-1">&times;</button>
+          </div>
+        </div>
+
         <!-- Prompt Suggestion Pills -->
         <div class="flex items-center gap-2 overflow-x-auto pb-1 text-[11px] font-medium no-scrollbar">
           <span class="text-zinc-500 text-[10px] uppercase font-bold tracking-wider shrink-0">Prompts:</span>
-          <button onclick="insertTemplate('/code ')" class="px-2.5 py-1 rounded-lg bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 text-zinc-400 hover:text-accent-emerald transition shrink-0">
+          <button onclick="insertTemplate('/code ')" class="px-2.5 py-1 rounded-lg bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 text-zinc-400 hover:text-brand-emerald transition shrink-0">
             ⚡ /code
           </button>
-          <button onclick="insertTemplate('/refactor ')" class="px-2.5 py-1 rounded-lg bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 text-zinc-400 hover:text-accent-cyan transition shrink-0">
+          <button onclick="insertTemplate('/refactor ')" class="px-2.5 py-1 rounded-lg bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 text-zinc-400 hover:text-brand-cyan transition shrink-0">
             ✨ /refactor
           </button>
-          <button onclick="insertTemplate('/explain ')" class="px-2.5 py-1 rounded-lg bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 text-zinc-400 hover:text-accent-amber transition shrink-0">
+          <button onclick="insertTemplate('/explain ')" class="px-2.5 py-1 rounded-lg bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 text-zinc-400 hover:text-brand-amber transition shrink-0">
             🧠 /explain
           </button>
-          <button onclick="insertTemplate('/test ')" class="px-2.5 py-1 rounded-lg bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 text-zinc-400 hover:text-accent-violet transition shrink-0">
+          <button onclick="insertTemplate('/test ')" class="px-2.5 py-1 rounded-lg bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 text-zinc-400 hover:text-brand-violet transition shrink-0">
             🧪 /test
           </button>
         </div>
 
-        <!-- Input Box -->
-        <div class="relative bg-obsidian-900/90 border border-obsidian-700/80 focus-within:border-accent-emerald focus-within:ring-2 focus-within:ring-accent-emerald/20 rounded-2xl shadow-xl transition-all">
-          <textarea id="userInput" rows="1" placeholder="Type a message, paste code, or explore ideas... (Shift + Enter for newline)" 
-                    class="w-full bg-transparent pl-4 pr-24 py-3.5 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none resize-none max-h-48 overflow-y-auto leading-relaxed"></textarea>
+        <!-- Input Box with File Attachment & Voice Mic -->
+        <div class="relative bg-obsidian-900/90 border border-obsidian-700/80 focus-within:border-brand-emerald focus-within:ring-2 focus-within:ring-brand-emerald/20 rounded-2xl shadow-xl transition-all">
+          <textarea id="userInput" rows="1" placeholder="Type a message, paste code, or drop a file... (Shift + Enter for newline)" 
+                    class="w-full bg-transparent pl-12 pr-28 py-3.5 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none resize-none max-h-48 overflow-y-auto leading-relaxed"></textarea>
           
+          <!-- Left Attach Button -->
+          <div class="absolute left-2.5 bottom-2.5 flex items-center gap-1">
+            <input type="file" id="fileInput" class="hidden" onchange="handleFileSelect(event)" />
+            <button onclick="document.getElementById('fileInput').click()" class="text-zinc-400 hover:text-white p-2 rounded-xl hover:bg-obsidian-800 transition" title="Attach file (.py, .js, .txt, .json)">
+              <i data-lucide="paperclip" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <!-- Right Action Buttons -->
           <div class="absolute right-2.5 bottom-2.5 flex items-center gap-1.5">
+            <!-- Voice Input Button -->
+            <button id="voiceBtn" onclick="toggleVoiceInput()" class="text-zinc-400 hover:text-brand-emerald p-2 rounded-xl hover:bg-obsidian-800 transition" title="Voice Dictation">
+              <i data-lucide="mic" class="w-4 h-4"></i>
+            </button>
+
+            <!-- Stop Button -->
             <button id="stopBtn" onclick="stopGeneration()" class="hidden bg-rose-600 hover:bg-rose-500 text-white px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-lg shadow-rose-600/30">
               <i data-lucide="square" class="w-3.5 h-3.5 fill-current"></i>
               <span>Stop</span>
             </button>
 
-            <button id="sendBtn" onclick="sendMessage()" class="bg-accent-emerald hover:bg-emerald-400 text-obsidian-950 p-2.5 rounded-xl transition active:scale-95 shadow-lg shadow-accent-emerald/30 font-bold">
+            <!-- Send Button -->
+            <button id="sendBtn" onclick="sendMessage()" class="bg-brand-emerald hover:bg-emerald-400 text-obsidian-950 p-2.5 rounded-xl transition active:scale-95 shadow-lg shadow-brand-emerald/30 font-bold">
               <i data-lucide="arrow-up" class="w-4 h-4 stroke-[2.5]"></i>
             </button>
           </div>
@@ -418,7 +512,7 @@
             <span>Shift + Enter for Newline</span>
           </div>
           <div class="flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-accent-emerald"></span>
+            <span class="w-1.5 h-1.5 rounded-full bg-brand-emerald"></span>
             <span>OpenAI API Compatible (/v1)</span>
           </div>
         </div>
@@ -426,12 +520,30 @@
     </div>
   </main>
 
+  <!-- Live Code HTML Preview Modal -->
+  <div id="previewModal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fade-up">
+    <div class="bg-obsidian-900 border border-obsidian-750 rounded-2xl max-w-4xl w-full h-[80vh] flex flex-col overflow-hidden shadow-2xl">
+      <div class="px-5 py-3 border-b border-obsidian-750 flex items-center justify-between bg-obsidian-950/70">
+        <div class="flex items-center gap-2">
+          <i data-lucide="play" class="w-4 h-4 text-brand-emerald"></i>
+          <span class="font-bold text-xs text-white">Live HTML/Component Sandbox Preview</span>
+        </div>
+        <button onclick="closePreviewModal()" class="text-zinc-400 hover:text-white p-1 rounded-lg hover:bg-obsidian-800 transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div class="flex-1 bg-white">
+        <iframe id="previewIframe" class="w-full h-full border-0"></iframe>
+      </div>
+    </div>
+  </div>
+
   <!-- Settings Flyout Modal -->
   <div id="settingsModal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fade-up">
     <div class="bg-obsidian-900 border border-obsidian-750 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl">
       <div class="px-6 py-4 border-b border-obsidian-750 flex items-center justify-between">
         <div class="flex items-center gap-2.5">
-          <i data-lucide="sliders" class="w-5 h-5 text-accent-emerald"></i>
+          <i data-lucide="sliders" class="w-5 h-5 text-brand-emerald"></i>
           <h2 class="font-bold text-sm text-white">Connection & Model Settings</h2>
         </div>
         <button onclick="closeSettingsModal()" class="text-zinc-400 hover:text-white p-1 rounded-lg hover:bg-obsidian-800 transition">
@@ -445,9 +557,9 @@
           <label class="block font-semibold text-zinc-300 mb-1.5">OpenAI Base URL</label>
           <div class="flex gap-2">
             <input id="baseUrl" type="text" placeholder="https://xxxx.trycloudflare.com/v1" 
-                   class="flex-1 bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2 text-zinc-200 font-mono text-xs focus:outline-none focus:border-accent-emerald" />
-            <button onclick="pingServer()" class="bg-obsidian-800 hover:bg-obsidian-750 text-zinc-200 px-3.5 py-2 rounded-xl font-medium transition flex items-center gap-1.5 border border-obsidian-700">
-              <i data-lucide="activity" class="w-3.5 h-3.5 text-accent-emerald"></i>
+                   class="flex-1 bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2 text-zinc-200 font-mono text-xs focus:outline-none focus:border-brand-emerald" />
+            <button onclick="pingServer()" class="bg-obsidian-850 hover:bg-obsidian-800 text-zinc-200 px-3.5 py-2 rounded-xl font-medium transition flex items-center gap-1.5 border border-obsidian-700">
+              <i data-lucide="activity" class="w-3.5 h-3.5 text-brand-emerald"></i>
               <span>Ping</span>
             </button>
           </div>
@@ -458,7 +570,7 @@
         <div>
           <label class="block font-semibold text-zinc-300 mb-1.5">API Key (Bearer Auth)</label>
           <input id="apiKey" type="password" value="ollama" placeholder="ollama" 
-                 class="w-full bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2 text-zinc-200 font-mono text-xs focus:outline-none focus:border-accent-emerald" />
+                 class="w-full bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2 text-zinc-200 font-mono text-xs focus:outline-none focus:border-brand-emerald" />
           <p class="text-[11px] text-zinc-500 mt-1">Ollama ke liye default <code>ollama</code> ya koi bhi random key chalegi.</p>
         </div>
 
@@ -466,16 +578,16 @@
         <div>
           <label class="block font-semibold text-zinc-300 mb-1.5">Active Model Tag</label>
           <input id="modelNameInput" type="text" value="qwen2.5-coder:7b" 
-                 class="w-full bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2 text-zinc-200 font-mono text-xs focus:outline-none focus:border-accent-emerald" />
+                 class="w-full bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2 text-zinc-200 font-mono text-xs focus:outline-none focus:border-brand-emerald" />
         </div>
 
         <!-- Temperature Slider -->
         <div>
           <div class="flex justify-between font-semibold text-zinc-300 mb-1.5">
-            <span>Temperature: <span id="tempDisplay" class="text-accent-emerald font-mono">0.6</span></span>
+            <span>Temperature: <span id="tempDisplay" class="text-brand-emerald font-mono">0.6</span></span>
             <span class="text-zinc-500 font-normal">Lower = More deterministic code</span>
           </div>
-          <input id="tempInput" type="range" min="0" max="1.5" step="0.05" value="0.6" class="w-full accent-accent-emerald"
+          <input id="tempInput" type="range" min="0" max="1.5" step="0.05" value="0.6" class="w-full accent-brand-emerald"
                  oninput="document.getElementById('tempDisplay').innerText = this.value;" />
         </div>
 
@@ -483,15 +595,15 @@
         <div>
           <label class="block font-semibold text-zinc-300 mb-1.5">System Prompt</label>
           <textarea id="systemPromptInput" rows="3" placeholder="You are an expert full-stack developer and system architect..."
-                    class="w-full bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2 text-zinc-300 text-xs focus:outline-none focus:border-accent-emerald leading-relaxed"></textarea>
+                    class="w-full bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2 text-zinc-300 text-xs focus:outline-none focus:border-brand-emerald leading-relaxed"></textarea>
         </div>
       </div>
 
       <div class="px-6 py-4 border-t border-obsidian-750 bg-obsidian-950/50 flex justify-end gap-2.5">
-        <button onclick="closeSettingsModal()" class="px-4 py-2 rounded-xl bg-obsidian-800 hover:bg-obsidian-750 text-zinc-300 text-xs font-medium transition">
+        <button onclick="closeSettingsModal()" class="px-4 py-2 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 text-zinc-300 text-xs font-medium transition">
           Cancel
         </button>
-        <button onclick="saveAndApplySettings()" class="px-4 py-2 rounded-xl bg-accent-emerald hover:bg-emerald-400 text-obsidian-950 text-xs font-bold transition shadow-glow-emerald">
+        <button onclick="saveAndApplySettings()" class="px-4 py-2 rounded-xl bg-brand-emerald hover:bg-emerald-400 text-obsidian-950 text-xs font-bold transition shadow-glow-emerald">
           Save & Connect
         </button>
       </div>
@@ -504,6 +616,66 @@
     let currentChatId = localStorage.getItem('colab_studio_current_id') || null;
     let abortController = null;
     let renderThrottleTimer = null;
+    let isAudioEnabled = localStorage.getItem('colab_audio_enabled') !== 'false';
+    let attachedFileContent = null;
+    let totalTokensGenerated = parseInt(localStorage.getItem('colab_total_tokens') || '0', 10);
+    const THEMES = ['theme-obsidian', 'theme-midnight', 'theme-cyberpunk'];
+    let currentThemeIdx = parseInt(localStorage.getItem('colab_theme_idx') || '0', 10);
+
+    // Audio Chime Synthesizer via Web Audio API (Zero external assets!)
+    function playChime() {
+      if (!isAudioEnabled) return;
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const now = audioCtx.currentTime;
+        const osc1 = audioCtx.createOscillator();
+        const osc2 = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(587.33, now); // D5
+        osc1.frequency.exponentialRampToValueAtTime(880, now + 0.15); // A5
+
+        osc2.type = 'triangle';
+        osc2.frequency.setValueAtTime(880, now);
+        osc2.frequency.exponentialRampToValueAtTime(1174.66, now + 0.15); // D6
+
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + 0.35);
+        osc2.stop(now + 0.35);
+      } catch (e) {}
+    }
+
+    function toggleAudio() {
+      isAudioEnabled = !isAudioEnabled;
+      localStorage.setItem('colab_audio_enabled', isAudioEnabled);
+      const btn = document.getElementById('audioBtn');
+      btn.className = isAudioEnabled ? 'p-1.5 hover:bg-obsidian-800 rounded-lg text-brand-emerald transition' : 'p-1.5 hover:bg-obsidian-800 rounded-lg text-zinc-600 transition';
+    }
+
+    function cycleTheme() {
+      document.body.classList.remove('theme-obsidian', 'theme-midnight', 'theme-cyberpunk');
+      currentThemeIdx = (currentThemeIdx + 1) % THEMES.length;
+      if (THEMES[currentThemeIdx] !== 'theme-obsidian') {
+        document.body.classList.add(THEMES[currentThemeIdx]);
+      }
+      localStorage.setItem('colab_theme_idx', currentThemeIdx);
+    }
+
+    // Cost Savings Calculator ($5 / 1M tokens vs GPT-4o)
+    function updateSavingsDisplay() {
+      const savedAmount = ((totalTokensGenerated / 1000000) * 5.0).toFixed(2);
+      document.getElementById('savingsCounter').innerText = `$${savedAmount}`;
+      localStorage.setItem('colab_total_tokens', totalTokensGenerated);
+    }
 
     // Personas Library
     const PERSONAS = {
@@ -536,6 +708,11 @@
 
     // Load Settings
     function initSettings() {
+      if (THEMES[currentThemeIdx] !== 'theme-obsidian') {
+        document.body.classList.add(THEMES[currentThemeIdx]);
+      }
+      updateSavingsDisplay();
+
       const url = localStorage.getItem('colab_base_url') || '';
       const key = localStorage.getItem('colab_api_key') || 'ollama';
       const model = localStorage.getItem('colab_model') || 'qwen2.5-coder:7b';
@@ -604,7 +781,7 @@
       const sideText = document.getElementById('sidebarConnStatus');
 
       if (!url) {
-        pill.className = 'cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-mono border bg-obsidian-850 border-obsidian-700 text-zinc-400';
+        pill.className = 'cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-mono border bg-obsidian-850 border-obsidian-750 text-zinc-400';
         pillText.innerText = 'No URL Set';
         sideText.innerHTML = '<span class="inline-block w-1.5 h-1.5 rounded-full bg-zinc-500"></span><span>No URL Set</span>';
         return;
@@ -646,10 +823,110 @@
       document.getElementById('settingsModal').classList.add('hidden');
     }
 
+    function openPreviewModal(htmlContent) {
+      const modal = document.getElementById('previewModal');
+      const iframe = document.getElementById('previewIframe');
+      iframe.srcdoc = htmlContent;
+      modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+    function closePreviewModal() {
+      document.getElementById('previewModal').classList.add('hidden');
+    }
+
     // Sidebar Toggle
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
       sidebar.classList.toggle('-ml-80');
+    }
+
+    // Scroll Management
+    function handleScroll(el) {
+      const btn = document.getElementById('scrollBottomBtn');
+      const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 120;
+      if (!isNearBottom) {
+        btn.classList.remove('hidden');
+      } else {
+        btn.classList.add('hidden');
+      }
+    }
+
+    function scrollToBottom() {
+      const container = document.getElementById('messagesContainer');
+      container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+    }
+
+    // File Attachment Handler
+    function handleFileSelect(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        attachedFileContent = {
+          name: file.name,
+          content: evt.target.result
+        };
+        document.getElementById('attachedFileName').innerText = file.name;
+        document.getElementById('fileAttachmentArea').classList.remove('hidden');
+      };
+      reader.readAsText(file);
+    }
+
+    function removeAttachedFile() {
+      attachedFileContent = null;
+      document.getElementById('fileInput').value = '';
+      document.getElementById('fileAttachmentArea').classList.add('hidden');
+    }
+
+    // Voice Dictation (Web Speech API)
+    let recognition = null;
+    let isRecording = false;
+
+    function toggleVoiceInput() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert('Voice input is not supported in this browser. Please use Chrome, Edge, or Safari.');
+        return;
+      }
+
+      const voiceBtn = document.getElementById('voiceBtn');
+      if (isRecording && recognition) {
+        recognition.stop();
+        isRecording = false;
+        voiceBtn.classList.remove('text-rose-500', 'animate-pulse');
+        return;
+      }
+
+      recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+
+      recognition.onstart = function() {
+        isRecording = true;
+        voiceBtn.classList.add('text-rose-500', 'animate-pulse');
+      };
+
+      recognition.onresult = function(event) {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        document.getElementById('userInput').value = transcript;
+      };
+
+      recognition.onend = function() {
+        isRecording = false;
+        voiceBtn.classList.remove('text-rose-500', 'animate-pulse');
+      };
+
+      recognition.onerror = function() {
+        isRecording = false;
+        voiceBtn.classList.remove('text-rose-500', 'animate-pulse');
+      };
+
+      recognition.start();
     }
 
     // Chat Management with LocalStorage Protection
@@ -727,12 +1004,12 @@
       filtered.forEach(chat => {
         const isActive = chat.id === currentChatId;
         const div = document.createElement('div');
-        div.className = `group flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer transition ${isActive ? 'bg-obsidian-800 text-white font-medium border border-obsidian-700/80 shadow-sm' : 'text-zinc-400 hover:bg-obsidian-850 hover:text-zinc-200'}`;
+        div.className = `group flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer transition ${isActive ? 'bg-obsidian-850 text-white font-medium border border-obsidian-750 shadow-sm' : 'text-zinc-400 hover:bg-obsidian-850/60 hover:text-zinc-200'}`;
         div.onclick = () => selectChat(chat.id);
 
         div.innerHTML = `
           <div class="truncate flex items-center gap-2">
-            <i data-lucide="message-square" class="w-3.5 h-3.5 shrink-0 ${isActive ? 'text-accent-emerald' : 'text-zinc-500'}"></i>
+            <i data-lucide="message-square" class="w-3.5 h-3.5 shrink-0 ${isActive ? 'text-brand-emerald' : 'text-zinc-500'}"></i>
             <span class="truncate">${escapeHtml(chat.title || 'Conversation')}</span>
           </div>
           <button onclick="deleteChat('${chat.id}', event)" class="opacity-0 group-hover:opacity-100 hover:text-rose-400 p-1 text-xs transition">
@@ -747,7 +1024,7 @@
     }
 
     // Markdown Parser with DOMPurify XSS Sanitization & DeepSeek Think Accordion
-    function formatMarkdown(rawText) {
+    function formatMarkdown(rawText, isStreaming = false) {
       if (!rawText) return '';
 
       // DeepSeek <think> tag handling
@@ -786,7 +1063,11 @@
       }
 
       // Final pass with DOMPurify sanitization
-      return DOMPurify.sanitize(marked.parse(html));
+      let sanitized = DOMPurify.sanitize(marked.parse(html));
+      if (isStreaming) {
+        sanitized += '<span class="streaming-cursor animate-cursor-blink"></span>';
+      }
+      return sanitized;
     }
 
     function renderMessages() {
@@ -795,8 +1076,8 @@
       if (!chat || !chat.messages.length) {
         container.innerHTML = `
           <div id="welcomeScreen" class="py-12 px-4 max-w-2xl mx-auto text-center space-y-6 animate-fade-up">
-            <div class="inline-flex p-4 rounded-3xl bg-gradient-to-br from-obsidian-800 to-obsidian-850 border border-obsidian-700/80 shadow-glow-emerald">
-              <i data-lucide="sparkles" class="w-10 h-10 text-accent-emerald"></i>
+            <div class="inline-flex p-4 rounded-3xl bg-gradient-to-br from-obsidian-850 to-obsidian-900 border border-obsidian-750 shadow-glow-emerald">
+              <i data-lucide="sparkles" class="w-10 h-10 text-brand-emerald"></i>
             </div>
             <div class="space-y-2">
               <h2 class="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">Colab LLM Studio</h2>
@@ -817,17 +1098,17 @@
 
         if (msg.role === 'user') {
           div.innerHTML = `
-            <div class="max-w-[85%] bg-gradient-to-r from-obsidian-850 to-obsidian-800 border border-accent-emerald/40 text-emerald-100 rounded-2xl px-5 py-3.5 relative group shadow-sm">
+            <div class="max-w-[85%] bg-gradient-to-r from-obsidian-850 to-obsidian-800 border border-brand-emerald/40 text-emerald-100 rounded-2xl px-5 py-3.5 relative group shadow-sm">
               <div class="whitespace-pre-wrap">${escapeHtml(msg.content)}</div>
               <div class="absolute right-2 -bottom-5 opacity-0 group-hover:opacity-100 transition text-[10px] flex gap-2">
-                <button onclick="editPrompt(${idx})" class="text-zinc-400 hover:text-accent-emerald">Edit</button>
-                <button onclick="copyRawText(${idx})" class="text-zinc-400 hover:text-accent-emerald">Copy</button>
+                <button onclick="editPrompt(${idx})" class="text-zinc-400 hover:text-brand-emerald">Edit</button>
+                <button onclick="copyRawText(${idx})" class="text-zinc-400 hover:text-brand-emerald">Copy</button>
               </div>
             </div>
           `;
         } else {
           div.innerHTML = `
-            <div class="w-9 h-9 rounded-xl bg-obsidian-850 border border-obsidian-700/80 flex items-center justify-center text-xs shrink-0 text-accent-emerald shadow-md">
+            <div class="w-9 h-9 rounded-xl bg-obsidian-850 border border-obsidian-750 flex items-center justify-center text-xs shrink-0 text-brand-emerald shadow-md">
               <i data-lucide="bot" class="w-4 h-4"></i>
             </div>
             <div class="flex-1 max-w-[88%] bg-obsidian-900/90 border border-obsidian-750 rounded-2xl px-5 py-4 text-zinc-200 prose prose-invert max-w-none text-sm shadow-md relative group">
@@ -836,7 +1117,7 @@
                 <button onclick="copyRawText(${idx})" class="hover:text-zinc-200 flex items-center gap-1">
                   <i data-lucide="copy" class="w-3 h-3"></i> Copy Response
                 </button>
-                <button onclick="regenerateFrom(${idx})" class="hover:text-accent-emerald flex items-center gap-1">
+                <button onclick="regenerateFrom(${idx})" class="hover:text-brand-emerald flex items-center gap-1">
                   <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Regenerate
                 </button>
               </div>
@@ -870,6 +1151,10 @@
 
         const bar = document.createElement('div');
         bar.className = 'code-window-bar font-mono';
+
+        // Check if HTML snippet for live preview button
+        const isHtmlCode = ['html', 'htm', 'svg', 'xml'].includes(lang.toLowerCase());
+
         bar.innerHTML = `
           <div class="flex items-center gap-3">
             <div class="mac-dots">
@@ -880,6 +1165,12 @@
             <span class="text-xs uppercase tracking-wider text-zinc-400 font-semibold">${lang}</span>
           </div>
           <div class="flex items-center gap-1.5">
+            ${isHtmlCode ? `
+              <button onclick="previewCode(this)" class="px-2.5 py-1 rounded-md bg-brand-emerald/10 hover:bg-brand-emerald/20 text-brand-emerald text-[11px] flex items-center gap-1 transition font-medium border border-brand-emerald/30">
+                <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                <span>Preview</span>
+              </button>
+            ` : ''}
             <button onclick="downloadCode(this, '${lang}')" class="px-2.5 py-1 rounded-md bg-obsidian-800 hover:bg-obsidian-750 text-zinc-300 hover:text-white text-[11px] flex items-center gap-1 transition" title="Download Code">
               <i data-lucide="file-code" class="w-3.5 h-3.5"></i>
               <span>Save</span>
@@ -898,11 +1189,16 @@
       lucide.createIcons();
     }
 
+    function previewCode(btn) {
+      const code = btn.closest('.code-window').querySelector('code').innerText;
+      openPreviewModal(code);
+    }
+
     function copySnippet(btn) {
       const code = btn.closest('.code-window').querySelector('code').innerText;
       navigator.clipboard.writeText(code).then(() => {
         const original = btn.innerHTML;
-        btn.innerHTML = '<span class="text-accent-emerald">✓ Copied!</span>';
+        btn.innerHTML = '<span class="text-brand-emerald">✓ Copied!</span>';
         setTimeout(() => { btn.innerHTML = original; lucide.createIcons(); }, 1800);
       });
     }
@@ -1002,12 +1298,17 @@
       if (e.key === 'Escape') {
         stopGeneration();
         closeSettingsModal();
+        closePreviewModal();
       }
     });
 
     // Send Message Logic with OpenAI SSE Streaming & EGM Fixes
     async function sendMessage() {
-      const text = textarea.value.trim();
+      let text = textarea.value.trim();
+      if (attachedFileContent) {
+        text = `[File: ${attachedFileContent.name}]\n\`\`\`\n${attachedFileContent.content}\n\`\`\`\n\n${text}`;
+        removeAttachedFile();
+      }
       if (!text) return;
 
       let baseUrl = (document.getElementById('baseUrl').value.trim() || localStorage.getItem('colab_base_url') || '').replace(/\/+$/, '');
@@ -1097,7 +1398,7 @@
         const updateDomThrottled = () => {
           if (!renderThrottleTimer) {
             renderThrottleTimer = requestAnimationFrame(() => {
-              document.getElementById(`content_${assistantIdx}`).innerHTML = formatMarkdown(assistantMsg.content);
+              document.getElementById(`content_${assistantIdx}`).innerHTML = formatMarkdown(assistantMsg.content, true);
               const container = document.getElementById('messagesContainer');
               container.scrollTop = container.scrollHeight;
               renderThrottleTimer = null;
@@ -1174,9 +1475,13 @@
           cancelAnimationFrame(renderThrottleTimer);
           renderThrottleTimer = null;
         }
-        document.getElementById(`content_${assistantIdx}`).innerHTML = formatMarkdown(assistantMsg.content);
+        document.getElementById(`content_${assistantIdx}`).innerHTML = formatMarkdown(assistantMsg.content, false);
         const container = document.getElementById('messagesContainer');
         container.scrollTop = container.scrollHeight;
+
+        totalTokensGenerated += tokenCount;
+        updateSavingsDisplay();
+        playChime();
 
         sendBtn.classList.remove('hidden');
         stopBtn.classList.add('hidden');
