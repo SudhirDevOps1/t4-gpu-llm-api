@@ -1,7 +1,7 @@
 # ⚡ Colab LLM Studio — Free GPU OpenAI-Compatible API Hub & Client
 
 <p align="center">
-  <a href="https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/nazOllama_colab_API.ipynb" target="_blank">
+  <a href="https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/t4-gpu-llm-api.ipynb" target="_blank">
     <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" height="34"/>
   </a>
 </p>
@@ -68,7 +68,7 @@ The models below have been specifically benchmarked to guarantee **lag-free exec
 
 ### 1. Upload the Notebook
 - Open [Google Colab](https://colab.research.google.com).
-- Click **Upload** and select `nazOllama_colab_API.ipynb` (or `Copy of nazOllama_colab_API.ipynb`).
+- Click **Upload** and select `t4-gpu-llm-api.ipynb` (or simply click the **"Open In Colab"** badge above).
 
 ### 2. Enable Free T4 GPU
 - In the top menu, go to **Runtime** > **Change runtime type**.
