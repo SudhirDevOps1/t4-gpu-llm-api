@@ -1411,7 +1411,15 @@
               <div class="mini-orb"></div>
             </div>
             <div class="flex-1 max-w-[88%] bg-obsidian-900/90 border border-obsidian-750 rounded-2xl px-5 py-4 text-zinc-200 prose prose-invert max-w-none text-sm shadow-md relative group">
-              <div id="content_${idx}">${formatMarkdown(msg.content)}</div>
+              <div id="content_${idx}">${msg.content ? formatMarkdown(msg.content) : `
+                <div class="flex items-center gap-3 text-zinc-400 py-1 font-mono text-xs animate-pulse">
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-brand-emerald animate-ping"></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-brand-cyan"></span>
+                  </div>
+                  <span class="text-zinc-300">Processing on Colab T4 GPU... <span class="text-zinc-500">(Initial model load takes 15-30s)</span></span>
+                </div>
+              `}</div>
               <div class="mt-3 pt-2.5 border-t border-obsidian-750/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-between text-[11px] text-zinc-500">
                 <button onclick="copyRawText(${idx})" class="hover:text-zinc-200 flex items-center gap-1">
                   <i data-lucide="copy" class="w-3 h-3"></i> Copy Response
@@ -1604,6 +1612,10 @@
 
     // Send Message Logic with NO NATIVE ALERT!
     async function sendMessage() {
+      if (abortController) {
+        showToast('Generation in progress. Please wait or click Stop!', 'warning');
+        return;
+      }
       let text = textarea.value.trim();
       if (attachedFileContent) {
         text = `[File: ${attachedFileContent.name}]\n\`\`\`\n${attachedFileContent.content}\n\`\`\`\n\n${text}`;
@@ -1730,6 +1742,36 @@
           }
         };
 
+        // Realtime waiting timer to inform user during cold starts
+        let waitSeconds = 0;
+        const waitingTimer = setInterval(() => {
+          if (!assistantMsg.content && abortController) {
+            waitSeconds++;
+            const el = document.getElementById(`content_${assistantIdx}`);
+            if (el) {
+              const extraHint = waitSeconds >= 12 ? '<span class="text-brand-cyan/80 font-semibold">— Loading model weights into Tesla T4 VRAM...</span>' : '';
+              el.innerHTML = `
+                <div class="flex items-center gap-3 text-zinc-400 py-1 font-mono text-xs animate-pulse">
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-brand-emerald animate-ping"></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-brand-cyan"></span>
+                  </div>
+                  <span class="text-zinc-300">Connecting to Colab T4 GPU... (${waitSeconds}s) ${extraHint}</span>
+                </div>
+              `;
+            }
+          } else {
+            clearInterval(waitingTimer);
+          }
+        }, 1000);
+
+        // Safety timeout of 100 seconds
+        const timeoutId = setTimeout(() => {
+          if (!assistantMsg.content && abortController) {
+            abortController.abort(new Error('Connection timed out (100s). Colab GPU may be unresponsive or still loading large model.'));
+          }
+        }, 100000);
+
         outerStreamLoop: while (true) {
           const { done, value } = await reader.read();
           if (done) break outerStreamLoop;
@@ -1746,14 +1788,42 @@
               break outerStreamLoop;
             }
 
+            // Support both standard SSE ('data: {..}') and direct JSON lines ('{..}')
+            let jsonPayload = '';
             if (clean.startsWith('data: ')) {
+              jsonPayload = clean.substring(6).trim();
+            } else if (clean.startsWith('{') && clean.endsWith('}')) {
+              jsonPayload = clean;
+            }
+
+            if (jsonPayload) {
               try {
-                const parsed = JSON.parse(clean.substring(6));
+                const parsed = JSON.parse(jsonPayload);
                 
+                // 1. Check for server errors (Ollama or OpenAI error format)
+                if (parsed.error) {
+                  const errMsg = typeof parsed.error === 'object' ? (parsed.error.message || JSON.stringify(parsed.error)) : parsed.error;
+                  assistantMsg.content = `❌ **Model Server Error:** ${errMsg}\n\n*Please verify that model \`${payload.model}\` is downloaded and running in Colab (Cell 4).*`;
+                  tokenCount++;
+                  clearInterval(waitingTimer);
+                  clearTimeout(timeoutId);
+                  updateDomThrottled();
+                  break outerStreamLoop;
+                }
+
+                // 2. CoT Reasoning Content (DeepSeek-R1)
                 const deltaReasoning = parsed.choices?.[0]?.delta?.reasoning_content || parsed.choices?.[0]?.delta?.reasoning || '';
-                const deltaContent = parsed.choices?.[0]?.delta?.content || '';
+                
+                // 3. Delta Content (OpenAI delta, Ollama native message, or OpenAI non-streaming fallback)
+                const deltaContent = parsed.choices?.[0]?.delta?.content 
+                  || parsed.message?.content 
+                  || parsed.response 
+                  || parsed.choices?.[0]?.message?.content 
+                  || '';
 
                 if (deltaReasoning) {
+                  clearInterval(waitingTimer);
+                  clearTimeout(timeoutId);
                   if (!hasReasoningStarted) {
                     assistantMsg.content = '<think>\n' + deltaReasoning;
                     hasReasoningStarted = true;
@@ -1764,6 +1834,8 @@
                 }
 
                 if (deltaContent) {
+                  clearInterval(waitingTimer);
+                  clearTimeout(timeoutId);
                   if (hasReasoningStarted && !assistantMsg.content.includes('</think>')) {
                     assistantMsg.content += '\n</think>\n\n';
                   }
@@ -1788,6 +1860,15 @@
             }
           }
         }
+
+        clearInterval(waitingTimer);
+        clearTimeout(timeoutId);
+
+        // Fallback if loop ended with 0 tokens received
+        if (!assistantMsg.content.trim()) {
+          assistantMsg.content = `⚠️ **No response tokens received from model.**\n\n- Model Requested: \`${payload.model}\`\n- Base Endpoint: \`${baseUrl}/chat/completions\`\n\n**Troubleshooting Checklist:**\n1. **Model Downloaded?** In Google Colab, verify **Cell 4** ran successfully for \`${payload.model}\`.\n2. **Ollama Running?** Ensure **Cell 3** (\`ollama serve\`) is active without errors.\n3. **Active Cloudflare Tunnel?** Ensure **Cell 5** tunnel is running and reachable.`;
+          updateDomThrottled();
+        }
       } catch (err) {
         if (err.name === 'AbortError') {
           assistantMsg.content += '\n\n*(Generation stopped by user)*';
@@ -1804,7 +1885,8 @@
           cancelAnimationFrame(renderThrottleTimer);
           renderThrottleTimer = null;
         }
-        document.getElementById(`content_${assistantIdx}`).innerHTML = formatMarkdown(assistantMsg.content, false);
+        const finalContent = assistantMsg.content.trim() ? formatMarkdown(assistantMsg.content, false) : `⚠️ <span class="text-zinc-500 font-mono text-xs">No response tokens generated.</span>`;
+        document.getElementById(`content_${assistantIdx}`).innerHTML = finalContent;
         const container = document.getElementById('messagesContainer');
         container.scrollTop = container.scrollHeight;
 

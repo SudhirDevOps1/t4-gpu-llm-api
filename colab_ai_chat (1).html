@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colab LLM Studio — Next-Gen AI Workspace</title>
+  
+  <!-- Premium Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS 3.4 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            obsidian: {
+              950: 'var(--bg-main)',
+              900: 'var(--bg-surface)',
+              850: 'var(--bg-surface-elevated)',
+              800: 'var(--bg-surface-hover)',
+              750: 'var(--border-subtle)',
+              700: 'var(--border-strong)',
+            },
+            brand: {
+              emerald: '#10b981',
+              cyan: '#06b6d4',
+              violet: '#8b5cf6',
+              rose: '#f43f5e',
+              amber: '#f59e0b',
+            }
+          },
+          boxShadow: {
+            'glow-emerald': '0 0 35px -5px rgba(16, 185, 129, 0.35)',
+            'glow-cyan': '0 0 35px -5px rgba(6, 182, 212, 0.35)',
+            'glow-violet': '0 0 35px -5px rgba(139, 92, 246, 0.35)',
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'fade-up': 'fadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            'cursor-blink': 'blink 1s step-end infinite',
+            'shimmer': 'shimmer 2.5s linear infinite',
+          },
+          keyframes: {
+            fadeUp: {
+              '0%': { opacity: '0', transform: 'translateY(12px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            blink: {
+              '0%, 100%': { opacity: '1' },
+              '50%': { opacity: '0' },
+            },
+            shimmer: {
+              '0%': { backgroundPosition: '-200% 0' },
+              '100%': { backgroundPosition: '200% 0' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- DOMPurify for XSS Protection -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.9/purify.min.js"></script>
+  <!-- Marked Markdown Parser -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- Highlight.js with Atom One Dark Skin -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <!-- KaTeX for Math -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+  <style>
+    /* Dynamic Theme Variables */
+    :root {
+      --bg-main: #060709;
+      --bg-surface: #0c0e13;
+      --bg-surface-elevated: #12161f;
+      --bg-surface-hover: #181d29;
+      --border-subtle: #1e2433;
+      --border-strong: #2c354b;
+      --accent-color: #10b981;
+    }
+
+    body.theme-midnight {
+      --bg-main: #050811;
+      --bg-surface: #090e1f;
+      --bg-surface-elevated: #0f1731;
+      --bg-surface-hover: #162145;
+      --border-subtle: #1c2b57;
+      --border-strong: #2a3e7a;
+      --accent-color: #38bdf8;
+    }
+
+    body.theme-cyberpunk {
+      --bg-main: #08050e;
+      --bg-surface: #0f0a1c;
+      --bg-surface-elevated: #170f2a;
+      --bg-surface-hover: #22173b;
+      --border-subtle: #2f2050;
+      --border-strong: #48317a;
+      --accent-color: #a855f7;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
+
+    /* Radial Background Mesh */
+    .bg-mesh {
+      background-color: var(--bg-main);
+      background-image: 
+        radial-gradient(at 50% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 60%),
+        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.05) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
+    }
+
+    /* 🔮 Glowing AI Orb */
+    .orb-container {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ai-orb {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #34d399, #06b6d4 45%, #8b5cf6 75%, #059669 100%);
+      box-shadow: 
+        0 0 40px rgba(16, 185, 129, 0.5),
+        0 0 80px rgba(6, 182, 212, 0.3),
+        inset 0 0 25px rgba(255, 255, 255, 0.7);
+      animation: orbFloat 4s ease-in-out infinite alternate, orbRotate 12s linear infinite;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .ai-orb:hover {
+      transform: scale(1.08);
+    }
+    .ai-orb::before {
+      content: '';
+      position: absolute;
+      inset: -14px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.4), rgba(6, 182, 212, 0.15) 60%, transparent 80%);
+      filter: blur(10px);
+      animation: orbPulse 2.8s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes orbFloat {
+      0% { transform: translateY(0px) rotate(0deg); }
+      100% { transform: translateY(-8px) rotate(10deg); }
+    }
+    @keyframes orbRotate {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+    @keyframes orbPulse {
+      0% { transform: scale(0.9); opacity: 0.6; }
+      100% { transform: scale(1.15); opacity: 0.95; }
+    }
+
+    /* Mini Orb in Header */
+    .mini-orb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #34d399, #06b6d4 60%, #8b5cf6 90%);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+      animation: orbPulse 2s ease-in-out infinite alternate;
+      display: inline-block;
+    }
+
+    /* Code Window & Mac Dots */
+    .code-window {
+      border-radius: 0.875rem;
+      border: 1px solid var(--border-subtle);
+      background: #090b10;
+      margin: 1rem 0;
+      overflow: hidden;
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+    }
+    .code-window-bar {
+      background: #0f121a;
+      padding: 0.55rem 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .mac-dots {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .mac-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+    /* Markdown Styling */
+    .prose code { font-family: 'JetBrains Mono', monospace; font-size: 0.85em; }
+    .prose p { margin-bottom: 0.85rem; line-height: 1.75; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 1rem 0; font-size: 0.85rem; border-radius: 0.5rem; overflow: hidden; border: 1px solid var(--border-subtle); }
+    .prose th, .prose td { border-bottom: 1px solid var(--border-subtle); padding: 0.65rem 0.85rem; text-align: left; }
+    .prose th { background: var(--bg-surface-elevated); font-weight: 600; color: #f3f4f6; }
+    .prose tr:last-child td { border-bottom: none; }
+    .prose tr:nth-child(even) { background: rgba(255, 255, 255, 0.015); }
+    .prose blockquote { border-left: 3px solid var(--accent-color); padding-left: 1rem; color: #9ca3af; font-style: italic; margin: 0.85rem 0; }
+    .prose a { color: #34d399; text-decoration: underline; text-underline-offset: 3px; font-weight: 500; }
+    .prose ul, .prose ol { padding-left: 1.5rem; margin-bottom: 0.85rem; }
+    .prose li { margin-bottom: 0.35rem; }
+
+    /* DeepSeek Think Tag Block */
+    .think-card {
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(30, 41, 59, 0.45) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 0.875rem;
+      margin: 0.85rem 0;
+      overflow: hidden;
+      box-shadow: 0 4px 20px -4px rgba(14, 165, 233, 0.15);
+    }
+    .think-header {
+      padding: 0.65rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-size: 0.775rem;
+      font-weight: 600;
+      color: #38bdf8;
+      background: rgba(14, 165, 233, 0.09);
+      user-select: none;
+      transition: all 0.2s;
+    }
+    .think-header:hover { background: rgba(14, 165, 233, 0.16); }
+    .think-body {
+      padding: 0.95rem 1.15rem;
+      font-size: 0.825rem;
+      color: #94a3b8;
+      line-height: 1.65;
+      border-top: 1px solid rgba(56, 189, 248, 0.1);
+    }
+    .streaming-cursor {
+      display: inline-block;
+      width: 6px;
+      height: 14px;
+      background-color: #10b981;
+      margin-left: 3px;
+      vertical-align: middle;
+      border-radius: 1px;
+    }
+
+    /* Toast Notification */
+    #toastContainer {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+    .toast-pill {
+      pointer-events: auto;
+      padding: 0.75rem 1.15rem;
+      border-radius: 1rem;
+      font-size: 0.825rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(16px);
+      animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      max-w: 360px;
+    }
+    @keyframes toastIn {
+      0% { opacity: 0; transform: translateY(-10px) scale(0.95); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+  </style>
+</head>
+<body class="bg-mesh text-zinc-100 h-screen flex overflow-hidden font-sans antialiased selection:bg-brand-emerald/30 selection:text-emerald-300">
+
+  <!-- Toast Notification Stack -->
+  <div id="toastContainer"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="w-80 bg-obsidian-900/95 backdrop-blur-2xl border-r border-obsidian-750 flex flex-col transition-all duration-300 z-30 shrink-0 relative">
+    
+    <!-- Top Brand & Status -->
+    <div class="h-16 px-4 border-b border-obsidian-750 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-emerald via-teal-500 to-brand-cyan p-0.5 shadow-glow-emerald">
+          <div class="w-full h-full bg-obsidian-950 rounded-[10px] flex items-center justify-center font-bold text-brand-emerald text-sm">
+            ⚡
+          </div>
+        </div>
+        <div>
+          <div class="font-bold text-sm text-zinc-100 tracking-tight flex items-center gap-1.5">
+            Colab LLM Studio
+          </div>
+          <div id="sidebarConnStatus" class="text-[10px] font-mono text-zinc-400 flex items-center gap-1.5">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+            <span>Checking Colab...</span>
+          </div>
+        </div>
+      </div>
+      <button onclick="newChat()" class="text-xs bg-obsidian-850 hover:bg-obsidian-800 text-zinc-200 hover:text-white px-3 py-1.5 rounded-xl border border-obsidian-750 flex items-center gap-1.5 transition active:scale-95 shadow-sm font-medium" title="New Chat (Ctrl+O)">
+        <i data-lucide="plus" class="w-3.5 h-3.5 text-brand-emerald"></i>
+        <span>New</span>
+      </button>
+    </div>
+
+    <!-- Live Cost Savings Pill -->
+    <div class="px-4 py-2 border-b border-obsidian-750/60 bg-gradient-to-r from-emerald-950/20 to-teal-950/20 flex items-center justify-between text-[11px] font-mono">
+      <span class="text-zinc-400 flex items-center gap-1">
+        <span>💰</span> Saved vs GPT-4o:
+      </span>
+      <span id="savingsCounter" class="text-brand-emerald font-bold">$0.00</span>
+    </div>
+
+    <!-- Search Conversations -->
+    <div class="p-3 border-b border-obsidian-750/50">
+      <div class="relative">
+        <i data-lucide="search" class="w-3.5 h-3.5 absolute left-3 top-2.5 text-zinc-500"></i>
+        <input id="searchChats" type="text" placeholder="Search chats... (Ctrl+K)" oninput="filterChats(this.value)"
+               class="w-full bg-obsidian-850/80 border border-obsidian-750 rounded-xl pl-9 pr-3 py-2 text-xs text-zinc-300 placeholder-zinc-500 focus:outline-none focus:border-brand-emerald focus:ring-1 focus:ring-brand-emerald/20 transition shadow-inner" />
+      </div>
+    </div>
+
+    <!-- AI Persona Quick Presets -->
+    <div class="px-3 py-2.5 border-b border-obsidian-750/40 bg-obsidian-950/40">
+      <div class="text-[10px] uppercase font-bold text-zinc-500 tracking-wider mb-2 px-1 flex items-center justify-between">
+        <span>Expert Personas</span>
+        <span class="text-[9px] text-brand-emerald font-mono">1-Click</span>
+      </div>
+      <div class="grid grid-cols-2 gap-1.5">
+        <button onclick="applyPersona('architect')" class="p-2 rounded-lg bg-obsidian-850/70 hover:bg-obsidian-800 border border-obsidian-750/60 text-left transition group">
+          <div class="text-[11px] font-semibold text-zinc-300 group-hover:text-brand-emerald flex items-center gap-1">
+            <span>🏛️</span> Architect
+          </div>
+          <div class="text-[9px] text-zinc-500 truncate">System design & DB</div>
+        </button>
+        <button onclick="applyPersona('coder')" class="p-2 rounded-lg bg-obsidian-850/70 hover:bg-obsidian-800 border border-obsidian-750/60 text-left transition group">
+          <div class="text-[11px] font-semibold text-zinc-300 group-hover:text-brand-cyan flex items-center gap-1">
+            <span>💻</span> Coder Pro
+          </div>
+          <div class="text-[9px] text-zinc-500 truncate">Clean code & async</div>
+        </button>
+        <button onclick="applyPersona('auditor')" class="p-2 rounded-lg bg-obsidian-850/70 hover:bg-obsidian-800 border border-obsidian-750/60 text-left transition group">
+          <div class="text-[11px] font-semibold text-zinc-300 group-hover:text-brand-rose flex items-center gap-1">
+            <span>🛡️</span> Security
+          </div>
+          <div class="text-[9px] text-zinc-500 truncate">Vulnerabilities & OWASP</div>
+        </button>
+        <button onclick="applyPersona('tester')" class="p-2 rounded-lg bg-obsidian-850/70 hover:bg-obsidian-800 border border-obsidian-750/60 text-left transition group">
+          <div class="text-[11px] font-semibold text-zinc-300 group-hover:text-brand-violet flex items-center gap-1">
+            <span>🧪</span> QA & Tests
+          </div>
+          <div class="text-[9px] text-zinc-500 truncate">Pytest, Jest, Mocks</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- History List with Date Partitioning -->
+    <div class="flex-1 overflow-y-auto p-2.5 space-y-2">
+      <div class="text-[10px] uppercase font-bold text-zinc-500 px-2 py-1 flex items-center justify-between">
+        <span>Conversations</span>
+        <span id="chatCountBadge" class="text-[9px] bg-obsidian-800 text-zinc-400 font-mono px-1.5 py-0.5 rounded-full">0</span>
+      </div>
+      <div id="chatList" class="space-y-1 text-xs"></div>
+    </div>
+
+    <!-- Theme & Audio Quick Bar -->
+    <div class="px-4 py-2 border-t border-obsidian-750/50 bg-obsidian-950/40 flex items-center justify-between text-xs text-zinc-400">
+      <div class="flex items-center gap-1.5">
+        <button onclick="cycleTheme()" title="Switch Theme (Obsidian, Midnight, Cyberpunk)" class="p-1.5 hover:bg-obsidian-800 rounded-lg text-zinc-400 hover:text-white transition">
+          <i data-lucide="palette" class="w-4 h-4"></i>
+        </button>
+        <button onclick="toggleAudio()" id="audioBtn" title="Toggle Generation Sound" class="p-1.5 hover:bg-obsidian-800 rounded-lg text-brand-emerald transition">
+          <i data-lucide="volume-2" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="flex items-center gap-1">
+        <button onclick="exportChatMarkdown()" title="Export Markdown" class="p-1.5 text-zinc-400 hover:text-white hover:bg-obsidian-800 rounded-lg transition">
+          <i data-lucide="file-down" class="w-4 h-4"></i>
+        </button>
+        <button onclick="clearAllChats()" title="Clear All History" class="p-1.5 text-zinc-500 hover:text-rose-400 hover:bg-obsidian-800 rounded-lg transition">
+          <i data-lucide="trash" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer Controls -->
+    <div class="p-3 border-t border-obsidian-750/70 bg-obsidian-950/70 flex items-center gap-2">
+      <button onclick="openSettingsModal()" class="flex-1 flex items-center justify-center gap-2 text-xs text-zinc-300 hover:text-white transition py-2 px-3 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 font-medium">
+        <i data-lucide="sliders-horizontal" class="w-4 h-4 text-brand-emerald"></i>
+        <span>Settings</span>
+      </button>
+      <a href="index.html" class="flex items-center justify-center gap-1.5 text-xs text-brand-cyan hover:text-white transition py-2 px-3 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 font-medium">
+        <i data-lucide="layers" class="w-4 h-4"></i>
+        <span>Store</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Chat Section -->
+  <main class="flex-1 flex flex-col h-full bg-transparent relative overflow-hidden">
+    
+    <!-- Topbar Header -->
+    <header class="h-16 border-b border-obsidian-750/70 flex items-center justify-between px-4 bg-obsidian-950/70 backdrop-blur-xl z-20">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()" class="text-zinc-400 hover:text-white p-2 rounded-xl hover:bg-obsidian-800 transition active:scale-95" title="Toggle Sidebar (Ctrl+/)">
+          <i data-lucide="panel-left-close" class="w-5 h-5"></i>
+        </button>
+
+        <!-- Quick Model Selector Capsule -->
+        <div class="flex items-center gap-2">
+          <div class="relative">
+            <select id="quickModelSelect" onchange="switchModel(this.value)" 
+                    class="appearance-none bg-obsidian-850/90 border border-obsidian-700/80 hover:border-obsidian-600 rounded-xl pl-3.5 pr-8 py-2 text-xs font-mono font-medium text-emerald-400 focus:outline-none focus:ring-1 focus:ring-brand-emerald transition cursor-pointer shadow-sm">
+              <optgroup label="Coding Models (SOTA)">
+                <option value="qwen2.5-coder:7b" selected>qwen2.5-coder:7b (Best Coding)</option>
+                <option value="qwen2.5-coder:1.5b">qwen2.5-coder:1.5b (Ultra Fast)</option>
+              </optgroup>
+              <optgroup label="Deep Reasoning (CoT)">
+                <option value="deepseek-r1:8b">deepseek-r1:8b (SOTA Reasoning)</option>
+                <option value="deepseek-r1:14b">deepseek-r1:14b (Max Reasoning)</option>
+                <option value="phi4:14b">phi4:14b (Math & Science)</option>
+              </optgroup>
+              <optgroup label="Fast Chat & Multilingual">
+                <option value="llama3.2:3b">llama3.2:3b (Instant Speed)</option>
+                <option value="qwen2.5:7b">qwen2.5:7b (General & Multilingual)</option>
+                <option value="mistral:7b">mistral:7b</option>
+                <option value="gemma2:9b">gemma2:9b</option>
+              </optgroup>
+            </select>
+            <i data-lucide="chevron-down" class="w-3.5 h-3.5 absolute right-2.5 top-3 text-zinc-400 pointer-events-none"></i>
+          </div>
+
+          <!-- Server Status Pill -->
+          <div id="connPill" onclick="openSettingsModal()" class="cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-mono border bg-amber-500/10 border-amber-500/30 text-amber-400 transition hover:bg-amber-500/20 shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+            <span id="connPillText">Connecting...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Realtime Token Metrics HUD -->
+      <div class="flex items-center gap-3">
+        <div id="metricsHUD" class="hidden sm:flex items-center gap-2.5 bg-obsidian-850/80 border border-obsidian-750 px-3.5 py-1.5 rounded-xl font-mono text-[11px] text-zinc-400 shadow-inner">
+          <span id="statTps" class="text-brand-emerald font-semibold flex items-center gap-1">
+            <i data-lucide="zap" class="w-3 h-3 text-brand-emerald"></i>
+            <span>0.0 tok/s</span>
+          </span>
+          <span class="text-zinc-600">&bull;</span>
+          <span id="statTokens">0 tok</span>
+          <span class="text-zinc-600">&bull;</span>
+          <span id="statLatency">0ms TTFT</span>
+        </div>
+        <a href="index.html" class="p-2 text-zinc-400 hover:text-brand-emerald hover:bg-obsidian-800 rounded-xl transition" title="AI Notebook Store"><i data-lucide="layers" class="w-4 h-4"></i></a>
+        <button onclick="openSettingsModal()" class="p-2 text-zinc-400 hover:text-white hover:bg-obsidian-800 rounded-xl transition" title="Connection Settings">
+          <i data-lucide="settings" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Messages Container -->
+    <div id="messagesContainer" onscroll="handleScroll(this)" class="flex-1 overflow-y-auto px-4 py-8 space-y-6 max-w-4xl w-full mx-auto relative">
+      <!-- Welcome Hero State with 🔮 AI Orb -->
+      <div id="welcomeScreen" class="py-10 px-4 max-w-2xl mx-auto text-center space-y-6 animate-fade-up">
+        
+        <!-- Glowing 3D AI Orb -->
+        <div class="orb-container">
+          <div class="ai-orb" onclick="openSettingsModal()" title="Colab AI Orb - Click to configure endpoint"></div>
+        </div>
+        
+        <div class="space-y-2">
+          <h2 class="text-2xl font-extrabold tracking-tight text-white sm:text-3xl flex items-center justify-center gap-2">
+            <span>Colab LLM Studio</span>
+          </h2>
+          <p class="text-zinc-400 text-sm leading-relaxed max-w-md mx-auto">
+            High-performance OpenAI-compatible client running on your Google Colab GPU. Lag-free coding, deep reasoning, and streaming tokens.
+          </p>
+        </div>
+
+        <!-- Connection Helper Banner if Not Connected -->
+        <div id="setupHelperBanner" class="p-4 rounded-2xl bg-gradient-to-r from-obsidian-850 via-obsidian-800 to-obsidian-850 border border-brand-emerald/30 shadow-glow-emerald text-left flex items-start justify-between gap-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 text-xs font-bold text-brand-emerald uppercase tracking-wider">
+              <i data-lucide="link" class="w-4 h-4"></i>
+              <span>Connect Your Colab Cloudflare URL</span>
+            </div>
+            <p class="text-xs text-zinc-300">
+              Colab notebook ke <strong>Cell 5</strong> se prapt <code>trycloudflare.com/v1</code> URL yahan paste karein.
+            </p>
+          </div>
+          <button onclick="openSettingsModal()" class="shrink-0 px-3.5 py-2 rounded-xl bg-brand-emerald hover:bg-emerald-400 text-obsidian-950 font-bold text-xs transition shadow-sm flex items-center gap-1.5">
+            <i data-lucide="plug" class="w-3.5 h-3.5"></i>
+            <span>Set URL</span>
+          </button>
+        </div>
+
+        <!-- Quick Launch Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left pt-2">
+          <div onclick="useQuickPrompt('Write a clean Python script using asyncio and aiohttp for concurrent HTTP requests with rate limiting.')" 
+               class="p-4 rounded-2xl bg-obsidian-850/80 hover:bg-obsidian-800/90 border border-obsidian-750 hover:border-brand-emerald/40 cursor-pointer transition group shadow-sm">
+            <div class="flex items-center gap-2 text-brand-emerald font-semibold text-xs mb-1">
+              <i data-lucide="code-2" class="w-4 h-4"></i>
+              <span>Async Python Engine</span>
+            </div>
+            <p class="text-xs text-zinc-400 group-hover:text-zinc-300">Concurrent requests, rate limiting, and robust exception handling.</p>
+          </div>
+
+          <div onclick="useQuickPrompt('Explain how DeepSeek-R1 uses reinforcement learning and test-time compute scaling to outperform proprietary models.')" 
+               class="p-4 rounded-2xl bg-obsidian-850/80 hover:bg-obsidian-800/90 border border-obsidian-750 hover:border-brand-cyan/40 cursor-pointer transition group shadow-sm">
+            <div class="flex items-center gap-2 text-brand-cyan font-semibold text-xs mb-1">
+              <i data-lucide="brain-circuit" class="w-4 h-4"></i>
+              <span>DeepSeek-R1 Deep Dive</span>
+            </div>
+            <p class="text-xs text-zinc-400 group-hover:text-zinc-300">Test-time compute scaling, GRPO reasoning, and architecture.</p>
+          </div>
+
+          <div onclick="useQuickPrompt('Design an ultra-fast Redis caching strategy for a microservices backend with cache stampede protection.')" 
+               class="p-4 rounded-2xl bg-obsidian-850/80 hover:bg-obsidian-800/90 border border-obsidian-750 hover:border-brand-amber/40 cursor-pointer transition group shadow-sm">
+            <div class="flex items-center gap-2 text-brand-amber font-semibold text-xs mb-1">
+              <i data-lucide="database" class="w-4 h-4"></i>
+              <span>Distributed Caching</span>
+            </div>
+            <p class="text-xs text-zinc-400 group-hover:text-zinc-300">Redis cache stampede mutex, TTL jitters, and invalidation.</p>
+          </div>
+
+          <div onclick="useQuickPrompt('Audit this code for security vulnerabilities, memory safety issues, and OWASP Top 10 risks:')" 
+               class="p-4 rounded-2xl bg-obsidian-850/80 hover:bg-obsidian-800/90 border border-obsidian-750 hover:border-brand-rose/40 cursor-pointer transition group shadow-sm">
+            <div class="flex items-center gap-2 text-brand-rose font-semibold text-xs mb-1">
+              <i data-lucide="shield-check" class="w-4 h-4"></i>
+              <span>Security & Code Audit</span>
+            </div>
+            <p class="text-xs text-zinc-400 group-hover:text-zinc-300">Detect SQLi, XSS, insecure deserialization, and auth flaws.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll-to-Bottom Floating Pill -->
+    <button id="scrollBottomBtn" onclick="scrollToBottom()" class="hidden fixed right-8 bottom-28 z-20 bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 text-white p-2.5 rounded-full shadow-2xl transition active:scale-95 flex items-center justify-center">
+      <i data-lucide="arrow-down" class="w-4 h-4 text-brand-emerald"></i>
+    </button>
+
+    <!-- Floating Command Island -->
+    <div class="border-t border-obsidian-750/70 bg-obsidian-950/85 backdrop-blur-2xl p-4">
+      <div class="max-w-4xl mx-auto space-y-2.5">
+        
+        <!-- Attached Files Capsule Area -->
+        <div id="fileAttachmentArea" class="hidden flex items-center gap-2 pb-1">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-obsidian-800 border border-obsidian-700 text-xs text-zinc-300">
+            <i data-lucide="file" class="w-3.5 h-3.5 text-brand-emerald"></i>
+            <span id="attachedFileName" class="truncate max-w-[200px]">file.txt</span>
+            <button onclick="removeAttachedFile()" class="text-zinc-500 hover:text-rose-400 ml-1">&times;</button>
+          </div>
+        </div>
+
+        <!-- Prompt Suggestion Pills -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-1 text-[11px] font-medium no-scrollbar">
+          <span class="text-zinc-500 text-[10px] uppercase font-bold tracking-wider shrink-0">Prompts:</span>
+          <button onclick="insertTemplate('/code ')" class="px-2.5 py-1 rounded-lg bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 text-zinc-400 hover:text-brand-emerald transition shrink-0">
+            ⚡ /code
+          </button>
+          <button onclick="insertTemplate('/refactor ')" class="px-2.5 py-1 rounded-lg bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 text-zinc-400 hover:text-brand-cyan transition shrink-0">
+            ✨ /refactor
+          </button>
+          <button onclick="insertTemplate('/explain ')" class="px-2.5 py-1 rounded-lg bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 text-zinc-400 hover:text-brand-amber transition shrink-0">
+            🧠 /explain
+          </button>
+          <button onclick="insertTemplate('/test ')" class="px-2.5 py-1 rounded-lg bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 text-zinc-400 hover:text-brand-violet transition shrink-0">
+            🧪 /test
+          </button>
+        </div>
+
+        <!-- Input Box with File Attachment & Voice Mic -->
+        <div class="relative bg-obsidian-900/90 border border-obsidian-700/80 focus-within:border-brand-emerald focus-within:ring-2 focus-within:ring-brand-emerald/20 rounded-2xl shadow-xl transition-all">
+          <textarea id="userInput" rows="1" placeholder="Type a message, paste code, or drop a file... (Shift + Enter for newline)" 
+                    class="w-full bg-transparent pl-12 pr-28 py-3.5 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none resize-none max-h-48 overflow-y-auto leading-relaxed"></textarea>
+          
+          <!-- Left Attach Button -->
+          <div class="absolute left-2.5 bottom-2.5 flex items-center gap-1">
+            <input type="file" id="fileInput" class="hidden" onchange="handleFileSelect(event)" />
+            <button onclick="document.getElementById('fileInput').click()" class="text-zinc-400 hover:text-white p-2 rounded-xl hover:bg-obsidian-800 transition" title="Attach file (.py, .js, .txt, .json)">
+              <i data-lucide="paperclip" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <!-- Right Action Buttons -->
+          <div class="absolute right-2.5 bottom-2.5 flex items-center gap-1.5">
+            <!-- Voice Input Button -->
+            <button id="voiceBtn" onclick="toggleVoiceInput()" class="text-zinc-400 hover:text-brand-emerald p-2 rounded-xl hover:bg-obsidian-800 transition" title="Voice Dictation">
+              <i data-lucide="mic" class="w-4 h-4"></i>
+            </button>
+
+            <!-- Stop Button -->
+            <button id="stopBtn" onclick="stopGeneration()" class="hidden bg-rose-600 hover:bg-rose-500 text-white px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-lg shadow-rose-600/30">
+              <i data-lucide="square" class="w-3.5 h-3.5 fill-current"></i>
+              <span>Stop</span>
+            </button>
+
+            <!-- Send Button -->
+            <button id="sendBtn" onclick="sendMessage()" class="bg-brand-emerald hover:bg-emerald-400 text-obsidian-950 p-2.5 rounded-xl transition active:scale-95 shadow-lg shadow-brand-emerald/30 font-bold">
+              <i data-lucide="arrow-up" class="w-4 h-4 stroke-[2.5]"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between px-2 text-[11px] text-zinc-500 font-mono">
+          <div class="flex items-center gap-3">
+            <span>Enter to Send</span>
+            <span>&bull;</span>
+            <span>Shift + Enter for Newline</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-brand-emerald"></span>
+            <span>OpenAI API Compatible (/v1)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Live Code HTML Preview Modal -->
+  <div id="previewModal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fade-up">
+    <div class="bg-obsidian-900 border border-obsidian-750 rounded-2xl max-w-4xl w-full h-[80vh] flex flex-col overflow-hidden shadow-2xl">
+      <div class="px-5 py-3 border-b border-obsidian-750 flex items-center justify-between bg-obsidian-950/70">
+        <div class="flex items-center gap-2">
+          <i data-lucide="play" class="w-4 h-4 text-brand-emerald"></i>
+          <span class="font-bold text-xs text-white">Live HTML/Component Sandbox Preview</span>
+        </div>
+        <button onclick="closePreviewModal()" class="text-zinc-400 hover:text-white p-1 rounded-lg hover:bg-obsidian-800 transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <div class="flex-1 bg-white">
+        <iframe id="previewIframe" class="w-full h-full border-0"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🛡️ In-App Custom Confirmation Modal (100% In-App Web UI - Zero Browser Popups) -->
+  <div id="confirmModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fade-up">
+    <div class="bg-obsidian-900 border border-obsidian-750 rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl">
+      <div id="confirmModalIconBox" class="w-12 h-12 mx-auto rounded-full bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
+        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+      </div>
+      <div class="space-y-1.5">
+        <h3 id="confirmModalTitle" class="text-base font-semibold text-white">Delete All Chat History?</h3>
+        <p id="confirmModalDesc" class="text-xs text-zinc-400 leading-relaxed">This will permanently delete all conversation threads. This action cannot be undone.</p>
+      </div>
+      <div class="flex items-center gap-2.5 pt-2">
+        <button onclick="closeInAppConfirm()" class="flex-1 py-2.5 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 text-xs font-medium text-zinc-300 border border-obsidian-700 transition">
+          Cancel
+        </button>
+        <button id="confirmModalConfirmBtn" class="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-xs font-semibold text-white transition shadow-lg shadow-rose-900/30">
+          Delete All
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings & Quick Connect Modal (NO NATIVE ALERT!) -->
+  <div id="settingsModal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fade-up">
+    <div class="bg-obsidian-900 border border-obsidian-750 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl">
+      <div class="px-6 py-4 border-b border-obsidian-750 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-7 h-7 rounded-lg bg-brand-emerald/10 border border-brand-emerald/30 flex items-center justify-center">
+            <i data-lucide="link" class="w-4 h-4 text-brand-emerald"></i>
+          </div>
+          <div>
+            <h2 class="font-bold text-sm text-white">Connect Your Colab GPU</h2>
+            <p class="text-[10px] text-zinc-400 font-mono">OpenAI-Compatible /v1 Endpoint</p>
+          </div>
+        </div>
+        <button onclick="closeSettingsModal()" class="text-zinc-400 hover:text-white p-1 rounded-lg hover:bg-obsidian-800 transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-4 text-xs">
+        
+        <!-- Step 1 Notification Card -->
+        <div class="p-3 rounded-xl bg-obsidian-850/80 border border-obsidian-750 flex items-start gap-3">
+          <div class="p-1 rounded-lg bg-brand-emerald/10 text-brand-emerald shrink-0 mt-0.5">
+            <i data-lucide="info" class="w-4 h-4"></i>
+          </div>
+          <div class="text-[11px] leading-relaxed text-zinc-300">
+            <strong>How to get this URL:</strong> Google Colab notebook mein <strong>Cell 5 (Cloudflare Tunnel)</strong> run karein. Wahan generated <code>https://xxxx.trycloudflare.com/v1</code> URL copy karke niche paste karein.
+          </div>
+        </div>
+
+        <!-- Base URL with Paste from Clipboard -->
+        <div>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="font-semibold text-zinc-300">OpenAI Base URL</label>
+            <button onclick="pasteFromClipboard()" class="text-brand-emerald hover:text-emerald-400 text-[10px] flex items-center gap-1 font-mono">
+              <i data-lucide="clipboard" class="w-3 h-3"></i>
+              <span>Paste Clipboard</span>
+            </button>
+          </div>
+          <div class="flex gap-2">
+            <input id="baseUrl" type="text" placeholder="https://xxxx.trycloudflare.com/v1" 
+                   class="flex-1 bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2.5 text-zinc-200 font-mono text-xs focus:outline-none focus:border-brand-emerald transition" />
+            <button onclick="pingServer()" class="bg-obsidian-850 hover:bg-obsidian-800 text-zinc-200 px-3.5 py-2 rounded-xl font-medium transition flex items-center gap-1.5 border border-obsidian-750 shrink-0">
+              <i data-lucide="activity" class="w-3.5 h-3.5 text-brand-emerald"></i>
+              <span>Ping</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- API Key -->
+        <div>
+          <label class="block font-semibold text-zinc-300 mb-1.5">API Key (Bearer Auth)</label>
+          <input id="apiKey" type="password" value="ollama" placeholder="ollama" 
+                 class="w-full bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2 text-zinc-200 font-mono text-xs focus:outline-none focus:border-brand-emerald transition" />
+          <p class="text-[10px] text-zinc-500 mt-1">Ollama ke liye default <code>ollama</code> ya koi bhi random key chalegi.</p>
+        </div>
+
+        <!-- Model ID -->
+        <div>
+          <label class="block font-semibold text-zinc-300 mb-1.5">Active Model Tag</label>
+          <input id="modelNameInput" type="text" value="qwen2.5-coder:7b" 
+                 class="w-full bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2 text-zinc-200 font-mono text-xs focus:outline-none focus:border-brand-emerald transition" />
+        </div>
+
+        <!-- Temperature Slider -->
+        <div>
+          <div class="flex justify-between font-semibold text-zinc-300 mb-1.5">
+            <span>Temperature: <span id="tempDisplay" class="text-brand-emerald font-mono">0.6</span></span>
+            <span class="text-zinc-500 font-normal">Lower = More deterministic code</span>
+          </div>
+          <input id="tempInput" type="range" min="0" max="1.5" step="0.05" value="0.6" class="w-full accent-brand-emerald"
+                 oninput="document.getElementById('tempDisplay').innerText = this.value;" />
+        </div>
+
+        <!-- System Prompt -->
+        <div>
+          <label class="block font-semibold text-zinc-300 mb-1.5">System Prompt</label>
+          <textarea id="systemPromptInput" rows="2" placeholder="You are an expert full-stack developer and system architect..."
+                    class="w-full bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2 text-zinc-300 text-xs focus:outline-none focus:border-brand-emerald leading-relaxed transition"></textarea>
+        </div>
+      </div>
+
+      <div class="px-6 py-4 border-t border-obsidian-750 bg-obsidian-950/50 flex items-center justify-between">
+        <button onclick="enableDemoMode()" class="text-xs text-brand-cyan hover:underline flex items-center gap-1 font-mono">
+          <span>🧪 Try Demo Simulation Mode</span>
+        </button>
+        <div class="flex gap-2">
+          <button onclick="closeSettingsModal()" class="px-4 py-2 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 text-zinc-300 text-xs font-medium transition">
+            Cancel
+          </button>
+          <button onclick="saveAndApplySettings()" class="px-4 py-2 rounded-xl bg-brand-emerald hover:bg-emerald-400 text-obsidian-950 text-xs font-bold transition shadow-glow-emerald">
+            Save & Connect
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State Management
+    let chats = JSON.parse(localStorage.getItem('colab_studio_chats') || '[]');
+    let currentChatId = localStorage.getItem('colab_studio_current_id') || null;
+    let abortController = null;
+    let renderThrottleTimer = null;
+    let isAudioEnabled = localStorage.getItem('colab_audio_enabled') !== 'false';
+    let isDemoMode = localStorage.getItem('colab_demo_mode') === 'true';
+    let attachedFileContent = null;
+    let totalTokensGenerated = parseInt(localStorage.getItem('colab_total_tokens') || '0', 10);
+    const THEMES = ['theme-obsidian', 'theme-midnight', 'theme-cyberpunk'];
+    let currentThemeIdx = parseInt(localStorage.getItem('colab_theme_idx') || '0', 10);
+
+    // Toast Notification Manager (Replaces ugly native browser alert!)
+    
+    // 🛡️ Zero Native Popups Interceptor: Intercept any library or native dialogs into Web App UI
+    window.alert = function(msg) {
+      showToast(String(msg), 'warning');
+    };
+    window.confirm = function(msg) {
+      showToast(String(msg), 'warning');
+      return false;
+    };
+    window.prompt = function(msg) {
+      showToast(String(msg), 'info');
+      return null;
+    };
+
+    // In-App Modal Dialog Management (Zero Browser Dialogs)
+    let inAppConfirmAction = null;
+
+    function showInAppConfirm(title, desc, confirmBtnText, onConfirm, isDanger = true) {
+      const modal = document.getElementById('confirmModal');
+      document.getElementById('confirmModalTitle').innerText = title;
+      document.getElementById('confirmModalDesc').innerText = desc;
+      const btn = document.getElementById('confirmModalConfirmBtn');
+      btn.innerText = confirmBtnText || 'Confirm';
+
+      const iconBox = document.getElementById('confirmModalIconBox');
+      if (isDanger) {
+        btn.className = 'flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-xs font-semibold text-white transition shadow-lg shadow-rose-900/30';
+        iconBox.className = 'w-12 h-12 mx-auto rounded-full bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400';
+        iconBox.innerHTML = '<i data-lucide="alert-triangle" class="w-6 h-6"></i>';
+      } else {
+        btn.className = 'flex-1 py-2.5 rounded-xl bg-brand-emerald hover:bg-emerald-400 text-xs font-semibold text-obsidian-950 transition shadow-lg shadow-emerald-900/30';
+        iconBox.className = 'w-12 h-12 mx-auto rounded-full bg-brand-emerald/10 border border-brand-emerald/30 flex items-center justify-center text-brand-emerald';
+        iconBox.innerHTML = '<i data-lucide="info" class="w-6 h-6"></i>';
+      }
+
+      inAppConfirmAction = onConfirm;
+      modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeInAppConfirm() {
+      const modal = document.getElementById('confirmModal');
+      if (modal) modal.classList.add('hidden');
+      inAppConfirmAction = null;
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      
+      let borderClass = 'border-brand-emerald/40 text-emerald-200 bg-obsidian-900/90';
+      let icon = 'info';
+
+      if (type === 'error') {
+        borderClass = 'border-rose-500/50 text-rose-200 bg-rose-950/80';
+        icon = 'alert-triangle';
+      } else if (type === 'warning') {
+        borderClass = 'border-amber-500/50 text-amber-200 bg-amber-950/80';
+        icon = 'alert-circle';
+      } else if (type === 'success') {
+        borderClass = 'border-brand-emerald/50 text-emerald-200 bg-emerald-950/80';
+        icon = 'check-circle-2';
+      }
+
+      toast.className = `toast-pill ${borderClass}`;
+      toast.innerHTML = `
+        <i data-lucide="${icon}" class="w-4 h-4 shrink-0"></i>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      lucide.createIcons();
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // Paste from Clipboard
+    async function pasteFromClipboard() {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text) {
+          document.getElementById('baseUrl').value = text.trim();
+          showToast('Pasted URL from clipboard!', 'success');
+        }
+      } catch (err) {
+        showToast('Clipboard access denied. Please paste manually.', 'warning');
+      }
+    }
+
+    // Demo Mode for immediate offline preview
+    function enableDemoMode() {
+      isDemoMode = true;
+      localStorage.setItem('colab_demo_mode', 'true');
+      closeSettingsModal();
+      showToast('Demo simulation mode activated! You can now test prompts and UI animations.', 'success');
+      document.getElementById('connPillText').innerText = 'Demo Mode';
+      document.getElementById('connPill').className = 'cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-mono border bg-cyan-500/10 border-cyan-500/30 text-cyan-400';
+    }
+
+    // Audio Chime Synthesizer via Web Audio API (Zero external assets!)
+    function playChime() {
+      if (!isAudioEnabled) return;
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const now = audioCtx.currentTime;
+        const osc1 = audioCtx.createOscillator();
+        const osc2 = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(587.33, now); // D5
+        osc1.frequency.exponentialRampToValueAtTime(880, now + 0.15); // A5
+
+        osc2.type = 'triangle';
+        osc2.frequency.setValueAtTime(880, now);
+        osc2.frequency.exponentialRampToValueAtTime(1174.66, now + 0.15); // D6
+
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+        osc1.connect(gain);
+        osc2.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc1.start(now);
+        osc2.start(now);
+        osc1.stop(now + 0.35);
+        osc2.stop(now + 0.35);
+      } catch (e) {}
+    }
+
+    function toggleAudio() {
+      isAudioEnabled = !isAudioEnabled;
+      localStorage.setItem('colab_audio_enabled', isAudioEnabled);
+      const btn = document.getElementById('audioBtn');
+      btn.className = isAudioEnabled ? 'p-1.5 hover:bg-obsidian-800 rounded-lg text-brand-emerald transition' : 'p-1.5 hover:bg-obsidian-800 rounded-lg text-zinc-600 transition';
+      showToast(`Audio chime ${isAudioEnabled ? 'enabled' : 'disabled'}`);
+    }
+
+    function cycleTheme() {
+      document.body.classList.remove('theme-obsidian', 'theme-midnight', 'theme-cyberpunk');
+      currentThemeIdx = (currentThemeIdx + 1) % THEMES.length;
+      if (THEMES[currentThemeIdx] !== 'theme-obsidian') {
+        document.body.classList.add(THEMES[currentThemeIdx]);
+      }
+      localStorage.setItem('colab_theme_idx', currentThemeIdx);
+      showToast(`Switched theme to ${THEMES[currentThemeIdx].replace('theme-', '')}`);
+    }
+
+    // Cost Savings Calculator ($5 / 1M tokens vs GPT-4o)
+    function updateSavingsDisplay() {
+      const savedAmount = ((totalTokensGenerated / 1000000) * 5.0).toFixed(2);
+      document.getElementById('savingsCounter').innerText = `$${savedAmount}`;
+      localStorage.setItem('colab_total_tokens', totalTokensGenerated);
+    }
+
+    // Personas Library
+    const PERSONAS = {
+      architect: {
+        title: "Senior Architect",
+        system: "You are a Principal Software Architect. Focus on distributed systems, database scaling, concurrency, clean architecture, and long-term maintainability. Present clear diagrams and trade-offs."
+      },
+      coder: {
+        title: "Senior Coder",
+        system: "You are an Elite Software Engineer. Write high-performance, modular, bug-free, fully typed code. Follow best practices, handle edge cases, and provide concise explanations."
+      },
+      auditor: {
+        title: "Security Auditor",
+        system: "You are a Senior Application Security Auditor & Penetration Tester. Audit code for OWASP Top 10 risks, SQL injection, XSS, CSRF, insecure deserialization, and authentication bypasses."
+      },
+      tester: {
+        title: "QA Engineer",
+        system: "You are a QA Automation Lead. Write comprehensive unit, integration, and property-based test suites. Cover edge cases, mocking, assertions, and boundary conditions."
+      }
+    };
+
+    function applyPersona(key) {
+      const p = PERSONAS[key];
+      if (p) {
+        document.getElementById('systemPromptInput').value = p.system;
+        localStorage.setItem('colab_sys', p.system);
+        showToast(`Applied Persona: ${p.title}`, 'success');
+      }
+    }
+
+    // Load Settings
+    function initSettings() {
+      if (THEMES[currentThemeIdx] !== 'theme-obsidian') {
+        document.body.classList.add(THEMES[currentThemeIdx]);
+      }
+      updateSavingsDisplay();
+
+      const url = localStorage.getItem('colab_base_url') || '';
+      const key = localStorage.getItem('colab_api_key') || 'ollama';
+      const model = localStorage.getItem('colab_model') || 'qwen2.5-coder:7b';
+      const storedTemp = localStorage.getItem('colab_temp');
+      const temp = (storedTemp !== null && storedTemp !== '' && !isNaN(storedTemp)) ? storedTemp : '0.6';
+      const sys = localStorage.getItem('colab_sys') || PERSONAS.coder.system;
+
+      document.getElementById('baseUrl').value = url;
+      document.getElementById('apiKey').value = key;
+      document.getElementById('modelNameInput').value = model;
+      document.getElementById('tempInput').value = temp;
+      document.getElementById('tempDisplay').innerText = temp;
+      document.getElementById('systemPromptInput').value = sys;
+
+      if (url) {
+        document.getElementById('setupHelperBanner')?.classList.add('hidden');
+      }
+
+      syncModelSelector(model);
+      if (url) pingServer();
+    }
+
+    function syncModelSelector(model) {
+      const select = document.getElementById('quickModelSelect');
+      let found = false;
+      for (let i = 0; i < select.options.length; i++) {
+        if (select.options[i].value === model) {
+          select.selectedIndex = i;
+          found = true;
+          break;
+        }
+      }
+      if (!found && model) {
+        const opt = document.createElement('option');
+        opt.value = model;
+        opt.innerText = `${model} (Custom)`;
+        select.appendChild(opt);
+        select.value = model;
+      }
+    }
+
+    function saveAndApplySettings() {
+      const url = document.getElementById('baseUrl').value.trim().replace(/\/+$/, '');
+      const key = document.getElementById('apiKey').value.trim();
+      const model = document.getElementById('modelNameInput').value.trim();
+      const temp = document.getElementById('tempInput').value;
+      const sys = document.getElementById('systemPromptInput').value.trim();
+
+      if (url) {
+        isDemoMode = false;
+        localStorage.setItem('colab_demo_mode', 'false');
+        document.getElementById('setupHelperBanner')?.classList.add('hidden');
+      }
+
+      localStorage.setItem('colab_base_url', url);
+      localStorage.setItem('colab_api_key', key);
+      localStorage.setItem('colab_model', model);
+      localStorage.setItem('colab_temp', temp);
+      localStorage.setItem('colab_sys', sys);
+
+      syncModelSelector(model);
+      closeSettingsModal();
+      showToast('Settings saved successfully!', 'success');
+      pingServer();
+    }
+
+    function switchModel(newModel) {
+      document.getElementById('modelNameInput').value = newModel;
+      localStorage.setItem('colab_model', newModel);
+      showToast(`Selected model: ${newModel}`);
+    }
+
+    // Ping Server & Latency Check
+    async function pingServer() {
+      let url = (document.getElementById('baseUrl').value.trim() || localStorage.getItem('colab_base_url') || '').replace(/\/+$/, '');
+      const pill = document.getElementById('connPill');
+      const pillText = document.getElementById('connPillText');
+      const sideText = document.getElementById('sidebarConnStatus');
+
+      if (!url) {
+        if (isDemoMode) {
+          pill.className = 'cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-mono border bg-cyan-500/10 border-cyan-500/30 text-cyan-400';
+          pillText.innerText = 'Demo Mode';
+          sideText.innerHTML = '<span class="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400"></span><span>Demo Mode</span>';
+          return;
+        }
+        pill.className = 'cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-mono border bg-obsidian-850 border-obsidian-700 text-zinc-400';
+        pillText.innerText = 'No URL Set';
+        sideText.innerHTML = '<span class="inline-block w-1.5 h-1.5 rounded-full bg-zinc-500"></span><span>No URL Set</span>';
+        return;
+      }
+
+      pill.className = 'cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-mono border bg-amber-500/10 border-amber-500/30 text-amber-400';
+      pillText.innerText = 'Pinging...';
+
+      const startTime = performance.now();
+      try {
+        const pingEndpoint = url.endsWith('/v1') ? `${url}/models` : `${url}/api/tags`;
+        const res = await fetch(pingEndpoint, {
+          headers: { 'Authorization': `Bearer ${document.getElementById('apiKey').value || 'ollama'}` }
+        });
+        const latency = Math.round(performance.now() - startTime);
+
+        if (res.ok) {
+          pill.className = 'cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-mono border bg-emerald-500/10 border-emerald-500/30 text-emerald-400 shadow-sm';
+          pillText.innerText = `Online (${latency}ms)`;
+          sideText.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span><span>Online (${latency}ms)</span>`;
+        } else {
+          pill.className = 'cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-mono border bg-rose-500/10 border-rose-500/30 text-rose-400';
+          pillText.innerText = `HTTP ${res.status}`;
+          sideText.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-rose-500"></span><span>HTTP ${res.status}</span>`;
+        }
+      } catch (err) {
+        pill.className = 'cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-mono border bg-rose-500/10 border-rose-500/30 text-rose-400';
+        pillText.innerText = 'Offline/CORS';
+        sideText.innerHTML = '<span class="inline-block w-1.5 h-1.5 rounded-full bg-rose-500"></span><span>Offline / CORS</span>';
+      }
+    }
+
+    // Modal Toggles
+    function openSettingsModal() {
+      document.getElementById('settingsModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+    function closeSettingsModal() {
+      document.getElementById('settingsModal').classList.add('hidden');
+    }
+
+    function openPreviewModal(htmlContent) {
+      const modal = document.getElementById('previewModal');
+      const iframe = document.getElementById('previewIframe');
+      iframe.srcdoc = htmlContent;
+      modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+    function closePreviewModal() {
+      document.getElementById('previewModal').classList.add('hidden');
+    }
+
+    // Sidebar Toggle
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('-ml-80');
+    }
+
+    // Scroll Management
+    function handleScroll(el) {
+      const btn = document.getElementById('scrollBottomBtn');
+      const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 120;
+      if (!isNearBottom) {
+        btn.classList.remove('hidden');
+      } else {
+        btn.classList.add('hidden');
+      }
+    }
+
+    function scrollToBottom() {
+      const container = document.getElementById('messagesContainer');
+      container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+    }
+
+    // File Attachment Handler
+    function handleFileSelect(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        attachedFileContent = {
+          name: file.name,
+          content: evt.target.result
+        };
+        document.getElementById('attachedFileName').innerText = file.name;
+        document.getElementById('fileAttachmentArea').classList.remove('hidden');
+        showToast(`Attached ${file.name}`, 'info');
+      };
+      reader.readAsText(file);
+    }
+
+    function removeAttachedFile() {
+      attachedFileContent = null;
+      document.getElementById('fileInput').value = '';
+      document.getElementById('fileAttachmentArea').classList.add('hidden');
+    }
+
+    // Voice Dictation (Web Speech API)
+    let recognition = null;
+    let isRecording = false;
+
+    function toggleVoiceInput() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        showToast('Voice dictation requires Chrome, Edge, or Safari.', 'warning');
+        return;
+      }
+
+      const voiceBtn = document.getElementById('voiceBtn');
+      if (isRecording && recognition) {
+        recognition.stop();
+        isRecording = false;
+        voiceBtn.classList.remove('text-rose-500', 'animate-pulse');
+        return;
+      }
+
+      recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
+
+      recognition.onstart = function() {
+        isRecording = true;
+        voiceBtn.classList.add('text-rose-500', 'animate-pulse');
+        showToast('Listening... Speak now', 'info');
+      };
+
+      recognition.onresult = function(event) {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        document.getElementById('userInput').value = transcript;
+      };
+
+      recognition.onend = function() {
+        isRecording = false;
+        voiceBtn.classList.remove('text-rose-500', 'animate-pulse');
+      };
+
+      recognition.onerror = function() {
+        isRecording = false;
+        voiceBtn.classList.remove('text-rose-500', 'animate-pulse');
+      };
+
+      recognition.start();
+    }
+
+    // Chat Management with LocalStorage Protection
+    function getActiveChat() {
+      return chats.find(c => c.id === currentChatId);
+    }
+
+    function newChat() {
+      const id = 'chat_' + Date.now();
+      chats.unshift({
+        id,
+        title: 'New Conversation',
+        messages: [],
+        createdAt: Date.now()
+      });
+      currentChatId = id;
+      saveChats();
+      renderChatList();
+      renderMessages();
+      showToast('Started new conversation', 'info');
+    }
+
+    function saveChats() {
+      try {
+        localStorage.setItem('colab_studio_chats', JSON.stringify(chats));
+        localStorage.setItem('colab_studio_current_id', currentChatId);
+      } catch (e) {
+        if (chats.length > 5) {
+          chats = chats.slice(0, 5);
+          try {
+            localStorage.setItem('colab_studio_chats', JSON.stringify(chats));
+          } catch (e2) {}
+        }
+      }
+      document.getElementById('chatCountBadge').innerText = chats.length;
+    }
+
+    function selectChat(id) {
+      currentChatId = id;
+      saveChats();
+      renderChatList();
+      renderMessages();
+    }
+
+    function deleteChat(id, e) {
+      e.stopPropagation();
+      chats = chats.filter(c => c.id !== id);
+      if (currentChatId === id) {
+        currentChatId = chats.length ? chats[0].id : null;
+      }
+      saveChats();
+      renderChatList();
+      renderMessages();
+      showToast('Conversation deleted', 'info');
+    }
+
+    function clearAllChats() {
+      if (!chats.length) {
+        showToast('No chat history to clear', 'info');
+        return;
+      }
+      showInAppConfirm(
+        'Clear All Chat History?',
+        'This will permanently delete all conversation threads and messages. This action cannot be undone.',
+        'Delete All',
+        () => {
+          chats = [];
+          currentChatId = null;
+          saveChats();
+          renderChatList();
+          renderMessages();
+          showToast('All chat history cleared', 'info');
+        },
+        true
+      );
+    }
+
+    function filterChats(query) {
+      renderChatList(query.toLowerCase());
+    }
+
+    function renderChatList(query = '') {
+      const container = document.getElementById('chatList');
+      container.innerHTML = '';
+      const filtered = chats.filter(c => !query || c.title.toLowerCase().includes(query));
+
+      filtered.forEach(chat => {
+        const isActive = chat.id === currentChatId;
+        const div = document.createElement('div');
+        div.className = `group flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer transition ${isActive ? 'bg-obsidian-850 text-white font-medium border border-obsidian-750 shadow-sm' : 'text-zinc-400 hover:bg-obsidian-850/60 hover:text-zinc-200'}`;
+        div.onclick = () => selectChat(chat.id);
+
+        div.innerHTML = `
+          <div class="truncate flex items-center gap-2">
+            <i data-lucide="message-square" class="w-3.5 h-3.5 shrink-0 ${isActive ? 'text-brand-emerald' : 'text-zinc-500'}"></i>
+            <span class="truncate">${escapeHtml(chat.title || 'Conversation')}</span>
+          </div>
+          <button onclick="deleteChat('${chat.id}', event)" class="opacity-0 group-hover:opacity-100 hover:text-rose-400 p-1 text-xs transition">
+            <i data-lucide="x" class="w-3.5 h-3.5"></i>
+          </button>
+        `;
+        container.appendChild(div);
+      });
+
+      document.getElementById('chatCountBadge').innerText = chats.length;
+      lucide.createIcons();
+    }
+
+    // Markdown Parser with DOMPurify XSS Sanitization & DeepSeek Think Accordion
+    function formatMarkdown(rawText, isStreaming = false) {
+      if (!rawText) return '';
+
+      let thinkHtml = '';
+      let remainingText = rawText;
+
+      // Extract closed think tags <think>...</think>
+      const thinkClosedRegex = /<think>([\s\S]*?)<\/think>/i;
+      const thinkOpenRegex = /<think>([\s\S]*)$/i;
+
+      if (thinkClosedRegex.test(remainingText)) {
+        remainingText = remainingText.replace(thinkClosedRegex, (match, p1) => {
+          const parsedInner = DOMPurify.sanitize(marked.parse(p1.trim()));
+          thinkHtml += '<div class="think-card my-3"><div class="think-header" onclick="this.nextElementSibling.classList.toggle(\'hidden\')"><span class="flex items-center gap-1.5"><i data-lucide="brain-circuit" class="w-4 h-4 text-sky-400 inline"></i><span>Chain of Thought Reasoning</span></span><span class="text-[10px] text-sky-400/80 font-mono">Toggle</span></div><div class="think-body prose prose-invert">' + parsedInner + '</div></div>';
+          return '';
+        }).trim();
+      } else if (thinkOpenRegex.test(remainingText)) {
+        remainingText = remainingText.replace(thinkOpenRegex, (match, p1) => {
+          const parsedInner = DOMPurify.sanitize(marked.parse(p1.trim()));
+          thinkHtml += '<div class="think-card my-3"><div class="think-header"><span class="flex items-center gap-1.5 animate-pulse text-sky-300"><i data-lucide="sparkles" class="w-4 h-4 text-sky-400 inline"></i><span>Thinking in progress...</span></span></div><div class="think-body prose prose-invert">' + parsedInner + '</div></div>';
+          return '';
+        }).trim();
+      }
+
+      const parsedMain = remainingText ? DOMPurify.sanitize(marked.parse(remainingText)) : '';
+      let finalHtml = thinkHtml + parsedMain;
+      if (isStreaming) {
+        finalHtml += '<span class="streaming-cursor animate-cursor-blink"></span>';
+      }
+      return finalHtml;
+    }
+
+    function renderMessages() {
+      const container = document.getElementById('messagesContainer');
+      const chat = getActiveChat();
+      if (!chat || !chat.messages.length) {
+        container.innerHTML = `
+          <div id="welcomeScreen" class="py-10 px-4 max-w-2xl mx-auto text-center space-y-6 animate-fade-up">
+            <div class="orb-container">
+              <div class="ai-orb" onclick="openSettingsModal()" title="Colab AI Orb - Click to configure endpoint"></div>
+            </div>
+            <div class="space-y-2">
+              <h2 class="text-2xl font-extrabold tracking-tight text-white sm:text-3xl flex items-center justify-center gap-2">
+                <span>Colab LLM Studio</span>
+              </h2>
+              <p class="text-zinc-400 text-sm leading-relaxed max-w-md mx-auto">
+                High-performance OpenAI-compatible client running on your Google Colab GPU. Lag-free coding, deep reasoning, and streaming tokens.
+              </p>
+            </div>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = '';
+      chat.messages.forEach((msg, idx) => {
+        const div = document.createElement('div');
+        div.className = `flex gap-3.5 text-sm leading-relaxed animate-fade-up ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`;
+
+        if (msg.role === 'user') {
+          div.innerHTML = `
+            <div class="max-w-[85%] bg-gradient-to-r from-obsidian-850 to-obsidian-800 border border-brand-emerald/40 text-emerald-100 rounded-2xl px-5 py-3.5 relative group shadow-sm">
+              <div class="whitespace-pre-wrap">${escapeHtml(msg.content)}</div>
+              <div class="absolute right-2 -bottom-5 opacity-0 group-hover:opacity-100 transition text-[10px] flex gap-2">
+                <button onclick="editPrompt(${idx})" class="text-zinc-400 hover:text-brand-emerald">Edit</button>
+                <button onclick="copyRawText(${idx})" class="text-zinc-400 hover:text-brand-emerald">Copy</button>
+              </div>
+            </div>
+          `;
+        } else {
+          div.innerHTML = `
+            <div class="w-9 h-9 rounded-xl bg-obsidian-850 border border-obsidian-750 flex items-center justify-center text-xs shrink-0 text-brand-emerald shadow-md">
+              <div class="mini-orb"></div>
+            </div>
+            <div class="flex-1 max-w-[88%] bg-obsidian-900/90 border border-obsidian-750 rounded-2xl px-5 py-4 text-zinc-200 prose prose-invert max-w-none text-sm shadow-md relative group">
+              <div id="content_${idx}">${msg.content ? formatMarkdown(msg.content) : `
+                <div class="flex items-center gap-3 text-zinc-400 py-1 font-mono text-xs animate-pulse">
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-brand-emerald animate-ping"></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-brand-cyan"></span>
+                  </div>
+                  <span class="text-zinc-300">Processing on Colab T4 GPU... <span class="text-zinc-500">(Initial model load takes 15-30s)</span></span>
+                </div>
+              `}</div>
+              <div class="mt-3 pt-2.5 border-t border-obsidian-750/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-between text-[11px] text-zinc-500">
+                <button onclick="copyRawText(${idx})" class="hover:text-zinc-200 flex items-center gap-1">
+                  <i data-lucide="copy" class="w-3 h-3"></i> Copy Response
+                </button>
+                <button onclick="regenerateFrom(${idx})" class="hover:text-brand-emerald flex items-center gap-1">
+                  <i data-lucide="rotate-ccw" class="w-3 h-3"></i> Regenerate
+                </button>
+              </div>
+            </div>
+          `;
+        }
+        container.appendChild(div);
+      });
+
+      enhanceCodeBlocks();
+      lucide.createIcons();
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+      return String(text).replace(/[&<>"']/g, m => map[m]);
+    }
+
+    // Mac-style Code Window & Syntax Highlighting
+    function enhanceCodeBlocks() {
+      document.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightElement(block);
+        const pre = block.parentElement;
+        if (pre.parentElement.classList.contains('code-window')) return;
+
+        const lang = block.className.match(/language-(\w+)/)?.[1] || 'code';
+        const wrapper = document.createElement('div');
+        wrapper.className = 'code-window';
+
+        const bar = document.createElement('div');
+        bar.className = 'code-window-bar font-mono';
+
+        const isHtmlCode = ['html', 'htm', 'svg', 'xml'].includes(lang.toLowerCase());
+
+        bar.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="mac-dots">
+              <span class="mac-dot bg-[#ff5f56]"></span>
+              <span class="mac-dot bg-[#ffbd2e]"></span>
+              <span class="mac-dot bg-[#27c93f]"></span>
+            </div>
+            <span class="text-xs uppercase tracking-wider text-zinc-400 font-semibold">${lang}</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            ${isHtmlCode ? `
+              <button onclick="previewCode(this)" class="px-2.5 py-1 rounded-md bg-brand-emerald/10 hover:bg-brand-emerald/20 text-brand-emerald text-[11px] flex items-center gap-1 transition font-medium border border-brand-emerald/30">
+                <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                <span>Preview</span>
+              </button>
+            ` : ''}
+            <button onclick="downloadCode(this, '${lang}')" class="px-2.5 py-1 rounded-md bg-obsidian-800 hover:bg-obsidian-750 text-zinc-300 hover:text-white text-[11px] flex items-center gap-1 transition" title="Download Code">
+              <i data-lucide="file-code" class="w-3.5 h-3.5"></i>
+              <span>Save</span>
+            </button>
+            <button onclick="copySnippet(this)" class="px-2.5 py-1 rounded-md bg-obsidian-800 hover:bg-obsidian-750 text-zinc-300 hover:text-white text-[11px] flex items-center gap-1 transition">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span>Copy</span>
+            </button>
+          </div>
+        `;
+
+        pre.parentNode.insertBefore(wrapper, pre);
+        wrapper.appendChild(bar);
+        wrapper.appendChild(pre);
+      });
+      lucide.createIcons();
+    }
+
+    function previewCode(btn) {
+      const code = btn.closest('.code-window').querySelector('code').innerText;
+      openPreviewModal(code);
+    }
+
+    function copySnippet(btn) {
+      const code = btn.closest('.code-window').querySelector('code').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        const original = btn.innerHTML;
+        btn.innerHTML = '<span class="text-brand-emerald">✓ Copied!</span>';
+        setTimeout(() => { btn.innerHTML = original; lucide.createIcons(); }, 1800);
+      });
+    }
+
+    function downloadCode(btn, lang) {
+      const code = btn.closest('.code-window').querySelector('code').innerText;
+      const extMap = { python: 'py', javascript: 'js', typescript: 'ts', html: 'html', css: 'css', json: 'json', bash: 'sh', shell: 'sh', sql: 'sql', rust: 'rs', cpp: 'cpp', c: 'c', java: 'java' };
+      const ext = extMap[lang.toLowerCase()] || 'txt';
+      const blob = new Blob([code], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `code_${Date.now()}.${ext}`;
+      a.click();
+    }
+
+    function copyRawText(idx) {
+      const chat = getActiveChat();
+      if (!chat) return;
+      navigator.clipboard.writeText(chat.messages[idx].content);
+      showToast('Copied to clipboard!', 'success');
+    }
+
+    function useQuickPrompt(text) {
+      document.getElementById('userInput').value = text;
+      document.getElementById('userInput').focus();
+    }
+
+    function insertTemplate(prefix) {
+      const input = document.getElementById('userInput');
+      input.value = prefix + input.value;
+      input.focus();
+    }
+
+    function editPrompt(idx) {
+      const chat = getActiveChat();
+      if (!chat) return;
+      document.getElementById('userInput').value = chat.messages[idx].content;
+      chat.messages = chat.messages.slice(0, idx);
+      saveChats();
+      renderMessages();
+      document.getElementById('userInput').focus();
+    }
+
+    function regenerateFrom(assistantIdx) {
+      const chat = getActiveChat();
+      if (!chat || assistantIdx < 1) return;
+      chat.messages = chat.messages.slice(0, assistantIdx);
+      saveChats();
+      renderMessages();
+      triggerCompletion();
+    }
+
+    function exportChatMarkdown() {
+      const chat = getActiveChat();
+      if (!chat || !chat.messages.length) {
+        showToast('No conversation to export.', 'warning');
+        return;
+      }
+      let md = `# ${chat.title}\n*Exported from Colab LLM Studio on ${new Date().toLocaleString()}*\n\n---\n\n`;
+      chat.messages.forEach(m => {
+        md += `### ${m.role === 'user' ? '👤 User' : '🤖 Assistant'}\n\n${m.content}\n\n---\n\n`;
+      });
+      const blob = new Blob([md], { type: 'text/markdown' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${chat.title.replace(/[^a-zA-Z0-9_-]/g, '_')}.md`;
+      a.click();
+      showToast('Exported chat to Markdown file', 'success');
+    }
+
+    // Auto-grow Textarea
+    const textarea = document.getElementById('userInput');
+    textarea.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
+    });
+    textarea.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    // Global Keyboard Shortcuts
+    document.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        document.getElementById('searchChats').focus();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === 'o') {
+        e.preventDefault();
+        newChat();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+        e.preventDefault();
+        toggleSidebar();
+      }
+      if (e.key === 'Escape') {
+        stopGeneration();
+        closeSettingsModal();
+        closePreviewModal();
+        closeInAppConfirm();
+      }
+    });
+
+    // Send Message Logic with NO NATIVE ALERT!
+    async function sendMessage() {
+      if (abortController) {
+        showToast('Generation in progress. Please wait or click Stop!', 'warning');
+        return;
+      }
+      let text = textarea.value.trim();
+      if (attachedFileContent) {
+        text = `[File: ${attachedFileContent.name}]\n\`\`\`\n${attachedFileContent.content}\n\`\`\`\n\n${text}`;
+        removeAttachedFile();
+      }
+      if (!text) return;
+
+      let baseUrl = (document.getElementById('baseUrl').value.trim() || localStorage.getItem('colab_base_url') || '').replace(/\/+$/, '');
+      
+      // If Base URL is missing and not in demo mode, open modal & toast smoothly!
+      if (!baseUrl && !isDemoMode) {
+        openSettingsModal();
+        showToast('Please paste your Colab Cloudflare URL or try Demo Mode!', 'warning');
+        return;
+      }
+
+      if (!baseUrl.endsWith('/v1') && baseUrl) baseUrl += '/v1';
+
+      if (!currentChatId || !getActiveChat()) newChat();
+
+      const chat = getActiveChat();
+      chat.messages.push({ role: 'user', content: text });
+      if (chat.title === 'New Conversation') {
+        chat.title = text.slice(0, 32) + (text.length > 32 ? '...' : '');
+      }
+
+      textarea.value = '';
+      textarea.style.height = 'auto';
+      renderChatList();
+      renderMessages();
+
+      await triggerCompletion(baseUrl);
+    }
+
+    async function triggerCompletion(customBaseUrl) {
+      let baseUrl = customBaseUrl || (document.getElementById('baseUrl').value.trim() || localStorage.getItem('colab_base_url') || '').replace(/\/+$/, '');
+      if (baseUrl && !baseUrl.endsWith('/v1')) baseUrl += '/v1';
+
+      const chat = getActiveChat();
+      const assistantMsg = { role: 'assistant', content: '' };
+      chat.messages.push(assistantMsg);
+      const assistantIdx = chat.messages.length - 1;
+      renderMessages();
+
+      const sendBtn = document.getElementById('sendBtn');
+      const stopBtn = document.getElementById('stopBtn');
+      sendBtn.classList.add('hidden');
+      stopBtn.classList.remove('hidden');
+
+      abortController = new AbortController();
+
+      // Demo Mode Stream Simulation
+      if (isDemoMode && !baseUrl) {
+        const demoResponses = [
+          "<think>\nUser is asking for assistance or testing the Colab LLM Studio client interface.\nVerifying token streaming, code window highlighting, and KaTeX rendering.\nEverything is operating smoothly.\n</think>\n\nHello! 🚀 **Colab LLM Studio** is running in simulation mode.\n\nYour UI is fully configured with:\n- 🎨 **Obsidian Glassmorphism Theme** with glowing AI Orb\n- 💻 **Mac-style Code Windows** with 1-click save & live preview\n- 🧠 **DeepSeek-R1 CoT Accordion**\n- ⚡ **Zero-CORS OpenAI Compatible /v1 Streaming**\n\nHere is a quick sample Python snippet:\n\n```python\nimport asyncio\nimport aiohttp\n\nasync def fetch_gpu_status():\n    print(\"Tesla T4 GPU is ready for lag-free inference!\")\n\nasyncio.run(fetch_gpu_status())\n```\n\nTo connect to your real Colab GPU, paste your Cloudflare Tunnel URL in **Settings**!"
+        ];
+        const sampleText = demoResponses[0];
+        let streamIdx = 0;
+        const interval = setInterval(() => {
+          if (streamIdx < sampleText.length && abortController && !abortController.signal.aborted) {
+            assistantMsg.content += sampleText.slice(streamIdx, streamIdx + 6);
+            streamIdx += 6;
+            document.getElementById(`content_${assistantIdx}`).innerHTML = formatMarkdown(assistantMsg.content, true);
+            scrollToBottom();
+          } else {
+            clearInterval(interval);
+            finishGeneration();
+          }
+        }, 30);
+        return;
+      }
+
+      const apiMessages = [];
+      const sysPrompt = localStorage.getItem('colab_sys') || '';
+      if (sysPrompt) apiMessages.push({ role: 'system', content: sysPrompt });
+      chat.messages.slice(0, -1).forEach(m => apiMessages.push({ role: m.role, content: m.content }));
+
+      const storedTemp = localStorage.getItem('colab_temp');
+      const tempVal = (storedTemp !== null && storedTemp !== '' && !isNaN(storedTemp)) ? parseFloat(storedTemp) : 0.6;
+
+      const payload = {
+        model: document.getElementById('quickModelSelect').value || localStorage.getItem('colab_model') || 'qwen2.5-coder:7b',
+        messages: apiMessages,
+        stream: true,
+        temperature: tempVal
+      };
+
+      const startTime = performance.now();
+      let firstTokenTime = null;
+      let tokenCount = 0;
+      let hasReasoningStarted = false;
+
+      const metricsHUD = document.getElementById('metricsHUD');
+      metricsHUD.classList.remove('hidden');
+
+      try {
+        const response = await fetch(`${baseUrl}/chat/completions`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('colab_api_key') || 'ollama'}`
+          },
+          body: JSON.stringify(payload),
+          signal: abortController.signal
+        });
+
+        if (!response.ok) {
+          const errText = await response.text();
+          throw new Error(`HTTP ${response.status}: ${escapeHtml(errText.slice(0, 150))}`);
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        const updateDomThrottled = () => {
+          if (!renderThrottleTimer) {
+            renderThrottleTimer = requestAnimationFrame(() => {
+              document.getElementById(`content_${assistantIdx}`).innerHTML = formatMarkdown(assistantMsg.content, true);
+              const container = document.getElementById('messagesContainer');
+              container.scrollTop = container.scrollHeight;
+              renderThrottleTimer = null;
+            });
+          }
+        };
+
+        // Realtime waiting timer to inform user during cold starts
+        let waitSeconds = 0;
+        const waitingTimer = setInterval(() => {
+          if (!assistantMsg.content && abortController) {
+            waitSeconds++;
+            const el = document.getElementById(`content_${assistantIdx}`);
+            if (el) {
+              const extraHint = waitSeconds >= 12 ? '<span class="text-brand-cyan/80 font-semibold">— Loading model weights into Tesla T4 VRAM...</span>' : '';
+              el.innerHTML = `
+                <div class="flex items-center gap-3 text-zinc-400 py-1 font-mono text-xs animate-pulse">
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-brand-emerald animate-ping"></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-brand-cyan"></span>
+                  </div>
+                  <span class="text-zinc-300">Connecting to Colab T4 GPU... (${waitSeconds}s) ${extraHint}</span>
+                </div>
+              `;
+            }
+          } else {
+            clearInterval(waitingTimer);
+          }
+        }, 1000);
+
+        // Safety timeout of 100 seconds
+        const timeoutId = setTimeout(() => {
+          if (!assistantMsg.content && abortController) {
+            abortController.abort(new Error('Connection timed out (100s). Colab GPU may be unresponsive or still loading large model.'));
+          }
+        }, 100000);
+
+        outerStreamLoop: while (true) {
+          const { done, value } = await reader.read();
+          if (done) break outerStreamLoop;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop();
+
+          for (const line of lines) {
+            const clean = line.trim();
+            if (!clean || clean.startsWith(':')) continue;
+
+            if (clean === 'data: [DONE]') {
+              break outerStreamLoop;
+            }
+
+            // Support both standard SSE ('data: {..}') and direct JSON lines ('{..}')
+            let jsonPayload = '';
+            if (clean.startsWith('data: ')) {
+              jsonPayload = clean.substring(6).trim();
+            } else if (clean.startsWith('{') && clean.endsWith('}')) {
+              jsonPayload = clean;
+            }
+
+            if (jsonPayload) {
+              try {
+                const parsed = JSON.parse(jsonPayload);
+                
+                // 1. Check for server errors (Ollama or OpenAI error format)
+                if (parsed.error) {
+                  const errMsg = typeof parsed.error === 'object' ? (parsed.error.message || JSON.stringify(parsed.error)) : parsed.error;
+                  assistantMsg.content = `❌ **Model Server Error:** ${errMsg}\n\n*Please verify that model \`${payload.model}\` is downloaded and running in Colab (Cell 4).*`;
+                  tokenCount++;
+                  clearInterval(waitingTimer);
+                  clearTimeout(timeoutId);
+                  updateDomThrottled();
+                  break outerStreamLoop;
+                }
+
+                // 2. CoT Reasoning Content (DeepSeek-R1)
+                const deltaReasoning = parsed.choices?.[0]?.delta?.reasoning_content || parsed.choices?.[0]?.delta?.reasoning || '';
+                
+                // 3. Delta Content (OpenAI delta, Ollama native message, or OpenAI non-streaming fallback)
+                const deltaContent = parsed.choices?.[0]?.delta?.content 
+                  || parsed.message?.content 
+                  || parsed.response 
+                  || parsed.choices?.[0]?.message?.content 
+                  || '';
+
+                if (deltaReasoning) {
+                  clearInterval(waitingTimer);
+                  clearTimeout(timeoutId);
+                  if (!hasReasoningStarted) {
+                    assistantMsg.content = '<think>\n' + deltaReasoning;
+                    hasReasoningStarted = true;
+                  } else {
+                    assistantMsg.content += deltaReasoning;
+                  }
+                  tokenCount++;
+                }
+
+                if (deltaContent) {
+                  clearInterval(waitingTimer);
+                  clearTimeout(timeoutId);
+                  if (hasReasoningStarted && !assistantMsg.content.includes('</think>')) {
+                    assistantMsg.content += '\n</think>\n\n';
+                  }
+                  assistantMsg.content += deltaContent;
+                  tokenCount++;
+                }
+
+                if (deltaReasoning || deltaContent) {
+                  if (!firstTokenTime) {
+                    firstTokenTime = Math.round(performance.now() - startTime);
+                    document.getElementById('statLatency').innerText = `${firstTokenTime}ms TTFT`;
+                  }
+
+                  const elapsed = (performance.now() - startTime) / 1000;
+                  const tps = elapsed > 0 ? (tokenCount / elapsed).toFixed(1) : '0';
+                  document.getElementById('statTps').innerText = `${tps} tok/s`;
+                  document.getElementById('statTokens').innerText = `${tokenCount} tok`;
+
+                  updateDomThrottled();
+                }
+              } catch (e) {}
+            }
+          }
+        }
+
+        clearInterval(waitingTimer);
+        clearTimeout(timeoutId);
+
+        // Fallback if loop ended with 0 tokens received
+        if (!assistantMsg.content.trim()) {
+          assistantMsg.content = `⚠️ **No response tokens received from model.**\n\n- Model Requested: \`${payload.model}\`\n- Base Endpoint: \`${baseUrl}/chat/completions\`\n\n**Troubleshooting Checklist:**\n1. **Model Downloaded?** In Google Colab, verify **Cell 4** ran successfully for \`${payload.model}\`.\n2. **Ollama Running?** Ensure **Cell 3** (\`ollama serve\`) is active without errors.\n3. **Active Cloudflare Tunnel?** Ensure **Cell 5** tunnel is running and reachable.`;
+          updateDomThrottled();
+        }
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          assistantMsg.content += '\n\n*(Generation stopped by user)*';
+        } else {
+          assistantMsg.content += `\n\n❌ **Error connecting to Colab:** ${err.message}\n\n*Check if your Cloudflare Tunnel is running and Base URL is correct.*`;
+        }
+      } finally {
+        totalTokensGenerated += tokenCount;
+        finishGeneration();
+      }
+
+      function finishGeneration() {
+        if (renderThrottleTimer) {
+          cancelAnimationFrame(renderThrottleTimer);
+          renderThrottleTimer = null;
+        }
+        const finalContent = assistantMsg.content.trim() ? formatMarkdown(assistantMsg.content, false) : `⚠️ <span class="text-zinc-500 font-mono text-xs">No response tokens generated.</span>`;
+        document.getElementById(`content_${assistantIdx}`).innerHTML = finalContent;
+        const container = document.getElementById('messagesContainer');
+        container.scrollTop = container.scrollHeight;
+
+        updateSavingsDisplay();
+        playChime();
+
+        sendBtn.classList.remove('hidden');
+        stopBtn.classList.add('hidden');
+        enhanceCodeBlocks();
+        lucide.createIcons();
+        saveChats();
+        abortController = null;
+      }
+    }
+
+    function stopGeneration() {
+      if (abortController) abortController.abort();
+    }
+
+    // Init on page load
+    
+    document.getElementById('confirmModalConfirmBtn')?.addEventListener('click', () => {
+      if (inAppConfirmAction) {
+        inAppConfirmAction();
+      }
+      closeInAppConfirm();
+    });
+
+    initSettings();
+    if (chats.length && !currentChatId) currentChatId = chats[0].id;
+    renderChatList();
+    renderMessages();
+    lucide.createIcons();
+  </script>
+</body>
+</html>
