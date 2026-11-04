@@ -658,6 +658,27 @@
     </div>
   </div>
 
+  <!-- 🛡️ In-App Custom Confirmation Modal (100% In-App Web UI - Zero Browser Popups) -->
+  <div id="confirmModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fade-up">
+    <div class="bg-obsidian-900 border border-obsidian-750 rounded-2xl max-w-sm w-full p-6 text-center space-y-4 shadow-2xl">
+      <div id="confirmModalIconBox" class="w-12 h-12 mx-auto rounded-full bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
+        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+      </div>
+      <div class="space-y-1.5">
+        <h3 id="confirmModalTitle" class="text-base font-semibold text-white">Delete All Chat History?</h3>
+        <p id="confirmModalDesc" class="text-xs text-zinc-400 leading-relaxed">This will permanently delete all conversation threads. This action cannot be undone.</p>
+      </div>
+      <div class="flex items-center gap-2.5 pt-2">
+        <button onclick="closeInAppConfirm()" class="flex-1 py-2.5 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 text-xs font-medium text-zinc-300 border border-obsidian-700 transition">
+          Cancel
+        </button>
+        <button id="confirmModalConfirmBtn" class="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-xs font-semibold text-white transition shadow-lg shadow-rose-900/30">
+          Delete All
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Settings & Quick Connect Modal (NO NATIVE ALERT!) -->
   <div id="settingsModal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fade-up">
     <div class="bg-obsidian-900 border border-obsidian-750 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl">
@@ -770,6 +791,52 @@
     let currentThemeIdx = parseInt(localStorage.getItem('colab_theme_idx') || '0', 10);
 
     // Toast Notification Manager (Replaces ugly native browser alert!)
+    
+    // 🛡️ Zero Native Popups Interceptor: Intercept any library or native dialogs into Web App UI
+    window.alert = function(msg) {
+      showToast(String(msg), 'warning');
+    };
+    window.confirm = function(msg) {
+      showToast(String(msg), 'warning');
+      return false;
+    };
+    window.prompt = function(msg) {
+      showToast(String(msg), 'info');
+      return null;
+    };
+
+    // In-App Modal Dialog Management (Zero Browser Dialogs)
+    let inAppConfirmAction = null;
+
+    function showInAppConfirm(title, desc, confirmBtnText, onConfirm, isDanger = true) {
+      const modal = document.getElementById('confirmModal');
+      document.getElementById('confirmModalTitle').innerText = title;
+      document.getElementById('confirmModalDesc').innerText = desc;
+      const btn = document.getElementById('confirmModalConfirmBtn');
+      btn.innerText = confirmBtnText || 'Confirm';
+
+      const iconBox = document.getElementById('confirmModalIconBox');
+      if (isDanger) {
+        btn.className = 'flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-xs font-semibold text-white transition shadow-lg shadow-rose-900/30';
+        iconBox.className = 'w-12 h-12 mx-auto rounded-full bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400';
+        iconBox.innerHTML = '<i data-lucide="alert-triangle" class="w-6 h-6"></i>';
+      } else {
+        btn.className = 'flex-1 py-2.5 rounded-xl bg-brand-emerald hover:bg-emerald-400 text-xs font-semibold text-obsidian-950 transition shadow-lg shadow-emerald-900/30';
+        iconBox.className = 'w-12 h-12 mx-auto rounded-full bg-brand-emerald/10 border border-brand-emerald/30 flex items-center justify-center text-brand-emerald';
+        iconBox.innerHTML = '<i data-lucide="info" class="w-6 h-6"></i>';
+      }
+
+      inAppConfirmAction = onConfirm;
+      modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeInAppConfirm() {
+      const modal = document.getElementById('confirmModal');
+      if (modal) modal.classList.add('hidden');
+      inAppConfirmAction = null;
+    }
+
     function showToast(message, type = 'info') {
       const container = document.getElementById('toastContainer');
       const toast = document.createElement('div');
@@ -1211,14 +1278,24 @@
     }
 
     function clearAllChats() {
-      if (confirm('Delete all chat history? This cannot be undone.')) {
-        chats = [];
-        currentChatId = null;
-        saveChats();
-        renderChatList();
-        renderMessages();
-        showToast('All chat history cleared', 'info');
+      if (!chats.length) {
+        showToast('No chat history to clear', 'info');
+        return;
       }
+      showInAppConfirm(
+        'Clear All Chat History?',
+        'This will permanently delete all conversation threads and messages. This action cannot be undone.',
+        'Delete All',
+        () => {
+          chats = [];
+          currentChatId = null;
+          saveChats();
+          renderChatList();
+          renderMessages();
+          showToast('All chat history cleared', 'info');
+        },
+        true
+      );
     }
 
     function filterChats(query) {
@@ -1256,47 +1333,33 @@
     function formatMarkdown(rawText, isStreaming = false) {
       if (!rawText) return '';
 
-      // DeepSeek <think> tag handling
-      let html = rawText.replace(/<think>([\s\S]*?)<\/think>/gi, (match, p1) => {
-        const parsedInner = DOMPurify.sanitize(marked.parse(p1.trim()));
-        return `
-          <div class="think-card">
-            <div class="think-header" onclick="this.nextElementSibling.classList.toggle('hidden')">
-              <span class="flex items-center gap-1.5">
-                <i data-lucide="brain-circuit" class="w-4 h-4 text-sky-400 inline"></i>
-                <span>Chain of Thought Reasoning</span>
-              </span>
-              <span class="text-[10px] text-sky-400/80 font-mono">Toggle</span>
-            </div>
-            <div class="think-body prose prose-invert">${parsedInner}</div>
-          </div>
-        `;
-      });
+      let thinkHtml = '';
+      let remainingText = rawText;
 
-      // Ongoing thinking tag during stream
-      if (html.includes('<think>') && !html.includes('</think>')) {
-        html = html.replace(/<think>([\s\S]*)$/gi, (match, p1) => {
+      // Extract closed think tags <think>...</think>
+      const thinkClosedRegex = /<think>([\s\S]*?)<\/think>/i;
+      const thinkOpenRegex = /<think>([\s\S]*)$/i;
+
+      if (thinkClosedRegex.test(remainingText)) {
+        remainingText = remainingText.replace(thinkClosedRegex, (match, p1) => {
           const parsedInner = DOMPurify.sanitize(marked.parse(p1.trim()));
-          return `
-            <div class="think-card">
-              <div class="think-header">
-                <span class="flex items-center gap-1.5 animate-pulse text-sky-300">
-                  <i data-lucide="sparkles" class="w-4 h-4 text-sky-400 inline"></i>
-                  <span>Thinking in progress...</span>
-                </span>
-              </div>
-              <div class="think-body prose prose-invert">${parsedInner}</div>
-            </div>
-          `;
-        });
+          thinkHtml += '<div class="think-card my-3"><div class="think-header" onclick="this.nextElementSibling.classList.toggle(\'hidden\')"><span class="flex items-center gap-1.5"><i data-lucide="brain-circuit" class="w-4 h-4 text-sky-400 inline"></i><span>Chain of Thought Reasoning</span></span><span class="text-[10px] text-sky-400/80 font-mono">Toggle</span></div><div class="think-body prose prose-invert">' + parsedInner + '</div></div>';
+          return '';
+        }).trim();
+      } else if (thinkOpenRegex.test(remainingText)) {
+        remainingText = remainingText.replace(thinkOpenRegex, (match, p1) => {
+          const parsedInner = DOMPurify.sanitize(marked.parse(p1.trim()));
+          thinkHtml += '<div class="think-card my-3"><div class="think-header"><span class="flex items-center gap-1.5 animate-pulse text-sky-300"><i data-lucide="sparkles" class="w-4 h-4 text-sky-400 inline"></i><span>Thinking in progress...</span></span></div><div class="think-body prose prose-invert">' + parsedInner + '</div></div>';
+          return '';
+        }).trim();
       }
 
-      // Final pass with DOMPurify sanitization
-      let sanitized = DOMPurify.sanitize(marked.parse(html));
+      const parsedMain = remainingText ? DOMPurify.sanitize(marked.parse(remainingText)) : '';
+      let finalHtml = thinkHtml + parsedMain;
       if (isStreaming) {
-        sanitized += '<span class="streaming-cursor animate-cursor-blink"></span>';
+        finalHtml += '<span class="streaming-cursor animate-cursor-blink"></span>';
       }
-      return sanitized;
+      return finalHtml;
     }
 
     function renderMessages() {
@@ -1530,6 +1593,7 @@
         stopGeneration();
         closeSettingsModal();
         closePreviewModal();
+        closeInAppConfirm();
       }
     });
 
@@ -1756,6 +1820,14 @@
     }
 
     // Init on page load
+    
+    document.getElementById('confirmModalConfirmBtn')?.addEventListener('click', () => {
+      if (inAppConfirmAction) {
+        inAppConfirmAction();
+      }
+      closeInAppConfirm();
+    });
+
     initSettings();
     if (chats.length && !currentChatId) currentChatId = chats[0].id;
     renderChatList();
