@@ -2,12 +2,12 @@
 
 Welcome to your **Personal AI Notebook Store & Hub** — a production-grade, privacy-first collection of cloud GPU notebooks and standalone web clients engineered for **Google Colab Free (Tesla T4 15GB)** and **Kaggle (Dual Tesla T4 x2 30GB)**.
 
-[![Store Web App](https://img.shields.io/badge/Obsidian_Store_Web_App-Live_Catalog-10b981?style=for-the-badge&logo=googlechrome&logoColor=white)](store/index.html)
+[![Store Web App](https://img.shields.io/badge/Obsidian_Store_Web_App-Live_Catalog-10b981?style=for-the-badge&logo=googlechrome&logoColor=white)](https://sudhirdevops1.github.io/t4-gpu-llm-api/)
 [![Zero-Leak Privacy](https://img.shields.io/badge/Security-100%25_Zero--Leak-06b6d4?style=for-the-badge&logo=shield&logoColor=white)](#-zero-leak-privacy--security-architecture)
 [![Google Colab](https://img.shields.io/badge/Google_Colab-Free_T4_GPU-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white)](#-notebook-catalog)
 [![Kaggle](https://img.shields.io/badge/Kaggle-Dual_T4_x2-20BEFF?style=for-the-badge&logo=kaggle&logoColor=white)](#-notebook-catalog)
 [![Lightning AI](https://img.shields.io/badge/Lightning_AI-Open_Studio-792EE5?style=for-the-badge&logo=lightning&logoColor=white)](https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api)
-[![Chat Client](https://img.shields.io/badge/Chat_Client-Next--Gen_Workspace-8b5cf6?style=for-the-badge&logo=webrtc&logoColor=white)](colab_ai_chat.html)
+[![Chat Client](https://img.shields.io/badge/Chat_Client-Next--Gen_Workspace-8b5cf6?style=for-the-badge&logo=webrtc&logoColor=white)](https://sudhirdevops1.github.io/t4-gpu-llm-api/colab_ai_chat.html)
 
 ---
 
