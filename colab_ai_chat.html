@@ -39,14 +39,15 @@
             }
           },
           boxShadow: {
-            'glow-emerald': '0 0 25px -5px rgba(16, 185, 129, 0.3)',
-            'glow-cyan': '0 0 25px -5px rgba(6, 182, 212, 0.3)',
-            'glow-violet': '0 0 25px -5px rgba(139, 92, 246, 0.3)',
+            'glow-emerald': '0 0 35px -5px rgba(16, 185, 129, 0.35)',
+            'glow-cyan': '0 0 35px -5px rgba(6, 182, 212, 0.35)',
+            'glow-violet': '0 0 35px -5px rgba(139, 92, 246, 0.35)',
           },
           animation: {
             'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             'fade-up': 'fadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards',
             'cursor-blink': 'blink 1s step-end infinite',
+            'shimmer': 'shimmer 2.5s linear infinite',
           },
           keyframes: {
             fadeUp: {
@@ -56,6 +57,10 @@
             blink: {
               '0%, 100%': { opacity: '1' },
               '50%': { opacity: '0' },
+            },
+            shimmer: {
+              '0%': { backgroundPosition: '-200% 0' },
+              '100%': { backgroundPosition: '200% 0' },
             }
           }
         }
@@ -79,32 +84,32 @@
   <style>
     /* Dynamic Theme Variables */
     :root {
-      --bg-main: #07080a;
-      --bg-surface: #0d1015;
-      --bg-surface-elevated: #13171f;
-      --bg-surface-hover: #1a202c;
-      --border-subtle: #222938;
-      --border-strong: #2f384c;
+      --bg-main: #060709;
+      --bg-surface: #0c0e13;
+      --bg-surface-elevated: #12161f;
+      --bg-surface-hover: #181d29;
+      --border-subtle: #1e2433;
+      --border-strong: #2c354b;
       --accent-color: #10b981;
     }
 
     body.theme-midnight {
-      --bg-main: #060913;
-      --bg-surface: #0a0f20;
-      --bg-surface-elevated: #101830;
-      --bg-surface-hover: #182244;
-      --border-subtle: #1f2c56;
-      --border-strong: #2d3f75;
+      --bg-main: #050811;
+      --bg-surface: #090e1f;
+      --bg-surface-elevated: #0f1731;
+      --bg-surface-hover: #162145;
+      --border-subtle: #1c2b57;
+      --border-strong: #2a3e7a;
       --accent-color: #38bdf8;
     }
 
     body.theme-cyberpunk {
-      --bg-main: #08060d;
-      --bg-surface: #100b1a;
-      --bg-surface-elevated: #191228;
-      --bg-surface-hover: #231938;
-      --border-subtle: #332352;
-      --border-strong: #4d357a;
+      --bg-main: #08050e;
+      --bg-surface: #0f0a1c;
+      --bg-surface-elevated: #170f2a;
+      --bg-surface-hover: #22173b;
+      --border-subtle: #2f2050;
+      --border-strong: #48317a;
       --accent-color: #a855f7;
     }
 
@@ -118,23 +123,84 @@
     .bg-mesh {
       background-color: var(--bg-main);
       background-image: 
-        radial-gradient(at 50% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 65%),
-        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.04) 0px, transparent 50%),
-        radial-gradient(at 0% 100%, rgba(139, 92, 246, 0.04) 0px, transparent 50%);
+        radial-gradient(at 50% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 60%),
+        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.05) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, rgba(139, 92, 246, 0.05) 0px, transparent 50%);
+    }
+
+    /* 🔮 Glowing AI Orb */
+    .orb-container {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ai-orb {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #34d399, #06b6d4 45%, #8b5cf6 75%, #059669 100%);
+      box-shadow: 
+        0 0 40px rgba(16, 185, 129, 0.5),
+        0 0 80px rgba(6, 182, 212, 0.3),
+        inset 0 0 25px rgba(255, 255, 255, 0.7);
+      animation: orbFloat 4s ease-in-out infinite alternate, orbRotate 12s linear infinite;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .ai-orb:hover {
+      transform: scale(1.08);
+    }
+    .ai-orb::before {
+      content: '';
+      position: absolute;
+      inset: -14px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.4), rgba(6, 182, 212, 0.15) 60%, transparent 80%);
+      filter: blur(10px);
+      animation: orbPulse 2.8s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes orbFloat {
+      0% { transform: translateY(0px) rotate(0deg); }
+      100% { transform: translateY(-8px) rotate(10deg); }
+    }
+    @keyframes orbRotate {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+    @keyframes orbPulse {
+      0% { transform: scale(0.9); opacity: 0.6; }
+      100% { transform: scale(1.15); opacity: 0.95; }
+    }
+
+    /* Mini Orb in Header */
+    .mini-orb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #34d399, #06b6d4 60%, #8b5cf6 90%);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+      animation: orbPulse 2s ease-in-out infinite alternate;
+      display: inline-block;
     }
 
     /* Code Window & Mac Dots */
     .code-window {
       border-radius: 0.875rem;
       border: 1px solid var(--border-subtle);
-      background: #0b0d13;
+      background: #090b10;
       margin: 1rem 0;
       overflow: hidden;
-      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
     }
     .code-window-bar {
-      background: #11141c;
-      padding: 0.5rem 0.85rem;
+      background: #0f121a;
+      padding: 0.55rem 0.9rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -163,12 +229,12 @@
 
     /* DeepSeek Think Tag Block */
     .think-card {
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(30, 41, 59, 0.4) 100%);
-      border: 1px solid rgba(56, 189, 248, 0.25);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(30, 41, 59, 0.45) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.3);
       border-radius: 0.875rem;
       margin: 0.85rem 0;
       overflow: hidden;
-      box-shadow: 0 4px 20px -4px rgba(14, 165, 233, 0.1);
+      box-shadow: 0 4px 20px -4px rgba(14, 165, 233, 0.15);
     }
     .think-header {
       padding: 0.65rem 1rem;
@@ -179,11 +245,11 @@
       font-size: 0.775rem;
       font-weight: 600;
       color: #38bdf8;
-      background: rgba(14, 165, 233, 0.08);
+      background: rgba(14, 165, 233, 0.09);
       user-select: none;
       transition: all 0.2s;
     }
-    .think-header:hover { background: rgba(14, 165, 233, 0.15); }
+    .think-header:hover { background: rgba(14, 165, 233, 0.16); }
     .think-body {
       padding: 0.95rem 1.15rem;
       font-size: 0.825rem;
@@ -200,9 +266,42 @@
       vertical-align: middle;
       border-radius: 1px;
     }
+
+    /* Toast Notification */
+    #toastContainer {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+    .toast-pill {
+      pointer-events: auto;
+      padding: 0.75rem 1.15rem;
+      border-radius: 1rem;
+      font-size: 0.825rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(16px);
+      animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      max-w: 360px;
+    }
+    @keyframes toastIn {
+      0% { opacity: 0; transform: translateY(-10px) scale(0.95); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
   </style>
 </head>
 <body class="bg-mesh text-zinc-100 h-screen flex overflow-hidden font-sans antialiased selection:bg-brand-emerald/30 selection:text-emerald-300">
+
+  <!-- Toast Notification Stack -->
+  <div id="toastContainer"></div>
 
   <!-- Sidebar -->
   <aside id="sidebar" class="w-80 bg-obsidian-900/95 backdrop-blur-2xl border-r border-obsidian-750 flex flex-col transition-all duration-300 z-30 shrink-0 relative">
@@ -383,21 +482,42 @@
 
     <!-- Messages Container -->
     <div id="messagesContainer" onscroll="handleScroll(this)" class="flex-1 overflow-y-auto px-4 py-8 space-y-6 max-w-4xl w-full mx-auto relative">
-      <!-- Welcome Hero State -->
-      <div id="welcomeScreen" class="py-12 px-4 max-w-2xl mx-auto text-center space-y-6 animate-fade-up">
-        <div class="inline-flex p-4 rounded-3xl bg-gradient-to-br from-obsidian-850 to-obsidian-900 border border-obsidian-750 shadow-glow-emerald">
-          <i data-lucide="sparkles" class="w-10 h-10 text-brand-emerald"></i>
+      <!-- Welcome Hero State with 🔮 AI Orb -->
+      <div id="welcomeScreen" class="py-10 px-4 max-w-2xl mx-auto text-center space-y-6 animate-fade-up">
+        
+        <!-- Glowing 3D AI Orb -->
+        <div class="orb-container">
+          <div class="ai-orb" onclick="openSettingsModal()" title="Colab AI Orb - Click to configure endpoint"></div>
         </div>
         
         <div class="space-y-2">
-          <h2 class="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">Colab LLM Studio</h2>
+          <h2 class="text-2xl font-extrabold tracking-tight text-white sm:text-3xl flex items-center justify-center gap-2">
+            <span>Colab LLM Studio</span>
+          </h2>
           <p class="text-zinc-400 text-sm leading-relaxed max-w-md mx-auto">
             High-performance OpenAI-compatible client running on your Google Colab GPU. Lag-free coding, deep reasoning, and streaming tokens.
           </p>
         </div>
 
+        <!-- Connection Helper Banner if Not Connected -->
+        <div id="setupHelperBanner" class="p-4 rounded-2xl bg-gradient-to-r from-obsidian-850 via-obsidian-800 to-obsidian-850 border border-brand-emerald/30 shadow-glow-emerald text-left flex items-start justify-between gap-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 text-xs font-bold text-brand-emerald uppercase tracking-wider">
+              <i data-lucide="link" class="w-4 h-4"></i>
+              <span>Connect Your Colab Cloudflare URL</span>
+            </div>
+            <p class="text-xs text-zinc-300">
+              Colab notebook ke <strong>Cell 5</strong> se prapt <code>trycloudflare.com/v1</code> URL yahan paste karein.
+            </p>
+          </div>
+          <button onclick="openSettingsModal()" class="shrink-0 px-3.5 py-2 rounded-xl bg-brand-emerald hover:bg-emerald-400 text-obsidian-950 font-bold text-xs transition shadow-sm flex items-center gap-1.5">
+            <i data-lucide="plug" class="w-3.5 h-3.5"></i>
+            <span>Set URL</span>
+          </button>
+        </div>
+
         <!-- Quick Launch Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left pt-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left pt-2">
           <div onclick="useQuickPrompt('Write a clean Python script using asyncio and aiohttp for concurrent HTTP requests with rate limiting.')" 
                class="p-4 rounded-2xl bg-obsidian-850/80 hover:bg-obsidian-800/90 border border-obsidian-750 hover:border-brand-emerald/40 cursor-pointer transition group shadow-sm">
             <div class="flex items-center gap-2 text-brand-emerald font-semibold text-xs mb-1">
@@ -438,7 +558,7 @@
     </div>
 
     <!-- Scroll-to-Bottom Floating Pill -->
-    <button id="scrollBottomBtn" onclick="scrollToBottom()" class="hidden fixed right-8 bottom-28 z-20 bg-obsidian-800 hover:bg-obsidian-750 border border-obsidian-700 text-white p-2.5 rounded-full shadow-2xl transition active:scale-95 flex items-center justify-center">
+    <button id="scrollBottomBtn" onclick="scrollToBottom()" class="hidden fixed right-8 bottom-28 z-20 bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 text-white p-2.5 rounded-full shadow-2xl transition active:scale-95 flex items-center justify-center">
       <i data-lucide="arrow-down" class="w-4 h-4 text-brand-emerald"></i>
     </button>
 
@@ -538,13 +658,18 @@
     </div>
   </div>
 
-  <!-- Settings Flyout Modal -->
+  <!-- Settings & Quick Connect Modal (NO NATIVE ALERT!) -->
   <div id="settingsModal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fade-up">
     <div class="bg-obsidian-900 border border-obsidian-750 rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl">
       <div class="px-6 py-4 border-b border-obsidian-750 flex items-center justify-between">
         <div class="flex items-center gap-2.5">
-          <i data-lucide="sliders" class="w-5 h-5 text-brand-emerald"></i>
-          <h2 class="font-bold text-sm text-white">Connection & Model Settings</h2>
+          <div class="w-7 h-7 rounded-lg bg-brand-emerald/10 border border-brand-emerald/30 flex items-center justify-center">
+            <i data-lucide="link" class="w-4 h-4 text-brand-emerald"></i>
+          </div>
+          <div>
+            <h2 class="font-bold text-sm text-white">Connect Your Colab GPU</h2>
+            <p class="text-[10px] text-zinc-400 font-mono">OpenAI-Compatible /v1 Endpoint</p>
+          </div>
         </div>
         <button onclick="closeSettingsModal()" class="text-zinc-400 hover:text-white p-1 rounded-lg hover:bg-obsidian-800 transition">
           <i data-lucide="x" class="w-4 h-4"></i>
@@ -552,33 +677,49 @@
       </div>
 
       <div class="p-6 space-y-4 text-xs">
-        <!-- Base URL -->
+        
+        <!-- Step 1 Notification Card -->
+        <div class="p-3 rounded-xl bg-obsidian-850/80 border border-obsidian-750 flex items-start gap-3">
+          <div class="p-1 rounded-lg bg-brand-emerald/10 text-brand-emerald shrink-0 mt-0.5">
+            <i data-lucide="info" class="w-4 h-4"></i>
+          </div>
+          <div class="text-[11px] leading-relaxed text-zinc-300">
+            <strong>How to get this URL:</strong> Google Colab notebook mein <strong>Cell 5 (Cloudflare Tunnel)</strong> run karein. Wahan generated <code>https://xxxx.trycloudflare.com/v1</code> URL copy karke niche paste karein.
+          </div>
+        </div>
+
+        <!-- Base URL with Paste from Clipboard -->
         <div>
-          <label class="block font-semibold text-zinc-300 mb-1.5">OpenAI Base URL</label>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="font-semibold text-zinc-300">OpenAI Base URL</label>
+            <button onclick="pasteFromClipboard()" class="text-brand-emerald hover:text-emerald-400 text-[10px] flex items-center gap-1 font-mono">
+              <i data-lucide="clipboard" class="w-3 h-3"></i>
+              <span>Paste Clipboard</span>
+            </button>
+          </div>
           <div class="flex gap-2">
             <input id="baseUrl" type="text" placeholder="https://xxxx.trycloudflare.com/v1" 
-                   class="flex-1 bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2 text-zinc-200 font-mono text-xs focus:outline-none focus:border-brand-emerald" />
-            <button onclick="pingServer()" class="bg-obsidian-850 hover:bg-obsidian-800 text-zinc-200 px-3.5 py-2 rounded-xl font-medium transition flex items-center gap-1.5 border border-obsidian-700">
+                   class="flex-1 bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2.5 text-zinc-200 font-mono text-xs focus:outline-none focus:border-brand-emerald transition" />
+            <button onclick="pingServer()" class="bg-obsidian-850 hover:bg-obsidian-800 text-zinc-200 px-3.5 py-2 rounded-xl font-medium transition flex items-center gap-1.5 border border-obsidian-750 shrink-0">
               <i data-lucide="activity" class="w-3.5 h-3.5 text-brand-emerald"></i>
               <span>Ping</span>
             </button>
           </div>
-          <p class="text-[11px] text-zinc-500 mt-1">Colab Notebook Cell 5 se prapt <code>trycloudflare.com/v1</code> URL paste karein.</p>
         </div>
 
         <!-- API Key -->
         <div>
           <label class="block font-semibold text-zinc-300 mb-1.5">API Key (Bearer Auth)</label>
           <input id="apiKey" type="password" value="ollama" placeholder="ollama" 
-                 class="w-full bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2 text-zinc-200 font-mono text-xs focus:outline-none focus:border-brand-emerald" />
-          <p class="text-[11px] text-zinc-500 mt-1">Ollama ke liye default <code>ollama</code> ya koi bhi random key chalegi.</p>
+                 class="w-full bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2 text-zinc-200 font-mono text-xs focus:outline-none focus:border-brand-emerald transition" />
+          <p class="text-[10px] text-zinc-500 mt-1">Ollama ke liye default <code>ollama</code> ya koi bhi random key chalegi.</p>
         </div>
 
         <!-- Model ID -->
         <div>
           <label class="block font-semibold text-zinc-300 mb-1.5">Active Model Tag</label>
           <input id="modelNameInput" type="text" value="qwen2.5-coder:7b" 
-                 class="w-full bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2 text-zinc-200 font-mono text-xs focus:outline-none focus:border-brand-emerald" />
+                 class="w-full bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2 text-zinc-200 font-mono text-xs focus:outline-none focus:border-brand-emerald transition" />
         </div>
 
         <!-- Temperature Slider -->
@@ -594,18 +735,23 @@
         <!-- System Prompt -->
         <div>
           <label class="block font-semibold text-zinc-300 mb-1.5">System Prompt</label>
-          <textarea id="systemPromptInput" rows="3" placeholder="You are an expert full-stack developer and system architect..."
-                    class="w-full bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2 text-zinc-300 text-xs focus:outline-none focus:border-brand-emerald leading-relaxed"></textarea>
+          <textarea id="systemPromptInput" rows="2" placeholder="You are an expert full-stack developer and system architect..."
+                    class="w-full bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2 text-zinc-300 text-xs focus:outline-none focus:border-brand-emerald leading-relaxed transition"></textarea>
         </div>
       </div>
 
-      <div class="px-6 py-4 border-t border-obsidian-750 bg-obsidian-950/50 flex justify-end gap-2.5">
-        <button onclick="closeSettingsModal()" class="px-4 py-2 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 text-zinc-300 text-xs font-medium transition">
-          Cancel
+      <div class="px-6 py-4 border-t border-obsidian-750 bg-obsidian-950/50 flex items-center justify-between">
+        <button onclick="enableDemoMode()" class="text-xs text-brand-cyan hover:underline flex items-center gap-1 font-mono">
+          <span>🧪 Try Demo Simulation Mode</span>
         </button>
-        <button onclick="saveAndApplySettings()" class="px-4 py-2 rounded-xl bg-brand-emerald hover:bg-emerald-400 text-obsidian-950 text-xs font-bold transition shadow-glow-emerald">
-          Save & Connect
-        </button>
+        <div class="flex gap-2">
+          <button onclick="closeSettingsModal()" class="px-4 py-2 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 text-zinc-300 text-xs font-medium transition">
+            Cancel
+          </button>
+          <button onclick="saveAndApplySettings()" class="px-4 py-2 rounded-xl bg-brand-emerald hover:bg-emerald-400 text-obsidian-950 text-xs font-bold transition shadow-glow-emerald">
+            Save & Connect
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -617,10 +763,69 @@
     let abortController = null;
     let renderThrottleTimer = null;
     let isAudioEnabled = localStorage.getItem('colab_audio_enabled') !== 'false';
+    let isDemoMode = localStorage.getItem('colab_demo_mode') === 'true';
     let attachedFileContent = null;
     let totalTokensGenerated = parseInt(localStorage.getItem('colab_total_tokens') || '0', 10);
     const THEMES = ['theme-obsidian', 'theme-midnight', 'theme-cyberpunk'];
     let currentThemeIdx = parseInt(localStorage.getItem('colab_theme_idx') || '0', 10);
+
+    // Toast Notification Manager (Replaces ugly native browser alert!)
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      
+      let borderClass = 'border-brand-emerald/40 text-emerald-200 bg-obsidian-900/90';
+      let icon = 'info';
+
+      if (type === 'error') {
+        borderClass = 'border-rose-500/50 text-rose-200 bg-rose-950/80';
+        icon = 'alert-triangle';
+      } else if (type === 'warning') {
+        borderClass = 'border-amber-500/50 text-amber-200 bg-amber-950/80';
+        icon = 'alert-circle';
+      } else if (type === 'success') {
+        borderClass = 'border-brand-emerald/50 text-emerald-200 bg-emerald-950/80';
+        icon = 'check-circle-2';
+      }
+
+      toast.className = `toast-pill ${borderClass}`;
+      toast.innerHTML = `
+        <i data-lucide="${icon}" class="w-4 h-4 shrink-0"></i>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      lucide.createIcons();
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // Paste from Clipboard
+    async function pasteFromClipboard() {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text) {
+          document.getElementById('baseUrl').value = text.trim();
+          showToast('Pasted URL from clipboard!', 'success');
+        }
+      } catch (err) {
+        showToast('Clipboard access denied. Please paste manually.', 'warning');
+      }
+    }
+
+    // Demo Mode for immediate offline preview
+    function enableDemoMode() {
+      isDemoMode = true;
+      localStorage.setItem('colab_demo_mode', 'true');
+      closeSettingsModal();
+      showToast('Demo simulation mode activated! You can now test prompts and UI animations.', 'success');
+      document.getElementById('connPillText').innerText = 'Demo Mode';
+      document.getElementById('connPill').className = 'cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-mono border bg-cyan-500/10 border-cyan-500/30 text-cyan-400';
+    }
 
     // Audio Chime Synthesizer via Web Audio API (Zero external assets!)
     function playChime() {
@@ -659,6 +864,7 @@
       localStorage.setItem('colab_audio_enabled', isAudioEnabled);
       const btn = document.getElementById('audioBtn');
       btn.className = isAudioEnabled ? 'p-1.5 hover:bg-obsidian-800 rounded-lg text-brand-emerald transition' : 'p-1.5 hover:bg-obsidian-800 rounded-lg text-zinc-600 transition';
+      showToast(`Audio chime ${isAudioEnabled ? 'enabled' : 'disabled'}`);
     }
 
     function cycleTheme() {
@@ -668,6 +874,7 @@
         document.body.classList.add(THEMES[currentThemeIdx]);
       }
       localStorage.setItem('colab_theme_idx', currentThemeIdx);
+      showToast(`Switched theme to ${THEMES[currentThemeIdx].replace('theme-', '')}`);
     }
 
     // Cost Savings Calculator ($5 / 1M tokens vs GPT-4o)
@@ -702,7 +909,7 @@
       if (p) {
         document.getElementById('systemPromptInput').value = p.system;
         localStorage.setItem('colab_sys', p.system);
-        alert(`Applied Persona: ${p.title}`);
+        showToast(`Applied Persona: ${p.title}`, 'success');
       }
     }
 
@@ -726,6 +933,10 @@
       document.getElementById('tempInput').value = temp;
       document.getElementById('tempDisplay').innerText = temp;
       document.getElementById('systemPromptInput').value = sys;
+
+      if (url) {
+        document.getElementById('setupHelperBanner')?.classList.add('hidden');
+      }
 
       syncModelSelector(model);
       if (url) pingServer();
@@ -757,6 +968,12 @@
       const temp = document.getElementById('tempInput').value;
       const sys = document.getElementById('systemPromptInput').value.trim();
 
+      if (url) {
+        isDemoMode = false;
+        localStorage.setItem('colab_demo_mode', 'false');
+        document.getElementById('setupHelperBanner')?.classList.add('hidden');
+      }
+
       localStorage.setItem('colab_base_url', url);
       localStorage.setItem('colab_api_key', key);
       localStorage.setItem('colab_model', model);
@@ -765,12 +982,14 @@
 
       syncModelSelector(model);
       closeSettingsModal();
+      showToast('Settings saved successfully!', 'success');
       pingServer();
     }
 
     function switchModel(newModel) {
       document.getElementById('modelNameInput').value = newModel;
       localStorage.setItem('colab_model', newModel);
+      showToast(`Selected model: ${newModel}`);
     }
 
     // Ping Server & Latency Check
@@ -781,7 +1000,13 @@
       const sideText = document.getElementById('sidebarConnStatus');
 
       if (!url) {
-        pill.className = 'cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-mono border bg-obsidian-850 border-obsidian-750 text-zinc-400';
+        if (isDemoMode) {
+          pill.className = 'cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-mono border bg-cyan-500/10 border-cyan-500/30 text-cyan-400';
+          pillText.innerText = 'Demo Mode';
+          sideText.innerHTML = '<span class="inline-block w-1.5 h-1.5 rounded-full bg-cyan-400"></span><span>Demo Mode</span>';
+          return;
+        }
+        pill.className = 'cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-mono border bg-obsidian-850 border-obsidian-700 text-zinc-400';
         pillText.innerText = 'No URL Set';
         sideText.innerHTML = '<span class="inline-block w-1.5 h-1.5 rounded-full bg-zinc-500"></span><span>No URL Set</span>';
         return;
@@ -869,6 +1094,7 @@
         };
         document.getElementById('attachedFileName').innerText = file.name;
         document.getElementById('fileAttachmentArea').classList.remove('hidden');
+        showToast(`Attached ${file.name}`, 'info');
       };
       reader.readAsText(file);
     }
@@ -886,7 +1112,7 @@
     function toggleVoiceInput() {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) {
-        alert('Voice input is not supported in this browser. Please use Chrome, Edge, or Safari.');
+        showToast('Voice dictation requires Chrome, Edge, or Safari.', 'warning');
         return;
       }
 
@@ -906,6 +1132,7 @@
       recognition.onstart = function() {
         isRecording = true;
         voiceBtn.classList.add('text-rose-500', 'animate-pulse');
+        showToast('Listening... Speak now', 'info');
       };
 
       recognition.onresult = function(event) {
@@ -946,6 +1173,7 @@
       saveChats();
       renderChatList();
       renderMessages();
+      showToast('Started new conversation', 'info');
     }
 
     function saveChats() {
@@ -953,7 +1181,6 @@
         localStorage.setItem('colab_studio_chats', JSON.stringify(chats));
         localStorage.setItem('colab_studio_current_id', currentChatId);
       } catch (e) {
-        console.warn('LocalStorage quota limit reached, trimming older chats:', e);
         if (chats.length > 5) {
           chats = chats.slice(0, 5);
           try {
@@ -980,6 +1207,7 @@
       saveChats();
       renderChatList();
       renderMessages();
+      showToast('Conversation deleted', 'info');
     }
 
     function clearAllChats() {
@@ -989,6 +1217,7 @@
         saveChats();
         renderChatList();
         renderMessages();
+        showToast('All chat history cleared', 'info');
       }
     }
 
@@ -1075,12 +1304,14 @@
       const chat = getActiveChat();
       if (!chat || !chat.messages.length) {
         container.innerHTML = `
-          <div id="welcomeScreen" class="py-12 px-4 max-w-2xl mx-auto text-center space-y-6 animate-fade-up">
-            <div class="inline-flex p-4 rounded-3xl bg-gradient-to-br from-obsidian-850 to-obsidian-900 border border-obsidian-750 shadow-glow-emerald">
-              <i data-lucide="sparkles" class="w-10 h-10 text-brand-emerald"></i>
+          <div id="welcomeScreen" class="py-10 px-4 max-w-2xl mx-auto text-center space-y-6 animate-fade-up">
+            <div class="orb-container">
+              <div class="ai-orb" onclick="openSettingsModal()" title="Colab AI Orb - Click to configure endpoint"></div>
             </div>
             <div class="space-y-2">
-              <h2 class="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">Colab LLM Studio</h2>
+              <h2 class="text-2xl font-extrabold tracking-tight text-white sm:text-3xl flex items-center justify-center gap-2">
+                <span>Colab LLM Studio</span>
+              </h2>
               <p class="text-zinc-400 text-sm leading-relaxed max-w-md mx-auto">
                 High-performance OpenAI-compatible client running on your Google Colab GPU. Lag-free coding, deep reasoning, and streaming tokens.
               </p>
@@ -1109,7 +1340,7 @@
         } else {
           div.innerHTML = `
             <div class="w-9 h-9 rounded-xl bg-obsidian-850 border border-obsidian-750 flex items-center justify-center text-xs shrink-0 text-brand-emerald shadow-md">
-              <i data-lucide="bot" class="w-4 h-4"></i>
+              <div class="mini-orb"></div>
             </div>
             <div class="flex-1 max-w-[88%] bg-obsidian-900/90 border border-obsidian-750 rounded-2xl px-5 py-4 text-zinc-200 prose prose-invert max-w-none text-sm shadow-md relative group">
               <div id="content_${idx}">${formatMarkdown(msg.content)}</div>
@@ -1152,7 +1383,6 @@
         const bar = document.createElement('div');
         bar.className = 'code-window-bar font-mono';
 
-        // Check if HTML snippet for live preview button
         const isHtmlCode = ['html', 'htm', 'svg', 'xml'].includes(lang.toLowerCase());
 
         bar.innerHTML = `
@@ -1218,7 +1448,7 @@
       const chat = getActiveChat();
       if (!chat) return;
       navigator.clipboard.writeText(chat.messages[idx].content);
-      alert('Copied to clipboard!');
+      showToast('Copied to clipboard!', 'success');
     }
 
     function useQuickPrompt(text) {
@@ -1254,7 +1484,7 @@
     function exportChatMarkdown() {
       const chat = getActiveChat();
       if (!chat || !chat.messages.length) {
-        alert('No conversation to export.');
+        showToast('No conversation to export.', 'warning');
         return;
       }
       let md = `# ${chat.title}\n*Exported from Colab LLM Studio on ${new Date().toLocaleString()}*\n\n---\n\n`;
@@ -1266,6 +1496,7 @@
       a.href = URL.createObjectURL(blob);
       a.download = `${chat.title.replace(/[^a-zA-Z0-9_-]/g, '_')}.md`;
       a.click();
+      showToast('Exported chat to Markdown file', 'success');
     }
 
     // Auto-grow Textarea
@@ -1302,7 +1533,7 @@
       }
     });
 
-    // Send Message Logic with OpenAI SSE Streaming & EGM Fixes
+    // Send Message Logic with NO NATIVE ALERT!
     async function sendMessage() {
       let text = textarea.value.trim();
       if (attachedFileContent) {
@@ -1312,12 +1543,15 @@
       if (!text) return;
 
       let baseUrl = (document.getElementById('baseUrl').value.trim() || localStorage.getItem('colab_base_url') || '').replace(/\/+$/, '');
-      if (!baseUrl) {
+      
+      // If Base URL is missing and not in demo mode, open modal & toast smoothly!
+      if (!baseUrl && !isDemoMode) {
         openSettingsModal();
-        alert('Pehle apna Colab Cloudflare Base URL set karein!');
+        showToast('Please paste your Colab Cloudflare URL or try Demo Mode!', 'warning');
         return;
       }
-      if (!baseUrl.endsWith('/v1')) baseUrl += '/v1';
+
+      if (!baseUrl.endsWith('/v1') && baseUrl) baseUrl += '/v1';
 
       if (!currentChatId || !getActiveChat()) newChat();
 
@@ -1337,7 +1571,7 @@
 
     async function triggerCompletion(customBaseUrl) {
       let baseUrl = customBaseUrl || (document.getElementById('baseUrl').value.trim() || localStorage.getItem('colab_base_url') || '').replace(/\/+$/, '');
-      if (!baseUrl.endsWith('/v1')) baseUrl += '/v1';
+      if (baseUrl && !baseUrl.endsWith('/v1')) baseUrl += '/v1';
 
       const chat = getActiveChat();
       const assistantMsg = { role: 'assistant', content: '' };
@@ -1351,6 +1585,27 @@
       stopBtn.classList.remove('hidden');
 
       abortController = new AbortController();
+
+      // Demo Mode Stream Simulation
+      if (isDemoMode && !baseUrl) {
+        const demoResponses = [
+          "<think>\nUser is asking for assistance or testing the Colab LLM Studio client interface.\nVerifying token streaming, code window highlighting, and KaTeX rendering.\nEverything is operating smoothly.\n</think>\n\nHello! 🚀 **Colab LLM Studio** is running in simulation mode.\n\nYour UI is fully configured with:\n- 🎨 **Obsidian Glassmorphism Theme** with glowing AI Orb\n- 💻 **Mac-style Code Windows** with 1-click save & live preview\n- 🧠 **DeepSeek-R1 CoT Accordion**\n- ⚡ **Zero-CORS OpenAI Compatible /v1 Streaming**\n\nHere is a quick sample Python snippet:\n\n```python\nimport asyncio\nimport aiohttp\n\nasync def fetch_gpu_status():\n    print(\"Tesla T4 GPU is ready for lag-free inference!\")\n\nasyncio.run(fetch_gpu_status())\n```\n\nTo connect to your real Colab GPU, paste your Cloudflare Tunnel URL in **Settings**!"
+        ];
+        const sampleText = demoResponses[0];
+        let streamIdx = 0;
+        const interval = setInterval(() => {
+          if (streamIdx < sampleText.length && abortController && !abortController.signal.aborted) {
+            assistantMsg.content += sampleText.slice(streamIdx, streamIdx + 6);
+            streamIdx += 6;
+            document.getElementById(`content_${assistantIdx}`).innerHTML = formatMarkdown(assistantMsg.content, true);
+            scrollToBottom();
+          } else {
+            clearInterval(interval);
+            finishGeneration();
+          }
+        }, 30);
+        return;
+      }
 
       const apiMessages = [];
       const sysPrompt = localStorage.getItem('colab_sys') || '';
@@ -1471,6 +1726,11 @@
           assistantMsg.content += `\n\n❌ **Error connecting to Colab:** ${err.message}\n\n*Check if your Cloudflare Tunnel is running and Base URL is correct.*`;
         }
       } finally {
+        totalTokensGenerated += tokenCount;
+        finishGeneration();
+      }
+
+      function finishGeneration() {
         if (renderThrottleTimer) {
           cancelAnimationFrame(renderThrottleTimer);
           renderThrottleTimer = null;
@@ -1479,7 +1739,6 @@
         const container = document.getElementById('messagesContainer');
         container.scrollTop = container.scrollHeight;
 
-        totalTokensGenerated += tokenCount;
         updateSavingsDisplay();
         playChime();
 
