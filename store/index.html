@@ -220,6 +220,9 @@
           <button onclick="setPlatformFilter('kaggle')" id="btnPlat-kaggle" class="px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition flex items-center gap-1.5">
             <span class="w-2 h-2 rounded-full bg-cyan-400"></span> Kaggle
           </button>
+          <button onclick="setPlatformFilter('lightning')" id="btnPlat-lightning" class="px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-purple-400"></span> Lightning AI
+          </button>
         </div>
       </div>
 
@@ -231,6 +234,9 @@
         <button onclick="setCategoryFilter('audio')" id="btnCat-audio" class="px-3 py-1 rounded-full bg-obsidian-850 hover:bg-obsidian-800 text-zinc-300 border border-obsidian-700 font-medium transition">🎙️ Audio & Voice Cloning</button>
         <button onclick="setCategoryFilter('vision')" id="btnCat-vision" class="px-3 py-1 rounded-full bg-obsidian-850 hover:bg-obsidian-800 text-zinc-300 border border-obsidian-700 font-medium transition">🎨 Vision & Image Gen</button>
         <button onclick="setCategoryFilter('video')" id="btnCat-video" class="px-3 py-1 rounded-full bg-obsidian-850 hover:bg-obsidian-800 text-zinc-300 border border-obsidian-700 font-medium transition">🎬 Video Generation</button>
+        <button onclick="setCategoryFilter('comfy')" id="btnCat-comfy" class="px-3 py-1 rounded-full bg-obsidian-850 hover:bg-obsidian-800 text-zinc-300 border border-obsidian-700 font-medium transition">🎨 ComfyUI Studio</button>
+        <button onclick="setCategoryFilter('rag')" id="btnCat-rag" class="px-3 py-1 rounded-full bg-obsidian-850 hover:bg-obsidian-800 text-zinc-300 border border-obsidian-700 font-medium transition">📚 RAG & Docs</button>
+        <button onclick="setCategoryFilter('lora')" id="btnCat-lora" class="px-3 py-1 rounded-full bg-obsidian-850 hover:bg-obsidian-800 text-zinc-300 border border-obsidian-700 font-medium transition">⚡ LoRA Training</button>
       </div>
     </div>
   </section>
@@ -438,6 +444,82 @@
         colabUrl: 'https://www.kaggle.com/code/new',
         tags: ['Video Gen', 'Text-to-Video', 'Dual T4', 'DiT', 'Kaggle']
       }
+,
+      {
+        id: 'colab-wan-video',
+        title: 'Wan2.1 & LTX-Video DiT Studio',
+        category: 'video',
+        platform: 'colab',
+        badge: 'DiT Video',
+        models: 'Wan2.1-T2V-1.3B · LTX-Video 0.9.1 · DiT',
+        desc: 'High-speed text-to-video and image-to-video generation on free Colab Tesla T4 GPU. Features 720p 24fps diffusion transformer synthesis within safe 8.5 GB VRAM envelope.',
+        vram: '8.5 GB / 15.3 GB',
+        quota: 'Free T4 GPU',
+        quant: 'FP8 / INT8',
+        path: 'colab/04_wan_ltx_video_studio.ipynb',
+        colabUrl: 'https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/04_wan_ltx_video_studio.ipynb',
+        tags: ['Video DiT', 'Wan2.1', 'Text-to-Video', 'LTX', 'Colab']
+      },
+      {
+        id: 'colab-comfyui',
+        title: 'ComfyUI Portable Cloud Studio',
+        category: 'comfy',
+        platform: 'colab',
+        badge: 'Node Canvas',
+        models: 'ComfyUI Core · ComfyUI-Manager · SDXL / Flux',
+        desc: '1-click portable cloud ComfyUI workspace with pre-installed ComfyUI-Manager and Cloudflare Tunnel to port 8188. No local ports or ngrok tokens required.',
+        vram: '4.0 GB to 14.0 GB',
+        quota: 'Up to 12 Hours',
+        quant: 'FP16-VAE',
+        path: 'colab/05_comfyui_cloud_studio.ipynb',
+        colabUrl: 'https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/05_comfyui_cloud_studio.ipynb',
+        tags: ['ComfyUI', 'Nodes', 'Manager', 'Cloudflare Tunnel', 'Colab']
+      },
+      {
+        id: 'colab-rag-agent',
+        title: 'RAG Knowledge Agent & Vector QA Studio',
+        category: 'rag',
+        platform: 'colab',
+        badge: 'RAG Agent',
+        models: 'all-MiniLM-L6-v2 · ChromaDB · LangChain',
+        desc: 'Ingest and index PDFs, Markdown, TXT, and Python source code. Cosine similarity retrieval connects directly to our Colab OpenAI /v1 endpoint for augmented answers.',
+        vram: '1.2 GB / 15.3 GB',
+        quota: 'CPU / T4 Friendly',
+        quant: 'FP32 Vector Embeddings',
+        path: 'colab/06_rag_knowledge_agent.ipynb',
+        colabUrl: 'https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/06_rag_knowledge_agent.ipynb',
+        tags: ['RAG', 'ChromaDB', 'Vector QA', 'PDF Indexing', 'OpenAI /v1']
+      },
+      {
+        id: 'colab-qlora',
+        title: 'QLoRA 4-bit Model Fine-Tuning Studio',
+        category: 'lora',
+        platform: 'colab',
+        badge: 'Fine-Tuning',
+        models: 'BitsAndBytes NF4 · PEFT · TRL SFTTrainer',
+        desc: 'Fine-tune 7B/8B parameter LLMs (Qwen2.5, Llama-3) on a single free 15GB Colab T4 GPU with 4-bit NF4 double quantization and safe adapter export.',
+        vram: '9.5 GB / 15.3 GB',
+        quota: 'Colab Free T4',
+        quant: 'NF4 4-bit Quantization',
+        path: 'colab/07_qlora_training_studio.ipynb',
+        colabUrl: 'https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/07_qlora_training_studio.ipynb',
+        tags: ['LoRA', 'QLoRA', 'Fine-Tuning', 'PEFT', 'BitsAndBytes']
+      },
+      {
+        id: 'kaggle-comfyui',
+        title: 'Kaggle Dual T4 x2 ComfyUI & DiT Studio',
+        category: 'comfy',
+        platform: 'kaggle',
+        badge: 'Dual GPU Comfy',
+        models: 'ComfyUI · ComfyUI-Manager · Dual T4 (30GB)',
+        desc: 'Run heavy diffusion and video node workflows on Kaggle Dual Tesla T4 x2 with 30GB combined VRAM and persistent Cloudflare tunnel.',
+        vram: '12.0 GB / 30.6 GB',
+        quota: '30h / week',
+        quant: 'FP16 Tensor Cores',
+        path: 'kaggle/02_comfyui_dual_t4.ipynb',
+        colabUrl: 'https://www.kaggle.com/code/new',
+        tags: ['Kaggle', 'Dual T4', 'ComfyUI', 'DiT', '30GB VRAM']
+      }
     ];
 
     let currentPlatform = 'all';
@@ -523,7 +605,7 @@
 
     function setPlatformFilter(platform) {
       currentPlatform = platform;
-      ['all', 'colab', 'kaggle'].forEach(p => {
+      ['all', 'colab', 'kaggle', 'lightning'].forEach(p => {
         const btn = document.getElementById(`btnPlat-${p}`);
         if (p === platform) {
           btn.className = 'px-3 py-1.5 rounded-lg bg-obsidian-800 text-white font-semibold transition';
@@ -536,7 +618,7 @@
 
     function setCategoryFilter(category) {
       currentCategory = category;
-      ['all', 'llm', 'audio', 'vision', 'video'].forEach(c => {
+      ['all', 'llm', 'audio', 'vision', 'video', 'comfy', 'rag', 'lora'].forEach(c => {
         const btn = document.getElementById(`btnCat-${c}`);
         if (c === category) {
           btn.className = 'px-3 py-1 rounded-full bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/30 font-medium transition';

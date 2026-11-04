@@ -19,6 +19,8 @@ def detect_platform() -> str:
         return "colab"
     if "KAGGLE_KERNEL_RUN_TYPE" in os.environ or os.path.exists("/kaggle"):
         return "kaggle"
+    if "LIGHTNING_CLOUD_URL" in os.environ or "LIGHTNING_APP_STATE_URL" in os.environ or os.path.exists("/teamspace/studios"):
+        return "lightning"
     return "local"
 
 def get_platform_limits() -> Dict[str, Any]:
@@ -45,6 +47,16 @@ def get_platform_limits() -> Dict[str, Any]:
             "typical_gpu": "Dual NVIDIA Tesla T4 x2 (30.6 GB Total VRAM)",
             "system_ram_gb": 29.0,
             "root_path": "/kaggle/working"
+        }
+    elif platform == "lightning":
+        return {
+            "platform": "Lightning AI Studio",
+            "tier": "Free Tier / Monthly Credits",
+            "max_runtime_hours": 24.0,
+            "max_idle_minutes": 120,
+            "typical_gpu": "NVIDIA T4 / A10G / CPU",
+            "system_ram_gb": 16.0,
+            "root_path": os.getenv("LIGHTNING_WORKSPACE_DIR", os.getcwd())
         }
     return {
         "platform": "Local Workstation",

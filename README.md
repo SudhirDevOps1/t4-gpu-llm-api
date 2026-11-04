@@ -6,6 +6,7 @@ Welcome to your **Personal AI Notebook Store & Hub** — a production-grade, pri
 [![Zero-Leak Privacy](https://img.shields.io/badge/Security-100%25_Zero--Leak-06b6d4?style=for-the-badge&logo=shield&logoColor=white)](#-zero-leak-privacy--security-architecture)
 [![Google Colab](https://img.shields.io/badge/Google_Colab-Free_T4_GPU-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white)](#-notebook-catalog)
 [![Kaggle](https://img.shields.io/badge/Kaggle-Dual_T4_x2-20BEFF?style=for-the-badge&logo=kaggle&logoColor=white)](#-notebook-catalog)
+[![Lightning AI](https://img.shields.io/badge/Lightning_AI-Open_Studio-792EE5?style=for-the-badge&logo=lightning&logoColor=white)](https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api)
 [![Chat Client](https://img.shields.io/badge/Chat_Client-Next--Gen_Workspace-8b5cf6?style=for-the-badge&logo=webrtc&logoColor=white)](colab_ai_chat.html)
 
 ---
@@ -30,7 +31,12 @@ Explore, search, filter, and inspect detailed specs for all notebooks in our sta
 | **01. T4 GPU LLM Server & OpenAI API Hub**<br>`Qwen2.5-Coder 7B` · `DeepSeek-R1 8B` | **Google Colab**<br>`Tesla T4 (15.3 GB)` | **~4.5 GB**<br>*(10GB free for KV-cache)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/t4-gpu-llm-api.ipynb) | High-speed OpenAI `/v1` server, CORS enabled, Cloudflare Tunnel without pipe deadlocks, token streaming HUD, and next-gen chat client. |
 | **02. Zero-Shot Voice Cloning & TTS Studio**<br>`Kokoro TTS` · `Fish Audio S2.1` | **Google Colab**<br>`Tesla T4 / CPU` | **~2.8 GB**<br>*(CPU-friendly)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/02_zero_shot_voice_tts.ipynb) | 80+ languages, crystal clear 24kHz/48kHz audio, zero-shot voice design, paralinguistic emotions, and zero HF token leaks. |
 | **03. Qwen-Image 2.1 Fast INT8 Studio**<br>`Qwen-Image 2.1` · `SDXL Turbo` | **Google Colab**<br>`Tesla T4 (15.3 GB)` | **~8.2 GB**<br>*(INT8 Tensor Cores)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/03_qwen_image_gen_studio.ipynb) | High-speed 1-2 step diffusion, text-to-image, instruction editing, multi-reference composition, offloaded checkpoint caching. |
-| **04. Kaggle Dual T4 x2 Distributed LLM Engine**<br>`DeepSeek-R1 14B` · `Qwen2.5 14B` | **Kaggle**<br>`Dual T4 x2 (30.6 GB)` | **~14.0 GB**<br>*(Tensor Parallel)* | [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) | Distributed multi-GPU inference on Kaggle Dual Tesla T4 x2, 30h/week free quota, isolated instance tokens, and `/v1` endpoint. |
+| **04. Wan2.1 & LTX-Video DiT Studio**<br>`Wan2.1-1.3B` · `LTX-Video 0.9.1` | **Google Colab**<br>`Tesla T4 (15.3 GB)` | **~8.5 GB**<br>*(FP8 / INT8)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/04_wan_ltx_video_studio.ipynb) | Fast diffusion transformer video generation (text-to-video & image-to-video) with procedural smooth stream rendering on Free T4. |
+| **05. ComfyUI Portable Cloud Studio**<br>`ComfyUI Core` · `ComfyUI-Manager` | **Google Colab**<br>`Tesla T4 (15.3 GB)` | **~4.0 - 14.0 GB**<br>*(FP16-VAE)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/05_comfyui_cloud_studio.ipynb) | 1-click cloud ComfyUI workspace with pre-installed ComfyUI-Manager and Cloudflare Tunnel to port 8188. No local ports required. |
+| **06. RAG Knowledge Agent & Vector QA**<br>`all-MiniLM-L6-v2` · `ChromaDB` | **Google Colab**<br>`Tesla T4 / CPU` | **~1.2 GB**<br>*(Lightweight)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/06_rag_knowledge_agent.ipynb) | Multi-format document ingestion (PDF, Markdown, Code) with cosine vector retrieval connected directly to our Colab `/v1` server. |
+| **07. QLoRA 4-bit Fine-Tuning Studio**<br>`BitsAndBytes NF4` · `PEFT / TRL` | **Google Colab**<br>`Tesla T4 (15.3 GB)` | **~9.5 GB**<br>*(4-bit NF4)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/07_qlora_training_studio.ipynb) | Fine-tune 7B/8B parameter LLMs on a single free 15GB T4 GPU with gradient checkpointing and safe `.safetensors` adapter export. |
+| **08. Kaggle Dual T4 x2 Distributed LLM Engine**<br>`DeepSeek-R1 14B` · `Qwen2.5 14B` | **Kaggle**<br>`Dual T4 x2 (30.6 GB)` | **~14.0 GB**<br>*(Tensor Parallel)* | [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) | Distributed multi-GPU inference on Kaggle Dual Tesla T4 x2, 30h/week free quota, isolated instance tokens, and `/v1` endpoint. |
+| **09. Kaggle Dual T4 x2 ComfyUI Studio**<br>`ComfyUI` · `Dual T4 Tensor Parallel` | **Kaggle**<br>`Dual T4 x2 (30.6 GB)` | **~12.0 GB**<br>*(Dual GPU)* | [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) | Heavy diffusion and video node workflows on Kaggle Dual Tesla T4 x2 with 30GB combined VRAM and persistent Cloudflare tunnel. |
 
 ---
 
@@ -125,9 +131,14 @@ Our dedicated Obsidian-themed single-page web app provides an IDE-grade chat env
 ├── colab/
 │   ├── 01_t4_gpu_llm_api.ipynb            # ⚡ Colab T4 LLM Server & OpenAI API Hub
 │   ├── 02_zero_shot_voice_tts.ipynb       # 🎙️ Zero-Shot Voice Cloning & TTS Studio
-│   └── 03_qwen_image_gen_studio.ipynb     # 🎨 Qwen-Image 2.1 Fast INT8 Studio
+│   ├── 03_qwen_image_gen_studio.ipynb     # 🎨 Qwen-Image 2.1 Fast INT8 Studio
+│   ├── 04_wan_ltx_video_studio.ipynb      # 🎬 Wan2.1 & LTX-Video DiT Studio
+│   ├── 05_comfyui_cloud_studio.ipynb      # 🎨 ComfyUI Portable Cloud Studio
+│   ├── 06_rag_knowledge_agent.ipynb       # 🧠 RAG Knowledge Agent & Vector QA
+│   └── 07_qlora_training_studio.ipynb     # ⚡ QLoRA 4-bit Model Fine-Tuning Studio
 ├── kaggle/
-│   └── 01_dual_t4_llm_engine.ipynb        # 🔥 Kaggle Dual T4 x2 Distributed LLM Engine
+│   ├── 01_dual_t4_llm_engine.ipynb        # 🔥 Kaggle Dual T4 x2 Distributed LLM Engine
+│   └── 02_comfyui_dual_t4.ipynb           # 🎨 Kaggle Dual T4 ComfyUI & DiT Studio
 └── .gitignore                             # 🔒 Strict protection against token/secret leaks
 ```
 
