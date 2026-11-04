@@ -412,11 +412,15 @@
     </div>
 
     <!-- Footer Controls -->
-    <div class="p-3 border-t border-obsidian-750/70 bg-obsidian-950/70 flex items-center justify-between">
+    <div class="p-3 border-t border-obsidian-750/70 bg-obsidian-950/70 flex items-center gap-2">
       <button onclick="openSettingsModal()" class="flex-1 flex items-center justify-center gap-2 text-xs text-zinc-300 hover:text-white transition py-2 px-3 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 font-medium">
         <i data-lucide="sliders-horizontal" class="w-4 h-4 text-brand-emerald"></i>
-        <span>Settings & Endpoints</span>
+        <span>Settings</span>
       </button>
+      <a href="store/index.html" class="flex items-center justify-center gap-1.5 text-xs text-brand-cyan hover:text-white transition py-2 px-3 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 font-medium">
+        <i data-lucide="layers" class="w-4 h-4"></i>
+        <span>Store</span>
+      </a>
     </div>
   </aside>
 
@@ -474,6 +478,7 @@
           <span class="text-zinc-600">&bull;</span>
           <span id="statLatency">0ms TTFT</span>
         </div>
+        <a href="store/index.html" class="p-2 text-zinc-400 hover:text-brand-emerald hover:bg-obsidian-800 rounded-xl transition" title="AI Notebook Store"><i data-lucide="layers" class="w-4 h-4"></i></a>
         <button onclick="openSettingsModal()" class="p-2 text-zinc-400 hover:text-white hover:bg-obsidian-800 rounded-xl transition" title="Connection Settings">
           <i data-lucide="settings" class="w-4 h-4"></i>
         </button>

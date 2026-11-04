@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Notebook Store — Next-Gen Multi-Cloud Hub</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS 3.4 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            obsidian: {
+              950: '#060709',
+              900: '#0c0e13',
+              850: '#12161f',
+              800: '#181d29',
+              750: '#1e2433',
+              700: '#2c354b',
+            },
+            brand: {
+              emerald: '#10b981',
+              cyan: '#06b6d4',
+              violet: '#8b5cf6',
+              rose: '#f43f5e',
+              amber: '#f59e0b',
+            }
+          },
+          boxShadow: {
+            'glow-emerald': '0 0 35px -5px rgba(16, 185, 129, 0.35)',
+            'glow-cyan': '0 0 35px -5px rgba(6, 182, 212, 0.35)',
+            'glow-violet': '0 0 35px -5px rgba(139, 92, 246, 0.35)',
+          },
+          animation: {
+            'fade-up': 'fadeUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          },
+          keyframes: {
+            fadeUp: {
+              '0%': { opacity: '0', transform: 'translateY(12px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #1e2433; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #2c354b; }
+
+    /* Radial Ambient Background */
+    .bg-mesh {
+      background-color: #060709;
+      background-image: 
+        radial-gradient(at 50% 0%, rgba(16, 185, 129, 0.12) 0px, transparent 60%),
+        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.06) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, rgba(139, 92, 246, 0.06) 0px, transparent 50%);
+    }
+
+    /* 🔮 Glowing AI Orb */
+    .orb-container {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ai-orb {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #34d399, #06b6d4 45%, #8b5cf6 75%, #059669 100%);
+      box-shadow: 
+        0 0 35px rgba(16, 185, 129, 0.45),
+        0 0 70px rgba(6, 182, 212, 0.25),
+        inset 0 0 20px rgba(255, 255, 255, 0.7);
+      animation: orbFloat 4s ease-in-out infinite alternate;
+    }
+    @keyframes orbFloat {
+      0% { transform: translateY(0px) rotate(0deg); }
+      100% { transform: translateY(-8px) rotate(15deg); }
+    }
+
+    /* Toast Notification System */
+    #toastContainer {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+    .toast {
+      pointer-events: auto;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+      animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes toastIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body class="bg-mesh text-zinc-100 min-h-screen flex flex-col font-sans selection:bg-brand-emerald/30 selection:text-white">
+
+  <!-- Toast Notification Stack -->
+  <div id="toastContainer"></div>
+
+  <!-- Header & Navigation -->
+  <header class="border-b border-obsidian-750/70 bg-obsidian-900/60 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-emerald to-brand-cyan p-[1px] shadow-glow-emerald">
+          <div class="w-full h-full bg-obsidian-900 rounded-[11px] flex items-center justify-center">
+            <i data-lucide="layers" class="w-5 h-5 text-brand-emerald"></i>
+          </div>
+        </div>
+        <div>
+          <h1 class="font-bold text-base tracking-tight text-white flex items-center gap-2">
+            <span>AI Notebook Store</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-brand-emerald/10 border border-brand-emerald/30 text-brand-emerald font-semibold">v2.0</span>
+          </h1>
+          <p class="text-[11px] text-zinc-400 font-mono">Multi-Cloud · Colab T4 · Kaggle Dual T4 · Zero-Leak</p>
+        </div>
+      </div>
+
+      <!-- Action Nav -->
+      <div class="flex items-center gap-3">
+        <a href="https://github.com/SudhirDevOps1/t4-gpu-llm-api" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-750 text-xs text-zinc-300 hover:text-white flex items-center gap-1.5 transition">
+          <i data-lucide="github" class="w-3.5 h-3.5"></i>
+          <span>GitHub Repo</span>
+        </a>
+        <a href="../colab_ai_chat.html" class="px-3.5 py-1.5 rounded-xl bg-brand-emerald/10 hover:bg-brand-emerald/20 border border-brand-emerald/30 text-xs text-brand-emerald font-medium flex items-center gap-1.5 transition shadow-glow-emerald">
+          <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+          <span>Chat Client</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 pt-10 pb-8 text-center">
+    <div class="orb-container mb-4">
+      <div class="ai-orb"></div>
+    </div>
+    <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+      Curated Free-Tier <span class="bg-gradient-to-r from-brand-emerald via-brand-cyan to-brand-violet bg-clip-text text-transparent">AI Notebook Store</span>
+    </h2>
+    <p class="mt-3 text-sm text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+      Deploy state-of-the-art LLMs, TTS voice clones, video generators, and vision diffusion engines directly onto 
+      <strong class="text-zinc-200">Google Colab</strong> & <strong class="text-zinc-200">Kaggle</strong>. 100% Free Tier, zero API key leaks, and isolated session IDs.
+    </p>
+
+    <!-- Global Stats Bar -->
+    <div class="mt-8 flex flex-wrap items-center justify-center gap-4 text-xs font-mono">
+      <div class="px-3.5 py-2 rounded-xl bg-obsidian-900/80 border border-obsidian-750 flex items-center gap-2">
+        <i data-lucide="shield-check" class="w-4 h-4 text-brand-emerald"></i>
+        <span>Zero-Leak Encryption Active</span>
+      </div>
+      <div class="px-3.5 py-2 rounded-xl bg-obsidian-900/80 border border-obsidian-750 flex items-center gap-2">
+        <i data-lucide="cpu" class="w-4 h-4 text-brand-cyan"></i>
+        <span>Colab T4 (15GB) & Kaggle Dual T4 (30GB)</span>
+      </div>
+      <div class="px-3.5 py-2 rounded-xl bg-obsidian-900/80 border border-obsidian-750 flex items-center gap-2">
+        <i data-lucide="fingerprint" class="w-4 h-4 text-brand-violet"></i>
+        <span>Isolated Session Limitation IDs</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter & Search Toolbar -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 pb-6 w-full">
+    <div class="p-4 rounded-2xl bg-obsidian-900/70 border border-obsidian-750/80 backdrop-blur-md space-y-3.5">
+      <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+        <!-- Search Input -->
+        <div class="relative flex-1">
+          <i data-lucide="search" class="w-4 h-4 text-zinc-500 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+          <input id="storeSearch" type="text" placeholder="Search notebooks by name, model, task, or tag..." 
+                 class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-obsidian-950 border border-obsidian-700 text-xs text-zinc-200 focus:outline-none focus:border-brand-emerald transition font-mono placeholder:font-sans"
+                 oninput="filterNotebooks()" />
+        </div>
+
+        <!-- Platform Select Buttons -->
+        <div class="flex items-center gap-1.5 p-1 rounded-xl bg-obsidian-950 border border-obsidian-750 text-xs font-medium shrink-0">
+          <button onclick="setPlatformFilter('all')" id="btnPlat-all" class="px-3 py-1.5 rounded-lg bg-obsidian-800 text-white font-semibold transition">All Platforms</button>
+          <button onclick="setPlatformFilter('colab')" id="btnPlat-colab" class="px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-amber-400"></span> Google Colab
+          </button>
+          <button onclick="setPlatformFilter('kaggle')" id="btnPlat-kaggle" class="px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-cyan-400"></span> Kaggle
+          </button>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="flex flex-wrap items-center gap-2 pt-1 border-t border-obsidian-750/50 text-xs">
+        <span class="text-zinc-500 text-[11px] font-mono mr-1">Categories:</span>
+        <button onclick="setCategoryFilter('all')" id="btnCat-all" class="px-3 py-1 rounded-full bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/30 font-medium transition">All</button>
+        <button onclick="setCategoryFilter('llm')" id="btnCat-llm" class="px-3 py-1 rounded-full bg-obsidian-850 hover:bg-obsidian-800 text-zinc-300 border border-obsidian-700 font-medium transition">⚡ LLM & Reasoning APIs</button>
+        <button onclick="setCategoryFilter('audio')" id="btnCat-audio" class="px-3 py-1 rounded-full bg-obsidian-850 hover:bg-obsidian-800 text-zinc-300 border border-obsidian-700 font-medium transition">🎙️ Audio & Voice Cloning</button>
+        <button onclick="setCategoryFilter('vision')" id="btnCat-vision" class="px-3 py-1 rounded-full bg-obsidian-850 hover:bg-obsidian-800 text-zinc-300 border border-obsidian-700 font-medium transition">🎨 Vision & Image Gen</button>
+        <button onclick="setCategoryFilter('video')" id="btnCat-video" class="px-3 py-1 rounded-full bg-obsidian-850 hover:bg-obsidian-800 text-zinc-300 border border-obsidian-700 font-medium transition">🎬 Video Generation</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Notebook Grid -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 pb-16 flex-1 w-full">
+    <div id="notebookGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- Injected via JavaScript -->
+    </div>
+    <div id="noResults" class="hidden text-center py-16 space-y-3">
+      <i data-lucide="inbox" class="w-12 h-12 text-zinc-600 mx-auto"></i>
+      <h3 class="text-zinc-300 font-semibold text-base">No matching notebooks found</h3>
+      <p class="text-zinc-500 text-xs">Try searching for other keywords like "TTS", "LLM", "DeepSeek", or reset filters.</p>
+    </div>
+  </main>
+
+  <!-- In-App Notebook Detail & Specs Modal -->
+  <div id="detailModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+    <div class="bg-obsidian-900 border border-obsidian-750 rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl animate-fade-up">
+      <div class="px-6 py-4 border-b border-obsidian-750 flex items-center justify-between bg-obsidian-950/70">
+        <div class="flex items-center gap-2.5">
+          <div id="modalCategoryIcon" class="w-8 h-8 rounded-lg bg-brand-emerald/10 border border-brand-emerald/30 flex items-center justify-center text-brand-emerald">
+            <i data-lucide="book-open" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 id="modalTitle" class="font-bold text-sm text-white">Notebook Title</h3>
+            <p id="modalPlatformBadge" class="text-[10px] text-zinc-400 font-mono">Google Colab · Free T4 GPU</p>
+          </div>
+        </div>
+        <button onclick="closeDetailModal()" class="text-zinc-400 hover:text-white p-1 rounded-lg hover:bg-obsidian-800 transition">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-4 text-xs max-h-[70vh] overflow-y-auto">
+        <div>
+          <h4 class="font-semibold text-zinc-300 mb-1">Architecture & Purpose</h4>
+          <p id="modalDesc" class="text-zinc-400 leading-relaxed"></p>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2">
+          <div class="p-3 rounded-xl bg-obsidian-850/60 border border-obsidian-750">
+            <span class="text-[10px] text-zinc-500 font-mono block">VRAM Required</span>
+            <span id="modalVram" class="font-bold text-zinc-200"></span>
+          </div>
+          <div class="p-3 rounded-xl bg-obsidian-850/60 border border-obsidian-750">
+            <span class="text-[10px] text-zinc-500 font-mono block">Runtime Quota</span>
+            <span id="modalQuota" class="font-bold text-zinc-200"></span>
+          </div>
+          <div class="p-3 rounded-xl bg-obsidian-850/60 border border-obsidian-750">
+            <span class="text-[10px] text-zinc-500 font-mono block">Quantization</span>
+            <span id="modalQuant" class="font-bold text-zinc-200"></span>
+          </div>
+          <div class="p-3 rounded-xl bg-obsidian-850/60 border border-obsidian-750">
+            <span class="text-[10px] text-zinc-500 font-mono block">Security</span>
+            <span class="font-bold text-brand-emerald">Zero-Leak</span>
+          </div>
+        </div>
+
+        <div class="space-y-2 pt-2">
+          <h4 class="font-semibold text-zinc-300">Quick Launch Instructions</h4>
+          <ol class="list-decimal list-inside space-y-1.5 text-zinc-400 text-[11px] leading-relaxed">
+            <li>Click <strong>Open in Cloud</strong> below to launch directly in your browser.</li>
+            <li>Select your hardware accelerator: <strong>Runtime &rarr; Change runtime type &rarr; T4 GPU</strong> (Colab) or <strong>Settings &rarr; GPU T4 x2</strong> (Kaggle).</li>
+            <li>Run Cell 1 (GPU diagnostic & instance fingerprint) to allocate isolated session quota.</li>
+            <li>Run subsequent cells sequentially. Checkpoints load automatically with zero API leaks.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="px-6 py-4 border-t border-obsidian-750 bg-obsidian-950/70 flex items-center justify-between">
+        <button onclick="closeDetailModal()" class="px-4 py-2 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 text-zinc-300 text-xs font-medium transition">
+          Close
+        </button>
+        <div class="flex items-center gap-2">
+          <button id="modalCopyUrlBtn" onclick="copyNotebookUrl()" class="px-3.5 py-2 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 border border-obsidian-700 text-zinc-200 text-xs font-medium transition flex items-center gap-1.5">
+            <i data-lucide="link" class="w-3.5 h-3.5"></i>
+            <span>Copy Link</span>
+          </button>
+          <a id="modalLaunchBtn" href="#" target="_blank" class="px-4 py-2 rounded-xl bg-brand-emerald hover:bg-emerald-400 text-obsidian-950 text-xs font-bold transition flex items-center gap-1.5 shadow-glow-emerald">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            <span>Launch Notebook</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-obsidian-750/70 bg-obsidian-900/60 backdrop-blur-md py-6 text-center text-xs text-zinc-500 font-mono">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p>Built with Obsidian Glassmorphic Design · 100% Zero-Leak Privacy</p>
+      <div class="flex items-center gap-4">
+        <a href="https://github.com/SudhirDevOps1/t4-gpu-llm-api" class="hover:text-zinc-300 transition">GitHub</a>
+        <a href="https://colab.research.google.com" class="hover:text-zinc-300 transition">Google Colab</a>
+        <a href="https://www.kaggle.com" class="hover:text-zinc-300 transition">Kaggle</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 🛡️ Zero Native Browser Dialogs Monkey-Patch
+    window.alert = function(msg) { showToast(String(msg), 'warning'); };
+    window.confirm = function(msg) { showToast(String(msg), 'warning'); return false; };
+
+    // Toast Notification Dispatcher
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      
+      let border = 'border-brand-emerald/40 text-emerald-200 bg-obsidian-900/90';
+      let icon = 'check-circle';
+      if (type === 'warning') {
+        border = 'border-amber-500/40 text-amber-200 bg-obsidian-900/90';
+        icon = 'alert-triangle';
+      }
+
+      toast.className = `toast border ${border}`;
+      toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4 shrink-0"></i><span>${message}</span>`;
+      container.appendChild(toast);
+      lucide.createIcons();
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 2600);
+    }
+
+    // Comprehensive Notebook Catalog Dataset
+    const NOTEBOOKS = [
+      {
+        id: 'colab-llm-server',
+        title: 'T4 GPU LLM Server & OpenAI API Hub',
+        category: 'llm',
+        platform: 'colab',
+        badge: 'Recommended',
+        models: 'Qwen 2.5 Coder 7B · DeepSeek-R1 7B/8B · Llama 3.2',
+        desc: 'Turns a free Google Colab Tesla T4 into an ultra-fast OpenAI-compatible /v1 API server with live token streaming, CORS support, Cloudflare Tunnel, and zero kernel deadlocks.',
+        vram: '4.5 GB / 15.3 GB',
+        quota: 'Up to 12 Hours',
+        quant: 'INT4 / Q4_K_M',
+        path: 'colab/01_t4_gpu_llm_api.ipynb',
+        colabUrl: 'https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/t4-gpu-llm-api.ipynb',
+        tags: ['OpenAI /v1', 'CORS', 'DeepSeek-R1', 'Cloudflare', 'T4 GPU']
+      },
+      {
+        id: 'colab-voice-tts',
+        title: 'Zero-Shot Voice Cloning & High-Speed TTS',
+        category: 'audio',
+        platform: 'colab',
+        badge: 'Studio',
+        models: 'Fish Audio S2.1 Pro · Kokoro TTS · SeedVC',
+        desc: 'Instant voice cloning and paralinguistic emotion text-to-speech across 80+ languages. Zero HuggingFace token leaks with encrypted session secret management.',
+        vram: '2.8 GB / 15.3 GB',
+        quota: 'Free T4 / CPU Friendly',
+        quant: 'FP16 / INT8',
+        path: 'colab/02_zero_shot_voice_tts.ipynb',
+        colabUrl: 'https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/02_zero_shot_voice_tts.ipynb',
+        tags: ['TTS', 'Voice Cloning', 'Kokoro', 'Multilingual', 'Colab']
+      },
+      {
+        id: 'colab-vision-qwen',
+        title: 'Qwen-Image 2.1 Fast INT8 Studio',
+        category: 'vision',
+        platform: 'colab',
+        badge: 'Diffusion',
+        models: 'Qwen-Image 2.1 INT8 · Wan2GP · SDXL Turbo',
+        desc: 'High-speed text-to-image, instruction editing, and multi-reference image composition powered by Comfy Kitchen INT8 Tensor Cores. Offloaded checkpoints outside repo.',
+        vram: '8.2 GB / 15.3 GB',
+        quota: 'Free T4 GPU',
+        quant: 'INT8 ConvRot',
+        path: 'colab/03_qwen_image_gen_studio.ipynb',
+        colabUrl: 'https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/03_qwen_image_gen_studio.ipynb',
+        tags: ['Vision', 'Text-to-Image', 'INT8 Tensor Cores', 'Inpainting']
+      },
+      {
+        id: 'kaggle-dual-t4-llm',
+        title: 'Kaggle Dual T4 x2 Distributed LLM Engine',
+        category: 'llm',
+        platform: 'kaggle',
+        badge: 'Dual GPU',
+        models: 'DeepSeek-R1 14B · Qwen2.5 14B · Mistral NeMo',
+        desc: 'Distributed multi-GPU tensor parallel inference on Kaggle Dual Tesla T4 x2 (30.6 GB Total VRAM). Automatically maps shards with expandable segments and secret protection.',
+        vram: '14.0 GB / 30.6 GB',
+        quota: '9 Hours (30h/week)',
+        quant: 'INT8 Tensor Parallel',
+        path: 'kaggle/01_dual_t4_llm_engine.ipynb',
+        colabUrl: 'https://www.kaggle.com/code/new',
+        tags: ['Kaggle', 'Dual T4', 'Tensor Parallel', 'DeepSeek-R1 14B', '30GB VRAM']
+      },
+      {
+        id: 'kaggle-ltx-video',
+        title: 'LTX-2.5 22B Distilled Dual GPU Video Generator',
+        category: 'video',
+        platform: 'kaggle',
+        badge: 'Video DiT',
+        models: 'LTX-2.5 22B Distilled · Wan2GP · Gemma-3',
+        desc: '8-step high-speed video generation with synchronized 32 kHz stereo audio using Kaggle Dual T4 GPUs. Auto-recovering cache buffers and memory fraction caps.',
+        vram: '24.5 GB / 30.6 GB',
+        quota: 'Kaggle T4 x2',
+        quant: 'INT8 Q4 DiT',
+        path: 'kaggle/02_ltx_video_generator.ipynb',
+        colabUrl: 'https://www.kaggle.com/code/new',
+        tags: ['Video Gen', 'Text-to-Video', 'Dual T4', 'DiT', 'Kaggle']
+      }
+    ];
+
+    let currentPlatform = 'all';
+    let currentCategory = 'all';
+    let currentActiveNotebook = null;
+
+    function renderNotebookCards() {
+      const grid = document.getElementById('notebookGrid');
+      const noResults = document.getElementById('noResults');
+      const query = document.getElementById('storeSearch').value.toLowerCase().trim();
+
+      grid.innerHTML = '';
+      
+      const filtered = NOTEBOOKS.filter(nb => {
+        const matchesPlat = (currentPlatform === 'all' || nb.platform === currentPlatform);
+        const matchesCat = (currentCategory === 'all' || nb.category === currentCategory);
+        const matchesQuery = !query || 
+          nb.title.toLowerCase().includes(query) || 
+          nb.desc.toLowerCase().includes(query) || 
+          nb.models.toLowerCase().includes(query) ||
+          nb.tags.some(t => t.toLowerCase().includes(query));
+        return matchesPlat && matchesCat && matchesQuery;
+      });
+
+      if (!filtered.length) {
+        noResults.classList.remove('hidden');
+        return;
+      }
+      noResults.classList.add('hidden');
+
+      filtered.forEach(nb => {
+        const card = document.createElement('div');
+        card.className = 'group rounded-2xl bg-obsidian-900 border border-obsidian-750 hover:border-brand-emerald/40 p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-2xl hover:shadow-brand-emerald/5';
+
+        const platformColor = nb.platform === 'colab' ? 'text-amber-400 bg-amber-500/10 border-amber-500/30' : 'text-cyan-400 bg-cyan-500/10 border-cyan-500/30';
+        const platformLabel = nb.platform === 'colab' ? 'Google Colab' : 'Kaggle';
+
+        card.innerHTML = `
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-mono px-2.5 py-0.5 rounded-full border ${platformColor} font-semibold flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full ${nb.platform === 'colab' ? 'bg-amber-400' : 'bg-cyan-400'}"></span>
+                ${platformLabel}
+              </span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded-md bg-obsidian-850 text-zinc-400 border border-obsidian-750">
+                ${nb.badge}
+              </span>
+            </div>
+
+            <div>
+              <h3 class="font-bold text-sm text-white group-hover:text-brand-emerald transition">${nb.title}</h3>
+              <p class="text-[11px] font-mono text-brand-cyan/80 mt-1">${nb.models}</p>
+            </div>
+
+            <p class="text-xs text-zinc-400 line-clamp-3 leading-relaxed">
+              ${nb.desc}
+            </p>
+
+            <div class="flex flex-wrap gap-1.5 pt-1">
+              ${nb.tags.map(t => `<span class="text-[10px] font-mono px-2 py-0.5 rounded-md bg-obsidian-950 text-zinc-400 border border-obsidian-750">${t}</span>`).join('')}
+            </div>
+          </div>
+
+          <div class="pt-5 mt-4 border-t border-obsidian-750/70 flex items-center justify-between gap-2">
+            <button onclick="openDetailModal('${nb.id}')" class="px-3 py-2 rounded-xl bg-obsidian-850 hover:bg-obsidian-800 text-xs font-medium text-zinc-300 transition flex items-center gap-1.5 border border-obsidian-750">
+              <i data-lucide="info" class="w-3.5 h-3.5"></i>
+              <span>Specs</span>
+            </button>
+
+            <div class="flex items-center gap-1.5">
+              <a href="${nb.colabUrl}" target="_blank" class="px-3.5 py-2 rounded-xl bg-brand-emerald/10 hover:bg-brand-emerald/20 border border-brand-emerald/30 text-xs text-brand-emerald font-semibold transition flex items-center gap-1.5 shadow-sm">
+                <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                <span>Open ${platformLabel}</span>
+              </a>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      lucide.createIcons();
+    }
+
+    function setPlatformFilter(platform) {
+      currentPlatform = platform;
+      ['all', 'colab', 'kaggle'].forEach(p => {
+        const btn = document.getElementById(`btnPlat-${p}`);
+        if (p === platform) {
+          btn.className = 'px-3 py-1.5 rounded-lg bg-obsidian-800 text-white font-semibold transition';
+        } else {
+          btn.className = 'px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition flex items-center gap-1.5';
+        }
+      });
+      renderNotebookCards();
+    }
+
+    function setCategoryFilter(category) {
+      currentCategory = category;
+      ['all', 'llm', 'audio', 'vision', 'video'].forEach(c => {
+        const btn = document.getElementById(`btnCat-${c}`);
+        if (c === category) {
+          btn.className = 'px-3 py-1 rounded-full bg-brand-emerald/10 text-brand-emerald border border-brand-emerald/30 font-medium transition';
+        } else {
+          btn.className = 'px-3 py-1 rounded-full bg-obsidian-850 hover:bg-obsidian-800 text-zinc-300 border border-obsidian-700 font-medium transition';
+        }
+      });
+      renderNotebookCards();
+    }
+
+    function filterNotebooks() {
+      renderNotebookCards();
+    }
+
+    function openDetailModal(nbId) {
+      const nb = NOTEBOOKS.find(n => n.id === nbId);
+      if (!nb) return;
+      currentActiveNotebook = nb;
+
+      document.getElementById('modalTitle').innerText = nb.title;
+      document.getElementById('modalPlatformBadge').innerText = `${nb.platform.toUpperCase()} · ${nb.models}`;
+      document.getElementById('modalDesc').innerText = nb.desc;
+      document.getElementById('modalVram').innerText = nb.vram;
+      document.getElementById('modalQuota').innerText = nb.quota;
+      document.getElementById('modalQuant').innerText = nb.quant;
+      document.getElementById('modalLaunchBtn').href = nb.colabUrl;
+
+      document.getElementById('detailModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeDetailModal() {
+      document.getElementById('detailModal').classList.add('hidden');
+      currentActiveNotebook = null;
+    }
+
+    function copyNotebookUrl() {
+      if (!currentActiveNotebook) return;
+      navigator.clipboard.writeText(currentActiveNotebook.colabUrl).then(() => {
+        showToast('Launch URL copied to clipboard!', 'info');
+      });
+    }
+
+    // Escape listener
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDetailModal();
+    });
+
+    // Initial render
+    renderNotebookCards();
+  </script>
+</body>
+</html>

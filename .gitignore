@@ -1,0 +1,32 @@
+# 🛡️ Zero-Leak Security & Secret Protection
+*.key
+*.pem
+*.token
+*.env
+*.env.*
+.secrets
+credentials.json
+*_token.txt
+
+# Jupyter & Python Checkpoints
+.ipynb_checkpoints/
+__pycache__/
+*.py[cod]
+*$py.class
+*.log
+
+# Heavy Checkpoints & Model Caches (Keep repo light & clean)
+ckpts/
+outputs/
+Wan2GP/
+weights/
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.onnx
+
+# OS & Temp
+.DS_Store
+Thumbs.db
+/tmp/
