@@ -30,7 +30,7 @@ Explore, search, filter, and inspect detailed specs for all notebooks in our sta
 | :--- | :--- | :--- | :--- | :--- |
 | **01. T4 GPU LLM Server & API Hub**<br>`Qwen2.5-Coder 7B` · `DeepSeek-R1 8B` | **Apache 2.0**<br>`✅ Commercial` | [GitHub](https://github.com/QwenLM/Qwen2.5-Coder) · [HF](https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct) | **RAM:** 8.0 GB<br>**VRAM:** 4.5 GB *(INT4)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/t4-gpu-llm-api.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) |
 | **02. Zero-Shot Voice Cloning & TTS**<br>`Kokoro TTS 82M` · `Fish Audio` | **Apache 2.0**<br>`✅ Commercial` | [GitHub](https://github.com/hexgrad/kokoro) · [HF](https://huggingface.co/hexgrad/Kokoro-82M) | **RAM:** 4.0 GB<br>**VRAM:** 2.8 GB *(or CPU)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/02_zero_shot_voice_tts.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) |
-| **03. Official F5-TTS Multi-Language Voice Studio**<br>`SWivid/F5-TTS` · `Vocos 24kHz` · `Hindi & English` | **MIT License**<br>`✅ Commercial` | [GitHub](https://github.com/SWivid/F5-TTS) · [HF](https://huggingface.co/SWivid/F5-TTS) | **RAM:** 6.0 GB<br>**VRAM:** 3.5 GB *(FP16 Flow-Matching)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/08_f5_chatterbox_hindi_voice.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) |
+| **03. TurboVoiceCloner — Chatterbox Multilingual**<br>`Resemble AI` · `NeuralFalconYT` · `Hindi SOTA` | **MIT License**<br>`✅ Commercial` | [GitHub](https://github.com/resemble-ai/chatterbox) · [HF](https://huggingface.co/ResembleAI) | **RAM:** 6.0 GB<br>**VRAM:** 3.5 GB *(FP16)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/08_f5_chatterbox_hindi_voice.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) |
 | **04. Qwen-Image 2.1 Fast INT8 Studio**<br>`Qwen-Image 2.1` · `SDXL Turbo` | **Apache 2.0**<br>`✅ Commercial` | [GitHub](https://github.com/QwenLM/Qwen-VL) · [HF](https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct) | **RAM:** 10.0 GB<br>**VRAM:** 8.2 GB *(INT8)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/03_qwen_image_gen_studio.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) |
 | **05. Wan2.1 & LTX-Video DiT Studio**<br>`Wan2.1-1.3B` · `LTX-Video 0.9.1` | **Apache 2.0**<br>`✅ Commercial` | [GitHub](https://github.com/Wan-AI/Wan2.1) · [HF](https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B) | **RAM:** 12.0 GB<br>**VRAM:** 8.5 GB *(FP8)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/04_wan_ltx_video_studio.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) |
 | **06. ComfyUI Portable Cloud Studio**<br>`ComfyUI Core` · `ComfyUI-Manager` | **GPL 3.0**<br>`✅ Open Source` | [GitHub](https://github.com/comfyanonymous/ComfyUI) · [HF](https://huggingface.co/Comfy-Org) | **RAM:** 8.0 GB<br>**VRAM:** 4.0 - 14.0 GB | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/05_comfyui_cloud_studio.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) |
@@ -47,18 +47,15 @@ Every model below is **100% verified, implemented, and directly deployable** ins
 
 ---
 
-### 🎙️ 1. Voice Cloning & High-Fidelity TTS Stack (Official F5-TTS & Kokoro)
+### 🎙️ 1. Voice Cloning & High-Fidelity TTS Stack (TurboVoiceCloner & Kokoro)
 * **Notebooks:** [`colab/08_f5_chatterbox_hindi_voice.ipynb`](colab/08_f5_chatterbox_hindi_voice.ipynb) & [`colab/02_zero_shot_voice_tts.ipynb`](colab/02_zero_shot_voice_tts.ipynb)
-* **Official Weights Deployed:**
-  - **`SWivid/F5-TTS (F5TTS_v1_Base)`**: Official Flow-Matching Diffusion Transformer for zero-shot voice cloning from 3–10 sec audio samples.
-  - **`E2TTS_Base`**: Flat-duration flow matching option selectable from the interactive dropdown.
-  - **`charactr/vocos-mel-24khz`**: Neural vocoder converting mel-spectrograms into crystal-clear 24kHz speech.
+* **Official Engines & Weights Deployed:**
+  - **`Resemble AI Chatterbox Multilingual`** (TurboVoiceCloner): State-of-the-art multilingual voice cloning engine with native Hindi (`hi`), English, Spanish, French, German, Italian, and Portuguese.
+  - **`NeuralFalconYT/Chatterbox-Multilingual`**: High-performance Gradio UI with emotion exaggeration slider (`0.25` - `2.0`), CFG guidance pace, and temperature.
+  - **`sentencex` Long-Text Chunking**: Synthesizes full paragraphs seamlessly without length limitations.
   - **`hexgrad/Kokoro-82M`**: Ultra-lightweight (82M parameter) commercial TTS engine with 8 built-in studio personas.
-* **Language Support & In-App Selectors:**
-  - 🇮🇳 **Hindi (हिन्दी / Devanagari):** Full phonemizer support with natural prosody and cadence.
-  - 🌐 **Hinglish (Code-Mixing):** Smooth bilingual transitions without robotic accents.
-  - 🇺🇸 **English (US/UK):** Studio-grade zero-shot voice cloning.
-* **Hardware Footprint:** 3.5 GB VRAM · Runs comfortably within Colab T4's 15.3 GB limit.
+* **Anti-Sleep Keep-Alive:** Background silence audio player (`silence.m4a`) prevents Google Colab disconnects.
+* **Hardware Footprint:** 3.5 GB VRAM · Runs smoothly on Free Colab Tesla T4.
 
 ---
 
@@ -121,19 +118,19 @@ Every AI domain has its own dedicated notebook in `colab/` or `kaggle/` with iso
 
 ---
 
-### 🎙️ Category 2: Real F5-TTS Multi-Language Voice Cloning Studio (`colab/08_f5_chatterbox_hindi_voice.ipynb`)
-- **Models:** `F5-TTS Indic` · `Resemble Chatterbox` · `Kokoro-82M`
+### 🎙️ Category 2: TurboVoiceCloner — Chatterbox Multilingual Studio (`colab/08_f5_chatterbox_hindi_voice.ipynb`)
+- **Models:** `Resemble AI Chatterbox Multilingual` · `NeuralFalconYT` · `Kokoro-82M`
 - **License:** `✅ Commercial Allowed` (MIT / Apache 2.0)
-- **Official Repos:** [GitHub: SWivid/F5-TTS](https://github.com/SWivid/F5-TTS) · [GitHub: hexgrad/kokoro](https://github.com/hexgrad/kokoro) · [HF: F5-TTS](https://huggingface.co/SWivid/F5-TTS)
-- **Hardware Footprint:** 6.0 GB RAM · 3.5 GB VRAM (FP16 Flow-Matching)
+- **Official Repos:** [GitHub: resemble-ai/chatterbox](https://github.com/resemble-ai/chatterbox) · [HF: ResembleAI](https://huggingface.co/ResembleAI)
+- **Hardware Footprint:** 6.0 GB RAM · 3.5 GB VRAM (FP16 Multilingual)
 - **1-Click Launch:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/08_f5_chatterbox_hindi_voice.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new)
 - **Step-by-Step Run Instructions:**
-  1. Launch on **Google Colab** (T4 GPU).
-  2. Run **Cell 1**: Clone F5-TTS / Chatterbox dependencies and download Hindi phonemizer dictionaries.
-  3. Run **Cell 2**: Load 3–5 second target voice sample (upload your own `.wav` or select sample voice).
-  4. Run **Cell 3**: Provide input prompt in **Hindi (Devanagari)**, **Hinglish**, or **English**.
-  5. Run **Cell 4**: Synthesize speech with natural breath cadence and expressiveness.
-  6. Play or download the studio-grade 24kHz / 48kHz audio directly from the output cell!
+  1. Launch on **Google Colab** (Select **T4 GPU** runtime).
+  2. Run **Cell 1**: Install Chatterbox Multilingual, apply Hindi Devanagari patches, and install pinned dependencies (session automatically restarts once).
+  3. Run **Cell 2**: Install `numpy<2.3` and enable `hf_transfer` for accelerated weight downloads.
+  4. Run **Cell 3**: Start the background anti-sleep audio keep-alive player to prevent Colab from disconnecting.
+  5. Run **Cell 4**: Launch the interactive Gradio Studio with `--share` link.
+  6. Open the generated Gradio link: upload or record reference audio (3-10s), select language (`hi` for Hindi, `en` for English), adjust emotion exaggeration slider, and generate long-form cloned speech!
 
 ---
 
