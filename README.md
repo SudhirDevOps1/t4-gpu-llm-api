@@ -28,14 +28,14 @@ Explore, search, filter, and inspect detailed specs for all notebooks in our sta
 
 | Model & Category | License & Commercial? | Official Repos | Hardware Specs | 1-Click Multi-Cloud Deploy |
 | :--- | :--- | :--- | :--- | :--- |
-| **01. T4 GPU LLM Server & API Hub**<br>`Qwen2.5-Coder 7B` · `DeepSeek-R1 8B` | **Apache 2.0**<br>`✅ Commercial` | [GitHub](https://github.com/QwenLM/Qwen2.5-Coder) · [HF](https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct) | **RAM:** 8.0 GB<br>**VRAM:** 4.5 GB *(INT4)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/t4-gpu-llm-api.ipynb) [![Lightning AI](https://img.shields.io/badge/Lightning_AI-Studio-792EE5?style=flat&logo=lightning)](https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api) |
-| **02. Zero-Shot Voice Cloning & TTS**<br>`Kokoro TTS 82M` · `Fish Audio` | **Apache 2.0**<br>`✅ Commercial` | [GitHub](https://github.com/hexgrad/kokoro) · [HF](https://huggingface.co/hexgrad/Kokoro-82M) | **RAM:** 4.0 GB<br>**VRAM:** 2.8 GB *(or CPU)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/02_zero_shot_voice_tts.ipynb) [![Lightning AI](https://img.shields.io/badge/Lightning_AI-Studio-792EE5?style=flat&logo=lightning)](https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api) |
-| **03. F5-TTS & Chatterbox Hindi Voice**<br>`F5-TTS` · `Chatterbox-Turbo` | **MIT License**<br>`✅ Commercial` | [GitHub](https://github.com/SWivid/F5-TTS) · [HF](https://huggingface.co/SWivid/F5-TTS) | **RAM:** 6.0 GB<br>**VRAM:** 3.5 GB *(FP16)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/08_f5_chatterbox_hindi_voice.ipynb) [![Lightning AI](https://img.shields.io/badge/Lightning_AI-Studio-792EE5?style=flat&logo=lightning)](https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api) |
-| **04. Qwen-Image 2.1 Fast INT8 Studio**<br>`Qwen-Image 2.1` · `SDXL Turbo` | **Apache 2.0**<br>`✅ Commercial` | [GitHub](https://github.com/QwenLM/Qwen-VL) · [HF](https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct) | **RAM:** 10.0 GB<br>**VRAM:** 8.2 GB *(INT8)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/03_qwen_image_gen_studio.ipynb) [![Lightning AI](https://img.shields.io/badge/Lightning_AI-Studio-792EE5?style=flat&logo=lightning)](https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api) |
-| **05. Wan2.1 & LTX-Video DiT Studio**<br>`Wan2.1-1.3B` · `LTX-Video 0.9.1` | **Apache 2.0**<br>`✅ Commercial` | [GitHub](https://github.com/Wan-AI/Wan2.1) · [HF](https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B) | **RAM:** 12.0 GB<br>**VRAM:** 8.5 GB *(FP8)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/04_wan_ltx_video_studio.ipynb) [![Lightning AI](https://img.shields.io/badge/Lightning_AI-Studio-792EE5?style=flat&logo=lightning)](https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api) |
-| **06. ComfyUI Portable Cloud Studio**<br>`ComfyUI Core` · `ComfyUI-Manager` | **GPL 3.0**<br>`✅ Open Source` | [GitHub](https://github.com/comfyanonymous/ComfyUI) · [HF](https://huggingface.co/Comfy-Org) | **RAM:** 8.0 GB<br>**VRAM:** 4.0 - 14.0 GB | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/05_comfyui_cloud_studio.ipynb) [![Lightning AI](https://img.shields.io/badge/Lightning_AI-Studio-792EE5?style=flat&logo=lightning)](https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api) |
-| **07. RAG Knowledge Agent & Vector QA**<br>`all-MiniLM-L6-v2` · `ChromaDB` | **Apache 2.0**<br>`✅ Commercial` | [GitHub](https://github.com/chroma-core/chroma) · [HF](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) | **RAM:** 4.0 GB<br>**VRAM:** 1.2 GB *(or CPU)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/06_rag_knowledge_agent.ipynb) [![Lightning AI](https://img.shields.io/badge/Lightning_AI-Studio-792EE5?style=flat&logo=lightning)](https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api) |
-| **08. QLoRA 4-bit Fine-Tuning Studio**<br>`BitsAndBytes NF4` · `PEFT / TRL` | **Apache 2.0**<br>`✅ Commercial` | [GitHub](https://github.com/huggingface/trl) · [HF](https://huggingface.co/huggingface/peft) | **RAM:** 10.0 GB<br>**VRAM:** 9.5 GB *(NF4)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/07_qlora_training_studio.ipynb) [![Lightning AI](https://img.shields.io/badge/Lightning_AI-Studio-792EE5?style=flat&logo=lightning)](https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api) |
+| **01. T4 GPU LLM Server & API Hub**<br>`Qwen2.5-Coder 7B` · `DeepSeek-R1 8B` | **Apache 2.0**<br>`✅ Commercial` | [GitHub](https://github.com/QwenLM/Qwen2.5-Coder) · [HF](https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct) | **RAM:** 8.0 GB<br>**VRAM:** 4.5 GB *(INT4)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/t4-gpu-llm-api.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) |
+| **02. Zero-Shot Voice Cloning & TTS**<br>`Kokoro TTS 82M` · `Fish Audio` | **Apache 2.0**<br>`✅ Commercial` | [GitHub](https://github.com/hexgrad/kokoro) · [HF](https://huggingface.co/hexgrad/Kokoro-82M) | **RAM:** 4.0 GB<br>**VRAM:** 2.8 GB *(or CPU)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/02_zero_shot_voice_tts.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) |
+| **03. F5-TTS & Chatterbox Hindi Voice**<br>`F5-TTS` · `Chatterbox-Turbo` | **MIT License**<br>`✅ Commercial` | [GitHub](https://github.com/SWivid/F5-TTS) · [HF](https://huggingface.co/SWivid/F5-TTS) | **RAM:** 6.0 GB<br>**VRAM:** 3.5 GB *(FP16)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/08_f5_chatterbox_hindi_voice.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) |
+| **04. Qwen-Image 2.1 Fast INT8 Studio**<br>`Qwen-Image 2.1` · `SDXL Turbo` | **Apache 2.0**<br>`✅ Commercial` | [GitHub](https://github.com/QwenLM/Qwen-VL) · [HF](https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct) | **RAM:** 10.0 GB<br>**VRAM:** 8.2 GB *(INT8)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/03_qwen_image_gen_studio.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) |
+| **05. Wan2.1 & LTX-Video DiT Studio**<br>`Wan2.1-1.3B` · `LTX-Video 0.9.1` | **Apache 2.0**<br>`✅ Commercial` | [GitHub](https://github.com/Wan-AI/Wan2.1) · [HF](https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B) | **RAM:** 12.0 GB<br>**VRAM:** 8.5 GB *(FP8)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/04_wan_ltx_video_studio.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) |
+| **06. ComfyUI Portable Cloud Studio**<br>`ComfyUI Core` · `ComfyUI-Manager` | **GPL 3.0**<br>`✅ Open Source` | [GitHub](https://github.com/comfyanonymous/ComfyUI) · [HF](https://huggingface.co/Comfy-Org) | **RAM:** 8.0 GB<br>**VRAM:** 4.0 - 14.0 GB | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/05_comfyui_cloud_studio.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) |
+| **07. RAG Knowledge Agent & Vector QA**<br>`all-MiniLM-L6-v2` · `ChromaDB` | **Apache 2.0**<br>`✅ Commercial` | [GitHub](https://github.com/chroma-core/chroma) · [HF](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) | **RAM:** 4.0 GB<br>**VRAM:** 1.2 GB *(or CPU)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/06_rag_knowledge_agent.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) |
+| **08. QLoRA 4-bit Fine-Tuning Studio**<br>`BitsAndBytes NF4` · `PEFT / TRL` | **Apache 2.0**<br>`✅ Commercial` | [GitHub](https://github.com/huggingface/trl) · [HF](https://huggingface.co/huggingface/peft) | **RAM:** 10.0 GB<br>**VRAM:** 9.5 GB *(NF4)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/07_qlora_training_studio.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) |
 | **09. Kaggle Dual T4 x2 LLM Engine**<br>`DeepSeek-R1 14B` · `Qwen2.5 14B` | **MIT License**<br>`✅ Commercial` | [GitHub](https://github.com/deepseek-ai/DeepSeek-R1) · [HF](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-14B) | **RAM:** 29.0 GB<br>**VRAM:** 14.0 GB *(Dual T4)* | [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) |
 | **10. Kaggle Dual T4 x2 ComfyUI Studio**<br>`ComfyUI` · `Dual T4 Tensor Parallel` | **GPL 3.0**<br>`✅ Open Source` | [GitHub](https://github.com/comfyanonymous/ComfyUI) · [HF](https://huggingface.co/Lightricks/LTX-Video) | **RAM:** 29.0 GB<br>**VRAM:** 12.0 GB *(Dual T4)* | [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) |
 
@@ -69,6 +69,137 @@ Unlike base corporate models that refuse legitimate coding, pentesting, or creat
 - **Vision & Image Generation:** Flux.1 Schnell INT8, SDXL Turbo, and Qwen-Image 2.1.
 - **High-Speed Video:** Wan2.1-T2V-1.3B & LTX-Video 2.5 (720p 24fps in 8–16 steps).
 - **Music & Audio:** YuE 2-3B (full-song 48kHz music generation) and ACE-Step 1.5 (LoRA music studio).
+
+---
+
+## 🛠️ Category-Wise Step-by-Step Execution Guides
+
+Every AI domain has its own dedicated notebook in `colab/` or `kaggle/` with isolated limitation IDs and zero-leak encryption. Follow the quick steps below to launch and run:
+
+---
+
+### ⚡ Category 1: LLM & Reasoning APIs (`colab/01_t4_gpu_llm_api.ipynb`)
+- **Models:** `Qwen2.5-Coder 7B` · `DeepSeek-R1 8B` · `Llama-3.2 3B`
+- **License:** `✅ Commercial Allowed` (Apache 2.0 / MIT)
+- **Official Repos:** [GitHub: QwenLM/Qwen2.5-Coder](https://github.com/QwenLM/Qwen2.5-Coder) · [HF: Qwen2.5-Coder-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct)
+- **Hardware Footprint:** 8.0 GB RAM · 4.5 GB VRAM (INT4 AWQ / GGUF)
+- **1-Click Launch:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/t4-gpu-llm-api.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new)
+- **Step-by-Step Run Instructions:**
+  1. Open the notebook in **Google Colab** (Select **T4 GPU** accelerator).
+  2. Run **Cell 1**: GPU environment check and dynamic session ID initialization (`core.instance`).
+  3. Run **Cell 2**: Install quantized runtime (`vLLM` / `llama-cpp-python` / `bitsandbytes`).
+  4. Run **Cell 3**: Download 4-bit weights into `/root/.cache` with masked token verification.
+  5. Run **Cell 4**: Launch FastAPI server with OpenAI `/v1/chat/completions` compatibility.
+  6. Run **Cell 5**: Spawn Cloudflare Tunnel to expose the public endpoint.
+  7. Copy your tunnel URL and paste it into [`colab_ai_chat.html`](colab_ai_chat.html) for real-time streaming inference!
+
+---
+
+### 🎙️ Category 2: Voice Cloning, Speech Synthesis & Hindi SOTA (`colab/08_f5_chatterbox_hindi_voice.ipynb`)
+- **Models:** `F5-TTS Indic` · `Resemble Chatterbox` · `Kokoro-82M`
+- **License:** `✅ Commercial Allowed` (MIT / Apache 2.0)
+- **Official Repos:** [GitHub: SWivid/F5-TTS](https://github.com/SWivid/F5-TTS) · [GitHub: hexgrad/kokoro](https://github.com/hexgrad/kokoro) · [HF: F5-TTS](https://huggingface.co/SWivid/F5-TTS)
+- **Hardware Footprint:** 6.0 GB RAM · 3.5 GB VRAM (FP16 Flow-Matching)
+- **1-Click Launch:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/08_f5_chatterbox_hindi_voice.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new)
+- **Step-by-Step Run Instructions:**
+  1. Launch on **Google Colab** (T4 GPU).
+  2. Run **Cell 1**: Clone F5-TTS / Chatterbox dependencies and download Hindi phonemizer dictionaries.
+  3. Run **Cell 2**: Load 3–5 second target voice sample (upload your own `.wav` or select sample voice).
+  4. Run **Cell 3**: Provide input prompt in **Hindi (Devanagari)**, **Hinglish**, or **English**.
+  5. Run **Cell 4**: Synthesize speech with natural breath cadence and expressiveness.
+  6. Play or download the studio-grade 24kHz / 48kHz audio directly from the output cell!
+
+---
+
+### 🎨 Category 3: Vision & High-Speed Image Diffusion (`colab/03_qwen_image_gen_studio.ipynb`)
+- **Models:** `Qwen-Image 2.1 INT8` · `SDXL Turbo` · `Flux.1 Schnell`
+- **License:** `✅ Commercial Allowed` (Qwen Apache 2.0) / `⚠️ Research` (SDXL Turbo)
+- **Official Repos:** [GitHub: QwenLM/Qwen-VL](https://github.com/QwenLM/Qwen-VL) · [HF: Qwen2-VL-7B](https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct)
+- **Hardware Footprint:** 10.0 GB RAM · 8.2 GB VRAM (INT8 Tensor Cores)
+- **1-Click Launch:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/03_qwen_image_gen_studio.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new)
+- **Step-by-Step Run Instructions:**
+  1. Open on Colab with T4 GPU runtime.
+  2. Run **Cell 1**: Setup Diffusers, FlashAttention-2, and INT8 quantization hooks.
+  3. Run **Cell 2**: Load weights using HuggingFace caching without local disk leaks.
+  4. Run **Cell 3**: Enter your visual prompt, resolution (512x512 up to 1024x1024), and seed.
+  5. Run **Cell 4**: Generate image in 1 to 4 steps with instant inline preview.
+
+---
+
+### 🎬 Category 4: Video Generation Studio (`colab/04_wan_ltx_video_studio.ipynb`)
+- **Models:** `Wan2.1-T2V-1.3B` · `LTX-Video 0.9.1`
+- **License:** `✅ Commercial Allowed` (Apache 2.0)
+- **Official Repos:** [GitHub: Wan-AI/Wan2.1](https://github.com/Wan-AI/Wan2.1) · [HF: Wan2.1-T2V-1.3B](https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B)
+- **Hardware Footprint:** 12.0 GB RAM · 8.5 GB VRAM (FP8 DiT)
+- **1-Click Launch:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/04_wan_ltx_video_studio.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new)
+- **Step-by-Step Run Instructions:**
+  1. Select **T4 GPU** on Colab or **Dual T4** on Kaggle.
+  2. Run **Cell 1**: Setup Wan2.1 DiT pipeline with FP8 weights.
+  3. Run **Cell 2**: Enter video scenario prompt and frame count (16 to 49 frames at 24fps).
+  4. Run **Cell 3**: Execute diffusion transformer sampler (~8.5 GB VRAM peak).
+  5. Run **Cell 4**: Encode to MP4 using H.264 with inline HTML5 video player.
+
+---
+
+### 🎨 Category 5: Portable ComfyUI Cloud Studio (`colab/05_comfyui_cloud_studio.ipynb`)
+- **Core Components:** `ComfyUI Core` · `ComfyUI-Manager` · `Cloudflare Tunnel`
+- **License:** `✅ Open Source` (GPL 3.0)
+- **Official Repos:** [GitHub: comfyanonymous/ComfyUI](https://github.com/comfyanonymous/ComfyUI)
+- **Hardware Footprint:** 8.0 GB RAM · 4.0 - 14.0 GB VRAM
+- **1-Click Launch:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/05_comfyui_cloud_studio.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new)
+- **Step-by-Step Run Instructions:**
+  1. Launch on Google Colab (T4 GPU).
+  2. Run **Cell 1**: Clone ComfyUI repo, install requirements and custom nodes.
+  3. Run **Cell 2**: Download base checkpoints (SD1.5, SDXL, or Flux Schnell) into `ComfyUI/models/checkpoints/`.
+  4. Run **Cell 3**: Start ComfyUI backend and tunnel to port 8188 via Cloudflare.
+  5. Click the generated `.trycloudflare.com` URL to open full node-based UI in your browser!
+
+---
+
+### 📚 Category 6: Local RAG Knowledge Agent & Vector QA (`colab/06_rag_knowledge_agent.ipynb`)
+- **Components:** `all-MiniLM-L6-v2` · `ChromaDB` · `LangChain`
+- **License:** `✅ Commercial Allowed` (Apache 2.0)
+- **Official Repos:** [GitHub: chroma-core/chroma](https://github.com/chroma-core/chroma) · [HF: all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
+- **Hardware Footprint:** 4.0 GB RAM · 1.2 GB VRAM (CPU Friendly)
+- **1-Click Launch:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/06_rag_knowledge_agent.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new)
+- **Step-by-Step Run Instructions:**
+  1. Run on Colab (T4 GPU or CPU).
+  2. Run **Cell 1**: Install ChromaDB, PyPDF, and sentence-transformers.
+  3. Run **Cell 2**: Upload your custom documents (PDF, TXT, MD, Code).
+  4. Run **Cell 3**: Generate embeddings and build Chroma vector index in persistent storage.
+  5. Run **Cell 4**: Query vector store with semantic search and synthesize answer via local LLM.
+
+---
+
+### ⚡ Category 7: QLoRA 4-Bit Fine-Tuning Studio (`colab/07_qlora_training_studio.ipynb`)
+- **Components:** `BitsAndBytes NF4` · `PEFT / LoRA` · `TRL SFTTrainer`
+- **License:** `✅ Commercial Allowed` (Apache 2.0)
+- **Official Repos:** [GitHub: huggingface/trl](https://github.com/huggingface/trl) · [HF: peft](https://huggingface.co/huggingface/peft)
+- **Hardware Footprint:** 10.0 GB RAM · 9.5 GB VRAM (NF4 Double Quant)
+- **1-Click Launch:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/07_qlora_training_studio.ipynb) [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new)
+- **Step-by-Step Run Instructions:**
+  1. Open notebook on Colab T4 GPU.
+  2. Run **Cell 1**: Setup BitsAndBytes, PEFT, Transformers, and TRL.
+  3. Run **Cell 2**: Select base model (e.g., Qwen2.5-Coder-7B) and prepare LoRA target modules (`q_proj`, `v_proj`).
+  4. Run **Cell 3**: Load or format your JSONL instruction dataset.
+  5. Run **Cell 4**: Train with gradient checkpointing and save adapter weights.
+
+---
+
+### 🔥 Category 8: Kaggle Dual T4 x2 High-Performance Engines (`kaggle/01_dual_t4_llm_engine.ipynb`)
+- **Models:** `DeepSeek-R1 14B Distill` · `Qwen 2.5 14B` · `ComfyUI Dual T4`
+- **License:** `✅ Commercial Allowed` (MIT / Apache 2.0)
+- **Official Repos:** [GitHub: deepseek-ai/DeepSeek-R1](https://github.com/deepseek-ai/DeepSeek-R1) · [HF: DeepSeek-R1-Distill-Qwen-14B](https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-14B)
+- **Hardware Footprint:** 29.0 GB System RAM · 14.0 GB VRAM across Dual T4 x2 (30.6 GB Total)
+- **1-Click Launch:** [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new)
+- **Step-by-Step Run Instructions:**
+  1. Open Kaggle Notebook and ensure **GPU T4 x2** accelerator is enabled.
+  2. Turn **Internet** to **On** in notebook settings panel.
+  3. Run **Cell 1**: Verify both GPUs (`cuda:0` and `cuda:1`) with `torch.cuda.device_count()`.
+  4. Run **Cell 2**: Load 14B parameter models with model parallel sharding across both T4 cards.
+  5. Run **Cell 3**: Expose inference endpoint via Cloudflare Tunnel.
+
+---
 
 ## 🛡️ Zero-Leak Privacy & Security Architecture
 
