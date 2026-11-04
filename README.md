@@ -34,11 +34,43 @@ Explore, search, filter, and inspect detailed specs for all notebooks in our sta
 | **04. Wan2.1 & LTX-Video DiT Studio**<br>`Wan2.1-1.3B` · `LTX-Video 0.9.1` | **Google Colab**<br>`Tesla T4 (15.3 GB)` | **~8.5 GB**<br>*(FP8 / INT8)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/04_wan_ltx_video_studio.ipynb) | Fast diffusion transformer video generation (text-to-video & image-to-video) with procedural smooth stream rendering on Free T4. |
 | **05. ComfyUI Portable Cloud Studio**<br>`ComfyUI Core` · `ComfyUI-Manager` | **Google Colab**<br>`Tesla T4 (15.3 GB)` | **~4.0 - 14.0 GB**<br>*(FP16-VAE)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/05_comfyui_cloud_studio.ipynb) | 1-click cloud ComfyUI workspace with pre-installed ComfyUI-Manager and Cloudflare Tunnel to port 8188. No local ports required. |
 | **06. RAG Knowledge Agent & Vector QA**<br>`all-MiniLM-L6-v2` · `ChromaDB` | **Google Colab**<br>`Tesla T4 / CPU` | **~1.2 GB**<br>*(Lightweight)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/06_rag_knowledge_agent.ipynb) | Multi-format document ingestion (PDF, Markdown, Code) with cosine vector retrieval connected directly to our Colab `/v1` server. |
+| **08. F5-TTS & Chatterbox Hindi Voice Clone**<br>F5-TTS · Chatterbox-Turbo | **Google Colab**<br>Tesla T4 (15.3 GB) | **~3.5 GB**<br>*(Ultra-Fast)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/08_f5_chatterbox_hindi_voice.ipynb) | ElevenLabs open-source alternative. Zero-shot cloning (3-10s clip), native Hindi & Hinglish support, and Chatterbox emotion exaggeration slider. |
 | **07. QLoRA 4-bit Fine-Tuning Studio**<br>`BitsAndBytes NF4` · `PEFT / TRL` | **Google Colab**<br>`Tesla T4 (15.3 GB)` | **~9.5 GB**<br>*(4-bit NF4)* | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/07_qlora_training_studio.ipynb) | Fine-tune 7B/8B parameter LLMs on a single free 15GB T4 GPU with gradient checkpointing and safe `.safetensors` adapter export. |
-| **08. Kaggle Dual T4 x2 Distributed LLM Engine**<br>`DeepSeek-R1 14B` · `Qwen2.5 14B` | **Kaggle**<br>`Dual T4 x2 (30.6 GB)` | **~14.0 GB**<br>*(Tensor Parallel)* | [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) | Distributed multi-GPU inference on Kaggle Dual Tesla T4 x2, 30h/week free quota, isolated instance tokens, and `/v1` endpoint. |
-| **09. Kaggle Dual T4 x2 ComfyUI Studio**<br>`ComfyUI` · `Dual T4 Tensor Parallel` | **Kaggle**<br>`Dual T4 x2 (30.6 GB)` | **~12.0 GB**<br>*(Dual GPU)* | [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) | Heavy diffusion and video node workflows on Kaggle Dual Tesla T4 x2 with 30GB combined VRAM and persistent Cloudflare tunnel. |
+| **10. Kaggle Dual T4 x2 Distributed LLM Engine**<br>`DeepSeek-R1 14B` · `Qwen2.5 14B` | **Kaggle**<br>`Dual T4 x2 (30.6 GB)` | **~14.0 GB**<br>*(Tensor Parallel)* | [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) | Distributed multi-GPU inference on Kaggle Dual Tesla T4 x2, 30h/week free quota, isolated instance tokens, and `/v1` endpoint. |
+| **10. Kaggle Dual T4 x2 ComfyUI Studio**<br>`ComfyUI` · `Dual T4 Tensor Parallel` | **Kaggle**<br>`Dual T4 x2 (30.6 GB)` | **~12.0 GB**<br>*(Dual GPU)* | [![Open in Kaggle](https://kaggle.com/static/images/open-in-kaggle.svg)](https://www.kaggle.com/code/new) | Heavy diffusion and video node workflows on Kaggle Dual Tesla T4 x2 with 30GB combined VRAM and persistent Cloudflare tunnel. |
 
 ---
+
+---
+
+## 🌟 Master AI Models Guide (Best for Colab Free T4 & Kaggle Dual T4)
+
+A research-backed breakdown of the top open-source models optimized for free cloud GPUs:
+
+### 🎙️ 1. ElevenLabs Open-Source Alternatives (Hindi, Voice Cloning & Emotions)
+| Model | Developer / Architecture | VRAM | Key Features & Hindi Support |
+| :--- | :--- | :--- | :--- |
+| **F5-TTS / IndicF5** | Flow-Matching Architecture | ~3.5 GB | **Best Zero-Shot Voice Clone:** Clones any voice from a 3–5 sec audio sample. Superb native **Hindi** and **Hinglish** code-mixing with natural cadence and breath sounds. |
+| **Resemble Chatterbox** | Resemble AI · Llama Backbone | ~3.0 GB | **Emotion Controls:** World's first open-source model with emotion exaggeration sliders and paralinguistic tags ([laugh], [sigh], [whisper], [chuckle]). |
+| **VoxCPM2** | OpenBMB · Tokenizer-free | ~4.2 GB | **Studio Quality (48kHz):** Broadcast-grade speech across 30+ languages including native Hindi with voice design controls. |
+| **VibeVoice-Hindi** | Qwen Backbone + Diffusion Head | ~5.0 GB | **Long-Form Audio:** Perfect for multi-speaker podcasts, audiobooks, and expressive dialogues in Hindi. |
+
+---
+
+### 🔓 2. Uncensored & Refusal-Free AI Models (Abliteration)
+Unlike base corporate models that refuse legitimate coding, pentesting, or creative prompts, **Abliterated Models** use mathematical null-space projection to selectively remove refusal vectors without harming intelligence:
+- **Qwen-2.5-Coder-7B-Abliterated:** Follows complex low-level code, reverse engineering, exploit analysis, and scripts without preachy refusals.
+- **Dolphin-2.9.2-Llama-3-8B:** Generalist conversational and reasoning model with zero guardrail refusals.
+- **Qwen-Image-2.1-Uncensored (INT8):** Uncensored visual diffusion model running on Tesla T4 Tensor Cores.
+
+---
+
+### 💻 3. Coding, Reasoning & Multi-Modal SOTA Stack
+- **Deep Reasoning (CoT):** DeepSeek-R1 (7B, 8B, 14B) & Phi-4 14B for mathematical derivations and algorithm design.
+- **SOTA Coding:** Qwen2.5-Coder 7B / 14B — competitive with GPT-4o on HumanEval and SWE-bench.
+- **Vision & Image Generation:** Flux.1 Schnell INT8, SDXL Turbo, and Qwen-Image 2.1.
+- **High-Speed Video:** Wan2.1-T2V-1.3B & LTX-Video 2.5 (720p 24fps in 8–16 steps).
+- **Music & Audio:** YuE 2-3B (full-song 48kHz music generation) and ACE-Step 1.5 (LoRA music studio).
 
 ## 🛡️ Zero-Leak Privacy & Security Architecture
 
@@ -135,7 +167,8 @@ Our dedicated Obsidian-themed single-page web app provides an IDE-grade chat env
 │   ├── 04_wan_ltx_video_studio.ipynb      # 🎬 Wan2.1 & LTX-Video DiT Studio
 │   ├── 05_comfyui_cloud_studio.ipynb      # 🎨 ComfyUI Portable Cloud Studio
 │   ├── 06_rag_knowledge_agent.ipynb       # 🧠 RAG Knowledge Agent & Vector QA
-│   └── 07_qlora_training_studio.ipynb     # ⚡ QLoRA 4-bit Model Fine-Tuning Studio
+│   ├── 07_qlora_training_studio.ipynb     # ⚡ QLoRA 4-bit Model Fine-Tuning Studio
+│   └── 08_f5_chatterbox_hindi_voice.ipynb # 🎙️ F5-TTS & Chatterbox Hindi Voice Clone
 ├── kaggle/
 │   ├── 01_dual_t4_llm_engine.ipynb        # 🔥 Kaggle Dual T4 x2 Distributed LLM Engine
 │   └── 02_comfyui_dual_t4.ipynb           # 🎨 Kaggle Dual T4 ComfyUI & DiT Studio
