@@ -512,7 +512,7 @@
               <span>Connect Your Colab Cloudflare URL</span>
             </div>
             <p class="text-xs text-zinc-300">
-              Colab notebook ke <strong>Cell 5</strong> se prapt <code>trycloudflare.com/v1</code> URL yahan paste karein.
+              Colab notebook ke <strong>Cell 7</strong> se prapt <code>trycloudflare.com/v1</code> URL yahan paste karein.
             </p>
           </div>
           <button onclick="openSettingsModal()" class="shrink-0 px-3.5 py-2 rounded-xl bg-brand-emerald hover:bg-emerald-400 text-obsidian-950 font-bold text-xs transition shadow-sm flex items-center gap-1.5">
@@ -710,7 +710,7 @@
             <i data-lucide="info" class="w-4 h-4"></i>
           </div>
           <div class="text-[11px] leading-relaxed text-zinc-300">
-            <strong>How to get this URL:</strong> Google Colab notebook mein <strong>Cell 5 (Cloudflare Tunnel)</strong> run karein. Wahan generated <code>https://xxxx.trycloudflare.com/v1</code> URL copy karke niche paste karein.
+            <strong>How to get this URL:</strong> Google Colab notebook mein <strong>Cell 7 (Cloudflare Tunnel)</strong> run karein. Wahan generated <code>https://xxxx.trycloudflare.com/v1</code> URL copy karke niche paste karein.
           </div>
         </div>
 
@@ -736,9 +736,9 @@
         <!-- API Key -->
         <div>
           <label class="block font-semibold text-zinc-300 mb-1.5">API Key (Bearer Auth)</label>
-          <input id="apiKey" type="password" value="ollama" placeholder="ollama" 
+          <input id="apiKey" type="password" value="" placeholder="Notebook ki session password" 
                  class="w-full bg-obsidian-950 border border-obsidian-700 rounded-xl px-3.5 py-2 text-zinc-200 font-mono text-xs focus:outline-none focus:border-brand-emerald transition" />
-          <p class="text-[10px] text-zinc-500 mt-1">Ollama ke liye default <code>ollama</code> ya koi bhi random key chalegi.</p>
+          <p class="text-[10px] text-zinc-500 mt-1">Notebook ke Cell 5 me print hui <code>session password</code> yahan daalein. Yeh Bearer token hai; proxy ke bina 401 aayega.</p>
         </div>
 
         <!-- Model ID -->
@@ -993,7 +993,7 @@
       updateSavingsDisplay();
 
       const url = localStorage.getItem('colab_base_url') || '';
-      const key = localStorage.getItem('colab_api_key') || 'ollama';
+      const key = localStorage.getItem('colab_api_key') || '';
       const model = localStorage.getItem('colab_model') || 'qwen2.5-coder:7b';
       const storedTemp = localStorage.getItem('colab_temp');
       const temp = (storedTemp !== null && storedTemp !== '' && !isNaN(storedTemp)) ? storedTemp : '0.6';
@@ -1091,7 +1091,7 @@
       try {
         const pingEndpoint = url.endsWith('/v1') ? `${url}/models` : `${url}/api/tags`;
         const res = await fetch(pingEndpoint, {
-          headers: { 'Authorization': `Bearer ${document.getElementById('apiKey').value || 'ollama'}` }
+          headers: { 'Authorization': `Bearer ${document.getElementById('apiKey').value.trim()}` }
         });
         const latency = Math.round(performance.now() - startTime);
 
@@ -1716,7 +1716,7 @@
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('colab_api_key') || 'ollama'}`
+            'Authorization': `Bearer ${localStorage.getItem('colab_api_key') || ''}`
           },
           body: JSON.stringify(payload),
           signal: abortController.signal
@@ -1866,7 +1866,7 @@
 
         // Fallback if loop ended with 0 tokens received
         if (!assistantMsg.content.trim()) {
-          assistantMsg.content = `⚠️ **No response tokens received from model.**\n\n- Model Requested: \`${payload.model}\`\n- Base Endpoint: \`${baseUrl}/chat/completions\`\n\n**Troubleshooting Checklist:**\n1. **Model Downloaded?** In Google Colab, verify **Cell 4** ran successfully for \`${payload.model}\`.\n2. **Ollama Running?** Ensure **Cell 3** (\`ollama serve\`) is active without errors.\n3. **Active Cloudflare Tunnel?** Ensure **Cell 5** tunnel is running and reachable.`;
+          assistantMsg.content = `⚠️ **No response tokens received from model.**\n\n- Model Requested: \`${payload.model}\`\n- Base Endpoint: \`${baseUrl}/chat/completions\`\n\n**Troubleshooting Checklist:**\n1. **Model Downloaded?** In Google Colab, verify **Cell 6** ran successfully for \`${payload.model}\`.\n2. **Ollama Running?** Ensure **Cell 3** (\`ollama serve\`) is active without errors.\n3. **Active Cloudflare Tunnel?** Ensure **Cell 7** tunnel is running and reachable.`;
           updateDomThrottled();
         }
       } catch (err) {

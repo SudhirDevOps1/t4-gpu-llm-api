@@ -1,0 +1,27 @@
+name: Notebook guard
+
+# Keeps every committed notebook output-free (no 18 MB base64 blobs, no leaked
+# stdout) and fails on notebooks that are not valid JSON.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  no-saved-outputs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify notebooks are output-free and valid JSON
+        run: python scripts/clean_notebooks.py --check

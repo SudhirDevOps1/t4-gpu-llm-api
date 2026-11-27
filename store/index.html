@@ -151,7 +151,7 @@
             <span>AI Notebook Store</span>
             <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-brand-emerald/10 border border-brand-emerald/30 text-brand-emerald font-semibold">v2.0</span>
           </h1>
-          <p class="text-[11px] text-zinc-400 font-mono">Multi-Cloud · Colab T4 · Kaggle Dual T4 · Zero-Leak</p>
+          <p class="text-[11px] text-zinc-400 font-mono">Multi-Cloud · Colab T4 · Kaggle Dual T4 · Password Auth</p>
         </div>
       </div>
 
@@ -178,15 +178,14 @@
       Curated Free-Tier <span class="bg-gradient-to-r from-brand-emerald via-brand-cyan to-brand-violet bg-clip-text text-transparent">AI Notebook Store</span>
     </h2>
     <p class="mt-3 text-sm text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-      Deploy state-of-the-art LLMs, TTS voice clones, video generators, and vision diffusion engines directly onto 
-      <strong class="text-zinc-200">Google Colab</strong> & <strong class="text-zinc-200">Kaggle</strong>. 100% Free Tier, zero API key leaks, and isolated session IDs.
+      Run LLMs, TTS, video and diffusion notebooks on the free tiers of <strong class="text-zinc-200">Google Colab</strong> and <strong class="text-zinc-200">Kaggle</strong>. Every public endpoint sits behind a password, and secrets come from Colab userdata or Kaggle secrets — never from committed cells.
     </p>
 
     <!-- Global Stats Bar -->
     <div class="mt-8 flex flex-wrap items-center justify-center gap-4 text-xs font-mono">
       <div class="px-3.5 py-2 rounded-xl bg-obsidian-900/80 border border-obsidian-750 flex items-center gap-2">
         <i data-lucide="shield-check" class="w-4 h-4 text-brand-emerald"></i>
-        <span>Zero-Leak Encryption Active</span>
+        <span>Password-Protected Endpoints</span>
       </div>
       <div class="px-3.5 py-2 rounded-xl bg-obsidian-900/80 border border-obsidian-750 flex items-center gap-2">
         <i data-lucide="cpu" class="w-4 h-4 text-brand-cyan"></i>
@@ -194,7 +193,7 @@
       </div>
       <div class="px-3.5 py-2 rounded-xl bg-obsidian-900/80 border border-obsidian-750 flex items-center gap-2">
         <i data-lucide="fingerprint" class="w-4 h-4 text-brand-violet"></i>
-        <span>Isolated Session Limitation IDs</span>
+        <span>No Secrets Stored in Notebooks</span>
       </div>
     </div>
   </section>
@@ -328,7 +327,7 @@
   <!-- Footer -->
   <footer class="border-t border-obsidian-750/70 bg-obsidian-900/60 backdrop-blur-md py-6 text-center text-xs text-zinc-500 font-mono">
     <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-      <p>Built with Obsidian Glassmorphic Design · 100% Zero-Leak Privacy</p>
+      <p>Obsidian Glassmorphic UI · Secrets stay in userdata / secrets</p>
       <div class="flex items-center gap-4">
         <a href="https://github.com/SudhirDevOps1/t4-gpu-llm-api" class="hover:text-zinc-300 transition">GitHub</a>
         <a href="https://colab.research.google.com" class="hover:text-zinc-300 transition">Google Colab</a>
@@ -370,285 +369,286 @@
     // Comprehensive Notebook Catalog Dataset
     const NOTEBOOKS = [
       {
-            "id": "colab-llm-server",
-            "title": "T4 GPU LLM Server & OpenAI API Hub",
-            "category": "llm",
-            "platform": "colab",
-            "badge": "Recommended",
-            "license": "Apache 2.0",
-            "isCommercial": true,
-            "githubUrl": "https://github.com/QwenLM/Qwen2.5-Coder",
-            "hfUrl": "https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct",
-            "models": "Qwen 2.5 Coder 7B \u00b7 DeepSeek-R1 8B \u00b7 Llama 3.2",
-            "desc": "Turns a free Google Colab Tesla T4 into an ultra-fast OpenAI-compatible /v1 API server with live token streaming, CORS support, Cloudflare Tunnel, and zero kernel deadlocks.",
-            "ram": "8.0 GB RAM",
-            "vram": "4.5 GB / 15.3 GB",
-            "quota": "Up to 12 Hours",
-            "quant": "INT4 / Q4_K_M",
-            "path": "t4-gpu-llm-api.ipynb",
-            "colabUrl": "https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/t4-gpu-llm-api.ipynb",
-            "kaggleUrl": "https://www.kaggle.com/code/new",
-            "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
-            "tags": [
-                  "OpenAI /v1",
-                  "Commercial",
-                  "DeepSeek-R1",
-                  "Cloudflare",
-                  "T4 GPU"
-            ]
+        "id": "colab-llm-server",
+        "title": "T4 GPU LLM Server (Ollama + OpenAI /v1)",
+        "category": "llm",
+        "platform": "colab",
+        "badge": "Recommended",
+        "license": "Mixed (Apache-2.0 / MIT)",
+        "isCommercial": true,
+        "githubUrl": "https://github.com/ollama/ollama",
+        "hfUrl": "https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct",
+        "models": "Qwen2.5-Coder 7B · DeepSeek-R1 8B · Llama 3.2 3B",
+        "desc": "Ollama on a free Tesla T4 with an OpenAI-compatible /v1 API. Ollama ignores the Authorization header, so it stays on 127.0.0.1:11434 and only a password-protected (Basic-auth) reverse proxy on :11435 is tunnelled.",
+        "ram": "9.0 GB RAM",
+        "vram": "5.0 GB / 15.3 GB",
+        "quota": "~12 h session",
+        "quant": "Q4_K_M (GGUF)",
+        "path": "t4-gpu-llm-api.ipynb",
+        "colabUrl": "https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/t4-gpu-llm-api.ipynb",
+        "kaggleUrl": "https://github.com/SudhirDevOps1/t4-gpu-llm-api/blob/main/README.md#running-on-kaggle-manual-import",
+        "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
+        "tags": [
+          "OpenAI /v1",
+          "Ollama",
+          "Password Auth",
+          "Cloudflare Tunnel",
+          "T4 GPU"
+        ]
       },
       {
-            "id": "colab-voice-tts",
-            "title": "Zero-Shot Voice Cloning & High-Speed TTS",
-            "category": "audio",
-            "platform": "colab",
-            "badge": "Studio",
-            "license": "Apache 2.0",
-            "isCommercial": true,
-            "githubUrl": "https://github.com/hexgrad/kokoro",
-            "hfUrl": "https://huggingface.co/hexgrad/Kokoro-82M",
-            "models": "Kokoro TTS 82M \u00b7 Fish Audio \u00b7 SeedVC",
-            "desc": "Instant voice cloning and paralinguistic emotion text-to-speech across 80+ languages. Zero HuggingFace token leaks with encrypted session secret management.",
-            "ram": "4.0 GB RAM",
-            "vram": "2.8 GB / 15.3 GB",
-            "quota": "Free T4 / CPU Friendly",
-            "quant": "FP16 / INT8",
-            "path": "colab/02_zero_shot_voice_tts.ipynb",
-            "colabUrl": "https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/02_zero_shot_voice_tts.ipynb",
-            "kaggleUrl": "https://www.kaggle.com/code/new",
-            "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
-            "tags": [
-                  "TTS",
-                  "Commercial",
-                  "Kokoro",
-                  "Multilingual",
-                  "Colab"
-            ]
+        "id": "colab-kokoro-tts",
+        "title": "Kokoro TTS Studio — 8 Preset Voices",
+        "category": "audio",
+        "platform": "colab",
+        "badge": "Fast TTS",
+        "license": "Apache 2.0",
+        "isCommercial": true,
+        "githubUrl": "https://github.com/hexgrad/kokoro",
+        "hfUrl": "https://huggingface.co/hexgrad/Kokoro-82M",
+        "models": "Kokoro-82M · 8 preset voices",
+        "desc": "Fast 24 kHz text-to-speech with 8 built-in Kokoro voices (American and British English). This is preset-voice TTS, not voice cloning — use notebook 08 for zero-shot cloning. The Gradio link is password protected.",
+        "ram": "4.0 GB RAM",
+        "vram": "2.8 GB / 15.3 GB",
+        "quota": "Free T4 or CPU",
+        "quant": "FP32",
+        "path": "colab/02_zero_shot_voice_tts.ipynb",
+        "colabUrl": "https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/02_zero_shot_voice_tts.ipynb",
+        "kaggleUrl": "https://github.com/SudhirDevOps1/t4-gpu-llm-api/blob/main/README.md#running-on-kaggle-manual-import",
+        "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
+        "tags": [
+          "TTS",
+          "Kokoro",
+          "Preset Voices",
+          "Password Auth",
+          "Colab"
+        ]
       },
       {
-            "id": "colab-f5-hindi-voice",
-            "title": "TurboVoiceCloner — Chatterbox Hindi & Multilingual Studio",
-            "category": "audio",
-            "platform": "colab",
-            "badge": "Turbo Voice",
-            "license": "MIT License",
-            "isCommercial": true,
-            "githubUrl": "https://github.com/resemble-ai/chatterbox",
-            "hfUrl": "https://huggingface.co/ResembleAI",
-            "models": "Resemble AI Chatterbox \u00b7 NeuralFalconYT \u00b7 Hindi & English",
-            "desc": "Production-grade TurboVoiceCloner studio powered by Resemble AI Chatterbox Multilingual. Features native Hindi (Devanagari) support, emotion exaggeration sliders, CFG pace control, anti-sleep keep-alive, and sentencex long-text paragraph synthesis on Free Colab T4.",
-            "ram": "6.0 GB RAM",
-            "vram": "3.5 GB / 15.3 GB",
-            "quota": "Free T4 GPU",
-            "quant": "FP16 Audio Diffusion",
-            "path": "colab/08_f5_chatterbox_hindi_voice.ipynb",
-            "colabUrl": "https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/08_f5_chatterbox_hindi_voice.ipynb",
-            "kaggleUrl": "https://www.kaggle.com/code/new",
-            "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
-            "tags": [
-                  "ElevenLabs Alt",
-                  "Commercial",
-                  "Hindi TTS",
-                  "Voice Clone",
-                  "Chatterbox"
-            ]
+        "id": "colab-chatterbox-hindi",
+        "title": "Chatterbox Multilingual — Hindi & Voice Clone Studio",
+        "category": "audio",
+        "platform": "colab",
+        "badge": "Voice Clone",
+        "license": "MIT License",
+        "isCommercial": true,
+        "githubUrl": "https://github.com/resemble-ai/chatterbox",
+        "hfUrl": "https://huggingface.co/ResembleAI/chatterbox",
+        "models": "Resemble AI Chatterbox Multilingual · NeuralFalconYT UI",
+        "desc": "Zero-shot voice cloning with Resemble AI Chatterbox Multilingual, including Hindi (Devanagari). Emotion exaggeration, CFG pace control, long-text chunking and an anti-sleep keep-alive. Exposed through Colab's authenticated port proxy, not a public --share link.",
+        "ram": "6.0 GB RAM",
+        "vram": "3.5 GB / 15.3 GB",
+        "quota": "Free T4 GPU",
+        "quant": "FP16",
+        "path": "colab/08_f5_chatterbox_hindi_voice.ipynb",
+        "colabUrl": "https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/08_f5_chatterbox_hindi_voice.ipynb",
+        "kaggleUrl": "https://github.com/SudhirDevOps1/t4-gpu-llm-api/blob/main/README.md#running-on-kaggle-manual-import",
+        "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
+        "tags": [
+          "Hindi TTS",
+          "Voice Clone",
+          "Chatterbox",
+          "MIT",
+          "Colab"
+        ]
       },
       {
-            "id": "colab-vision-qwen",
-            "title": "Qwen-Image 2.1 Fast INT8 Studio",
-            "category": "vision",
-            "platform": "colab",
-            "badge": "Diffusion",
-            "license": "Apache 2.0",
-            "isCommercial": true,
-            "githubUrl": "https://github.com/QwenLM/Qwen-VL",
-            "hfUrl": "https://huggingface.co/Qwen/Qwen2-VL-7B-Instruct",
-            "models": "Qwen-Image 2.1 INT8 \u00b7 Wan2GP \u00b7 SDXL Turbo",
-            "desc": "High-speed text-to-image, instruction editing, and multi-reference image composition powered by Comfy Kitchen INT8 Tensor Cores. Offloaded checkpoints outside repo.",
-            "ram": "10.0 GB RAM",
-            "vram": "8.2 GB / 15.3 GB",
-            "quota": "Free T4 GPU",
-            "quant": "INT8 ConvRot",
-            "path": "colab/03_qwen_image_gen_studio.ipynb",
-            "colabUrl": "https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/03_qwen_image_gen_studio.ipynb",
-            "kaggleUrl": "https://www.kaggle.com/code/new",
-            "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
-            "tags": [
-                  "Vision",
-                  "Commercial",
-                  "INT8 Tensor Cores",
-                  "Inpainting"
-            ]
+        "id": "colab-sdxl-turbo",
+        "title": "SDXL-Turbo Fast Image Studio",
+        "category": "vision",
+        "platform": "colab",
+        "badge": "Diffusion",
+        "license": "Stability AI Non-Commercial",
+        "isCommercial": false,
+        "githubUrl": "https://github.com/Stability-AI/generative-models",
+        "hfUrl": "https://huggingface.co/stabilityai/sdxl-turbo",
+        "models": "stabilityai/sdxl-turbo · FP16 · 1–4 steps",
+        "desc": "1–4 step text-to-image with SDXL-Turbo in FP16 on a free T4, plus a password-protected Gradio UI. No INT8, no FlashAttention-2 (Turing SM 7.5), no Qwen-Image. Non-commercial research license.",
+        "ram": "10.0 GB RAM",
+        "vram": "~7.0 GB / 15.3 GB",
+        "quota": "Free T4 GPU",
+        "quant": "FP16",
+        "path": "colab/03_qwen_image_gen_studio.ipynb",
+        "colabUrl": "https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/03_qwen_image_gen_studio.ipynb",
+        "kaggleUrl": "https://github.com/SudhirDevOps1/t4-gpu-llm-api/blob/main/README.md#running-on-kaggle-manual-import",
+        "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
+        "tags": [
+          "Vision",
+          "Diffusion",
+          "SDXL-Turbo",
+          "Non-Commercial",
+          "Colab"
+        ]
       },
       {
-            "id": "colab-wan-video",
-            "title": "Wan2.1 & LTX-Video DiT Studio",
-            "category": "video",
-            "platform": "colab",
-            "badge": "DiT Video",
-            "license": "Apache 2.0",
-            "isCommercial": true,
-            "githubUrl": "https://github.com/Wan-AI/Wan2.1",
-            "hfUrl": "https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B",
-            "models": "Wan2.1-T2V-1.3B \u00b7 LTX-Video 0.9.1 \u00b7 DiT",
-            "desc": "High-speed text-to-video and image-to-video generation on free Colab Tesla T4 GPU. Features 720p 24fps diffusion transformer synthesis within safe 8.5 GB VRAM envelope.",
-            "ram": "12.0 GB RAM",
-            "vram": "8.5 GB / 15.3 GB",
-            "quota": "Free T4 GPU",
-            "quant": "FP8 / INT8",
-            "path": "colab/04_wan_ltx_video_studio.ipynb",
-            "colabUrl": "https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/04_wan_ltx_video_studio.ipynb",
-            "kaggleUrl": "https://www.kaggle.com/code/new",
-            "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
-            "tags": [
-                  "Video DiT",
-                  "Commercial",
-                  "Wan2.1",
-                  "Text-to-Video",
-                  "LTX"
-            ]
+        "id": "colab-wan-video",
+        "title": "Wan2.1 Text-to-Video Studio (1.3B)",
+        "category": "video",
+        "platform": "colab",
+        "badge": "Real Video",
+        "license": "Apache 2.0",
+        "isCommercial": true,
+        "githubUrl": "https://github.com/Wan-AI/Wan2.1",
+        "hfUrl": "https://huggingface.co/Wan-AI/Wan2.1-T2V-1.3B-Diffusers",
+        "models": "Wan2.1-T2V-1.3B-Diffusers · WanPipeline",
+        "desc": "Real Wan2.1 text-to-video inference through the official diffusers WanPipeline: FP16 transformer, FP32 VAE and model CPU offload at 480×832 with 33 frames. Expect roughly 10–25 minutes per clip on a free T4. LTX-Video is not used.",
+        "ram": "14.0 GB RAM",
+        "vram": "~13.0 GB peak / 15.3 GB",
+        "quota": "Free T4 GPU",
+        "quant": "FP16 + FP32 VAE",
+        "path": "colab/04_wan_ltx_video_studio.ipynb",
+        "colabUrl": "https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/04_wan_ltx_video_studio.ipynb",
+        "kaggleUrl": "https://github.com/SudhirDevOps1/t4-gpu-llm-api/blob/main/README.md#running-on-kaggle-manual-import",
+        "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
+        "tags": [
+          "Video",
+          "Wan2.1",
+          "Text-to-Video",
+          "diffusers",
+          "Colab"
+        ]
       },
       {
-            "id": "colab-comfyui",
-            "title": "ComfyUI Portable Cloud Studio",
-            "category": "comfy",
-            "platform": "colab",
-            "badge": "Node Canvas",
-            "license": "GPL 3.0",
-            "isCommercial": true,
-            "githubUrl": "https://github.com/comfyanonymous/ComfyUI",
-            "hfUrl": "https://huggingface.co/Comfy-Org",
-            "models": "ComfyUI Core \u00b7 ComfyUI-Manager \u00b7 SDXL / Flux",
-            "desc": "1-click portable cloud ComfyUI workspace with pre-installed ComfyUI-Manager and Cloudflare Tunnel to port 8188. No local ports or ngrok tokens required.",
-            "ram": "8.0 GB RAM",
-            "vram": "4.0 GB to 14.0 GB",
-            "quota": "Up to 12 Hours",
-            "quant": "FP16-VAE",
-            "path": "colab/05_comfyui_cloud_studio.ipynb",
-            "colabUrl": "https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/05_comfyui_cloud_studio.ipynb",
-            "kaggleUrl": "https://www.kaggle.com/code/new",
-            "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
-            "tags": [
-                  "ComfyUI",
-                  "Open Source",
-                  "Manager",
-                  "Cloudflare Tunnel",
-                  "Colab"
-            ]
+        "id": "colab-comfyui",
+        "title": "ComfyUI Portable Cloud Studio",
+        "category": "comfy",
+        "platform": "colab",
+        "badge": "Node Canvas",
+        "license": "GPL-3.0 (ComfyUI core)",
+        "isCommercial": true,
+        "githubUrl": "https://github.com/comfyanonymous/ComfyUI",
+        "hfUrl": "https://huggingface.co/Comfy-Org",
+        "models": "ComfyUI Core · ComfyUI-Manager · your checkpoints",
+        "desc": "Portable ComfyUI workspace on a free T4. ComfyUI has no built-in authentication and ComfyUI-Manager can install custom nodes, so ComfyUI is bound to 127.0.0.1:8188 behind a Basic-auth proxy on :8189 — only the proxy is tunnelled.",
+        "ram": "8.0 GB RAM",
+        "vram": "4.0–14.0 GB / 15.3 GB",
+        "quota": "~12 h session",
+        "quant": "FP16 (--fp16-vae)",
+        "path": "colab/05_comfyui_cloud_studio.ipynb",
+        "colabUrl": "https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/05_comfyui_cloud_studio.ipynb",
+        "kaggleUrl": "https://github.com/SudhirDevOps1/t4-gpu-llm-api/blob/main/README.md#running-on-kaggle-manual-import",
+        "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
+        "tags": [
+          "ComfyUI",
+          "Node Graph",
+          "Password Auth",
+          "Manager",
+          "Colab"
+        ]
       },
       {
-            "id": "colab-rag-agent",
-            "title": "RAG Knowledge Agent & Vector QA Studio",
-            "category": "rag",
-            "platform": "colab",
-            "badge": "RAG Agent",
-            "license": "Apache 2.0",
-            "isCommercial": true,
-            "githubUrl": "https://github.com/chroma-core/chroma",
-            "hfUrl": "https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2",
-            "models": "all-MiniLM-L6-v2 \u00b7 ChromaDB \u00b7 LangChain",
-            "desc": "Ingest and index PDFs, Markdown, TXT, and Python source code. Cosine similarity retrieval connects directly to our Colab OpenAI /v1 endpoint for augmented answers.",
-            "ram": "4.0 GB RAM",
-            "vram": "1.2 GB / 15.3 GB",
-            "quota": "CPU / T4 Friendly",
-            "quant": "FP32 Vector Embeddings",
-            "path": "colab/06_rag_knowledge_agent.ipynb",
-            "colabUrl": "https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/06_rag_knowledge_agent.ipynb",
-            "kaggleUrl": "https://www.kaggle.com/code/new",
-            "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
-            "tags": [
-                  "RAG",
-                  "Commercial",
-                  "ChromaDB",
-                  "Vector QA",
-                  "OpenAI /v1"
-            ]
+        "id": "colab-rag-agent",
+        "title": "RAG Knowledge Agent (Retrieval + Real LLM)",
+        "category": "rag",
+        "platform": "colab",
+        "badge": "RAG Agent",
+        "license": "Apache 2.0",
+        "isCommercial": true,
+        "githubUrl": "https://github.com/chroma-core/chroma",
+        "hfUrl": "https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2",
+        "models": "all-MiniLM-L6-v2 · ChromaDB · any OpenAI /v1 endpoint",
+        "desc": "Chunks and embeds your text with all-MiniLM-L6-v2, stores it in ChromaDB, retrieves the top-k chunks and then calls a real OpenAI-compatible /chat/completions endpoint. Without an endpoint it shows the retrieved context instead of faking an answer.",
+        "ram": "4.0 GB RAM",
+        "vram": "1.2 GB / 15.3 GB",
+        "quota": "CPU or T4",
+        "quant": "FP32 embeddings",
+        "path": "colab/06_rag_knowledge_agent.ipynb",
+        "colabUrl": "https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/06_rag_knowledge_agent.ipynb",
+        "kaggleUrl": "https://github.com/SudhirDevOps1/t4-gpu-llm-api/blob/main/README.md#running-on-kaggle-manual-import",
+        "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
+        "tags": [
+          "RAG",
+          "ChromaDB",
+          "Vector QA",
+          "OpenAI /v1",
+          "Colab"
+        ]
       },
       {
-            "id": "colab-qlora",
-            "title": "QLoRA 4-bit Model Fine-Tuning Studio",
-            "category": "lora",
-            "platform": "colab",
-            "badge": "Fine-Tuning",
-            "license": "Apache 2.0",
-            "isCommercial": true,
-            "githubUrl": "https://github.com/huggingface/trl",
-            "hfUrl": "https://huggingface.co/huggingface/peft",
-            "models": "BitsAndBytes NF4 \u00b7 PEFT \u00b7 TRL SFTTrainer",
-            "desc": "Fine-tune 7B/8B parameter LLMs (Qwen2.5, Llama-3) on a single free 15GB Colab T4 GPU with 4-bit NF4 double quantization and safe adapter export.",
-            "ram": "10.0 GB RAM",
-            "vram": "9.5 GB / 15.3 GB",
-            "quota": "Colab Free T4",
-            "quant": "NF4 4-bit Quantization",
-            "path": "colab/07_qlora_training_studio.ipynb",
-            "colabUrl": "https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/07_qlora_training_studio.ipynb",
-            "kaggleUrl": "https://www.kaggle.com/code/new",
-            "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
-            "tags": [
-                  "LoRA",
-                  "Commercial",
-                  "Fine-Tuning",
-                  "PEFT",
-                  "BitsAndBytes"
-            ]
+        "id": "colab-qlora",
+        "title": "QLoRA 4-bit Fine-Tuning Studio",
+        "category": "lora",
+        "platform": "colab",
+        "badge": "Fine-Tuning",
+        "license": "Apache 2.0",
+        "isCommercial": true,
+        "githubUrl": "https://github.com/huggingface/trl",
+        "hfUrl": "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct",
+        "models": "Qwen2.5-0.5B-Instruct · NF4 · PEFT + TRL",
+        "desc": "Actually trains: loads Qwen2.5-0.5B-Instruct in 4-bit NF4, trains a LoRA adapter on 300 guanaco samples in roughly 5–10 minutes, runs a test generation and downloads the adapter zip. Pinned TRL 0.12.2 stack.",
+        "ram": "8.0 GB RAM",
+        "vram": "~4.0 GB / 15.3 GB",
+        "quota": "Free T4 GPU",
+        "quant": "NF4 (4-bit) + LoRA",
+        "path": "colab/07_qlora_training_studio.ipynb",
+        "colabUrl": "https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/07_qlora_training_studio.ipynb",
+        "kaggleUrl": "https://github.com/SudhirDevOps1/t4-gpu-llm-api/blob/main/README.md#running-on-kaggle-manual-import",
+        "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
+        "tags": [
+          "LoRA",
+          "QLoRA",
+          "Fine-Tuning",
+          "PEFT",
+          "TRL"
+        ]
       },
       {
-            "id": "kaggle-dual-t4-llm",
-            "title": "Kaggle Dual T4 x2 Distributed LLM Engine",
-            "category": "llm",
-            "platform": "kaggle",
-            "badge": "Dual GPU",
-            "license": "MIT License",
-            "isCommercial": true,
-            "githubUrl": "https://github.com/deepseek-ai/DeepSeek-R1",
-            "hfUrl": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
-            "models": "DeepSeek-R1 14B \u00b7 Qwen2.5 14B \u00b7 Mistral NeMo",
-            "desc": "Distributed multi-GPU tensor parallel inference on Kaggle Dual Tesla T4 x2 (30.6 GB Total VRAM). Automatically maps shards with expandable segments and secret protection.",
-            "ram": "29.0 GB RAM",
-            "vram": "14.0 GB / 30.6 GB",
-            "quota": "9 Hours (30h/week)",
-            "quant": "INT8 Tensor Parallel",
-            "path": "kaggle/01_dual_t4_llm_engine.ipynb",
-            "colabUrl": "https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/t4-gpu-llm-api.ipynb",
-            "kaggleUrl": "https://www.kaggle.com/code/new",
-            "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
-            "tags": [
-                  "Kaggle",
-                  "Commercial",
-                  "Dual T4",
-                  "Tensor Parallel",
-                  "30GB VRAM"
-            ]
+        "id": "kaggle-dual-t4-llm",
+        "title": "Kaggle Dual T4 LLM Server (Ollama)",
+        "category": "llm",
+        "platform": "kaggle",
+        "badge": "Dual GPU",
+        "license": "Mixed (Apache-2.0 / MIT)",
+        "isCommercial": true,
+        "githubUrl": "https://github.com/ollama/ollama",
+        "hfUrl": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-14B",
+        "models": "DeepSeek-R1 14B · Qwen2.5 14B · Llama 3.2 3B",
+        "desc": "Ollama on Kaggle 2× Tesla T4 with an OpenAI-compatible /v1 behind a password-protected auth proxy. Ollama does layer splitting, not tensor parallelism — a 14B Q4 model fits on a single card, so the second GPU mostly stays idle.",
+        "ram": "29.0 GB RAM",
+        "vram": "9.0 GB / 30.6 GB",
+        "quota": "9 h session (30 h/week)",
+        "quant": "Q4_K_M (GGUF)",
+        "path": "kaggle/01_dual_t4_llm_engine.ipynb",
+        "colabUrl": null,
+        "kaggleUrl": "https://github.com/SudhirDevOps1/t4-gpu-llm-api/blob/main/kaggle/01_dual_t4_llm_engine.ipynb",
+        "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
+        "tags": [
+          "Kaggle",
+          "Ollama",
+          "Password Auth",
+          "Dual T4",
+          "30GB VRAM"
+        ]
       },
       {
-            "id": "kaggle-comfyui",
-            "title": "Kaggle Dual T4 x2 ComfyUI & DiT Studio",
-            "category": "comfy",
-            "platform": "kaggle",
-            "badge": "Dual GPU Comfy",
-            "license": "GPL 3.0",
-            "isCommercial": true,
-            "githubUrl": "https://github.com/comfyanonymous/ComfyUI",
-            "hfUrl": "https://huggingface.co/Lightricks/LTX-Video",
-            "models": "ComfyUI \u00b7 ComfyUI-Manager \u00b7 Dual T4 (30GB)",
-            "desc": "Run heavy diffusion and video node workflows on Kaggle Dual Tesla T4 x2 with 30GB combined VRAM and persistent Cloudflare tunnel.",
-            "ram": "29.0 GB RAM",
-            "vram": "12.0 GB / 30.6 GB",
-            "quota": "30h / week",
-            "quant": "FP16 Tensor Cores",
-            "path": "kaggle/02_comfyui_dual_t4.ipynb",
-            "colabUrl": "https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/05_comfyui_cloud_studio.ipynb",
-            "kaggleUrl": "https://www.kaggle.com/code/new",
-            "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
-            "tags": [
-                  "Kaggle",
-                  "Open Source",
-                  "Dual T4",
-                  "ComfyUI",
-                  "30GB VRAM"
-            ]
+        "id": "kaggle-comfyui",
+        "title": "Kaggle Dual T4 ComfyUI Studio",
+        "category": "comfy",
+        "platform": "kaggle",
+        "badge": "Dual GPU Comfy",
+        "license": "GPL-3.0 (ComfyUI core)",
+        "isCommercial": true,
+        "githubUrl": "https://github.com/comfyanonymous/ComfyUI",
+        "hfUrl": "https://huggingface.co/Comfy-Org",
+        "models": "ComfyUI Core · ComfyUI-Manager · your checkpoints",
+        "desc": "The same password-protected ComfyUI setup on Kaggle 2× T4 (30 GB combined). ComfyUI drives one GPU at a time, so treat this as a single-card studio with more system RAM and a longer session.",
+        "ram": "29.0 GB RAM",
+        "vram": "4.0–14.0 GB / 30.6 GB",
+        "quota": "9 h session (30 h/week)",
+        "quant": "FP16 (--fp16-vae)",
+        "path": "kaggle/02_comfyui_dual_t4.ipynb",
+        "colabUrl": null,
+        "kaggleUrl": "https://github.com/SudhirDevOps1/t4-gpu-llm-api/blob/main/kaggle/02_comfyui_dual_t4.ipynb",
+        "lightningUrl": "https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api",
+        "tags": [
+          "Kaggle",
+          "ComfyUI",
+          "Password Auth",
+          "Dual T4",
+          "One GPU"
+        ]
       }
-];
+    ];
 
     let currentPlatform = 'all';
     let currentCategory = 'all';
@@ -745,14 +745,19 @@
 
             <!-- Direct 1-Click Multi-Cloud Launch Buttons -->
             <div class="grid grid-cols-2 gap-2 text-xs">
-              <a href="${nb.colabUrl}" target="_blank" class="px-2.5 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 font-semibold transition flex items-center justify-center gap-1.5 shadow-sm group/btn">
+              ${nb.platform === 'kaggle'
+                ? `<a href="${nb.kaggleUrl}" target="_blank" rel="noopener" class="col-span-2 px-2.5 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 font-semibold transition flex items-center justify-center gap-1.5 shadow-sm group/btn">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 group-hover/btn:scale-125 transition-transform"></span>
+                <span>Kaggle Notebook (import .ipynb)</span>
+              </a>`
+                : `<a href="${nb.colabUrl}" target="_blank" rel="noopener" class="px-2.5 py-2 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 font-semibold transition flex items-center justify-center gap-1.5 shadow-sm group/btn">
                 <span class="w-2 h-2 rounded-full bg-amber-400 group-hover/btn:scale-125 transition-transform"></span>
                 <span>Colab T4</span>
               </a>
-              <a href="${nb.kaggleUrl}" target="_blank" class="px-2.5 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 font-semibold transition flex items-center justify-center gap-1.5 shadow-sm group/btn">
+              <a href="${nb.kaggleUrl}" target="_blank" rel="noopener" class="px-2.5 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 font-semibold transition flex items-center justify-center gap-1.5 shadow-sm group/btn">
                 <span class="w-2 h-2 rounded-full bg-cyan-400 group-hover/btn:scale-125 transition-transform"></span>
-                <span>Kaggle</span>
-              </a>
+                <span>Kaggle Guide</span>
+              </a>`}
             </div>
           </div>
         `;
@@ -814,9 +819,13 @@
       if (ramBox) ramBox.innerText = nb.ram;
 
       // Update multi-cloud 1-click launch buttons
-      document.getElementById('modalLaunchBtn').href = nb.colabUrl;
+      const colabBtn = document.getElementById('modalLaunchBtn');
+      if (colabBtn) {
+        colabBtn.href = nb.colabUrl || nb.kaggleUrl;
+        colabBtn.style.display = nb.platform === 'kaggle' ? 'none' : '';
+      }
       const kBtn = document.getElementById('modalKaggleBtn');
-      if (kBtn) kBtn.href = nb.kaggleUrl || 'https://www.kaggle.com/code/new';
+      if (kBtn) kBtn.href = nb.kaggleUrl || nb.colabUrl;
       const lBtn = document.getElementById('modalLightningBtn');
       if (lBtn) lBtn.href = nb.lightningUrl || 'https://lightning.ai/new?repo_url=https://github.com/SudhirDevOps1/t4-gpu-llm-api';
 
@@ -831,7 +840,8 @@
 
     function copyNotebookUrl() {
       if (!currentActiveNotebook) return;
-      navigator.clipboard.writeText(currentActiveNotebook.colabUrl).then(() => {
+      const launchUrl = currentActiveNotebook.colabUrl || currentActiveNotebook.kaggleUrl;
+      navigator.clipboard.writeText(launchUrl).then(() => {
         showToast('Launch URL copied to clipboard!', 'info');
       });
     }

@@ -1,4 +1,4 @@
-# 🛡️ Zero-Leak Security & Secret Protection
+# Secret protection
 *.key
 *.pem
 *.token

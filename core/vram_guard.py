@@ -1,7 +1,9 @@
 """
 ⚡ Proactive GPU VRAM Guard & Memory Allocator
-Prevents CUDA Out-Of-Memory (OOM) errors on Google Colab (15GB T4)
-and optimizes Dual T4 tensor parallelism on Kaggle.
+Reduces CUDA Out-Of-Memory (OOM) risk on Google Colab (15 GB T4) and Kaggle
+Dual T4. This sets allocator environment variables and cache limits; it does
+not split a model across GPUs (Ollama does layer splitting, not tensor
+parallelism).
 """
 
 import os

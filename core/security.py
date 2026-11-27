@@ -1,7 +1,10 @@
 """
-🛡️ Zero-Leak Secret & Privacy Manager
-Guarantees that API keys, HuggingFace tokens, and private credentials
-are never hardcoded or printed to stdout in Google Colab, Kaggle, or Local environments.
+🛡️ Secret & Privacy Helper
+Reads API keys, HuggingFace tokens and other credentials from Colab userdata,
+Kaggle secrets, environment variables or a masked prompt — in that order.
+Notebooks never need a credential pasted into a cell. This is a reference
+helper; the notebooks call Colab/Kaggle secrets directly and do not import it
+automatically.
 """
 
 import os
