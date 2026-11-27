@@ -30,10 +30,15 @@ from aiohttp import ClientSession, ClientTimeout, TCPConnector, WSMsgType, web
 SKIP_REQUEST = {
     "host", "connection", "keep-alive", "proxy-authenticate", "proxy-authorization",
     "te", "trailer", "transfer-encoding", "upgrade", "expect", "origin", "referer",
+    # Do not ask the backend to compress: we stream bytes through unchanged and
+    # a compressed body without a matching Content-Encoding header makes Chrome
+    # fail with ERR_INVALID_RESPONSE.
+    "accept-encoding",
 }
 SKIP_RESPONSE = {
     "connection", "keep-alive", "proxy-authenticate", "proxy-authorization",
-    "te", "trailer", "transfer-encoding", "upgrade", "content-encoding", "content-length",
+    "te", "trailer", "transfer-encoding", "upgrade", "content-length",
+    # Content-Encoding MUST be preserved when the body is forwarded verbatim.
 }
 
 SESSION = web.AppKey("session", ClientSession)
@@ -49,6 +54,10 @@ def build_app(target_port: int, user: str, password: str) -> web.Application:
         app[SESSION] = ClientSession(
             connector=TCPConnector(limit=128),
             timeout=ClientTimeout(total=None, sock_connect=30, sock_read=None),
+            # Forward the backend's bytes verbatim. If aiohttp decompressed
+            # here while we copy Content-Encoding to the browser, the browser
+            # would try to gunzip plain text -> ERR_INVALID_RESPONSE.
+            auto_decompress=False,
         )
 
     async def close_session(app: web.Application) -> None:
