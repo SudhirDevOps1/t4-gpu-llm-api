@@ -45,6 +45,7 @@ The root [`index.html`](index.html) redirects here; the browser chat client live
 | 08 | [QLoRA fine-tuning](colab/07_qlora_training_studio.ipynb) | Qwen2.5-0.5B-Instruct in NF4 + LoRA on 300 guanaco samples; adapter zip out | Apache-2.0 | ~4 GB | [Colab](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/07_qlora_training_studio.ipynb) |
 | 09 | [Kaggle dual T4 LLM](kaggle/01_dual_t4_llm_engine.ipynb) | Ollama on 2× T4 with auth proxy; layer splitting (not tensor parallel) | Apache-2.0 / MIT | ~9 GB | [Notebook file](kaggle/01_dual_t4_llm_engine.ipynb) |
 | 10 | [Kaggle dual T4 ComfyUI](kaggle/02_comfyui_dual_t4.ipynb) | Same ComfyUI + auth proxy setup; ComfyUI uses one GPU at a time | GPL-3.0 (core) | 4–14 GB | [Notebook file](kaggle/02_comfyui_dual_t4.ipynb) |
+| 11 | [Hunyuan3D-2mini Turbo (image → 3D)](colab/09_Hunyuan3D_2mini_Turbo_Colab_T4.ipynb) | Official `gradio_app.py` with the 0.6B mini Turbo shape model, low-VRAM mode, FlashVDM, GLB/OBJ/PLY/STL export — **shape only, no texture stage** | **Tencent Hunyuan Community / Non-Commercial** | T4 16 GB (low-VRAM mode) | [Colab](https://colab.research.google.com/github/SudhirDevOps1/t4-gpu-llm-api/blob/main/colab/09_Hunyuan3D_2mini_Turbo_Colab_T4.ipynb) |
 
 > `t4-gpu-llm-api.ipynb` and `colab/01_t4_gpu_llm_api.ipynb` are byte-identical on purpose: the root file is the one linked by the Colab badge.
 
