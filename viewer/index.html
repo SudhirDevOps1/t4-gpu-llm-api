@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Read-only notebook viewer with a copy button on every cell.">
+  <title>Notebook Viewer — t4-gpu-llm-api</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.11.1/styles/github-dark.min.css">
+  <style>
+    :root {
+      --bg: #060709;
+      --panel: #0c0e13;
+      --panel-2: #12161f;
+      --line: #1e2433;
+      --line-soft: #171c28;
+      --text: #e6e8ee;
+      --muted: #8b93a7;
+      --emerald: #34d399;
+      --cyan: #06b6d4;
+      --violet: #8b5cf6;
+      --amber: #fbbf24;
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { margin: 0; min-height: 100%; }
+
+    body {
+      background:
+        radial-gradient(at 12% 0%, rgba(52,211,153,.10) 0px, transparent 55%),
+        radial-gradient(at 88% 0%, rgba(6,182,212,.09) 0px, transparent 55%),
+        var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 20px;
+      background: rgba(6,7,9,.88);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .brand-mark {
+      width: 34px; height: 34px; flex: 0 0 auto;
+      display: grid; place-items: center;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(52,211,153,.22), rgba(139,92,246,.22));
+      border: 1px solid rgba(52,211,153,.35);
+      color: var(--emerald);
+      font-family: ui-monospace, monospace;
+      font-weight: 800;
+      font-size: 15px;
+    }
+    .brand h1 { margin: 0; font-size: 15px; font-weight: 750; letter-spacing: -.01em; white-space: nowrap; }
+    .brand p { margin: 0; color: var(--muted); font-size: 11px; font-family: ui-monospace, monospace; }
+
+    .top-actions { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+    .nav-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 7px 12px; border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      color: #cbd2e0;
+      font-size: 12px; font-weight: 600;
+      transition: border-color .18s, color .18s, background .18s;
+    }
+    .nav-btn:hover { border-color: rgba(52,211,153,.5); color: #fff; background: #181d29; text-decoration: none; }
+    .nav-btn.primary { border-color: rgba(52,211,153,.45); color: var(--emerald); background: rgba(52,211,153,.08); }
+
+    .layout { display: grid; grid-template-columns: 296px minmax(0, 1fr); min-height: calc(100vh - 59px); }
+
+    .sidebar {
+      border-right: 1px solid var(--line);
+      background: rgba(12,14,19,.72);
+      padding: 18px 14px 28px;
+      position: sticky;
+      top: 59px;
+      height: calc(100vh - 59px);
+      overflow-y: auto;
+    }
+    .side-title {
+      display: flex; align-items: center; justify-content: space-between;
+      margin: 0 4px 12px;
+      font-size: 11px; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .side-title span { font-family: ui-monospace, monospace; color: var(--emerald); }
+
+    .search-wrap { position: relative; margin-bottom: 12px; }
+    .search-wrap input {
+      width: 100%; padding: 9px 10px 9px 32px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      font-size: 12px;
+    }
+    .search-wrap input:focus { border-color: rgba(52,211,153,.6); }
+    .search-wrap::before {
+      content: ""; position: absolute; left: 12px; top: 50%;
+      width: 9px; height: 9px; margin-top: -6px;
+      border: 1.5px solid var(--muted); border-radius: 50%;
+    }
+    .search-wrap::after {
+      content: ""; position: absolute; left: 20px; top: 50%;
+      width: 6px; height: 1.5px; margin-top: 1px;
+      background: var(--muted); transform: rotate(45deg);
+    }
+
+    .nb-item {
+      display: block; width: 100%; text-align: left;
+      padding: 9px 10px; margin-bottom: 5px;
+      border-radius: 10px; border: 1px solid transparent;
+      background: transparent; color: #c7cedd;
+      transition: background .16s, border-color .16s;
+    }
+    .nb-item:hover { background: var(--panel-2); }
+    .nb-item.active { background: rgba(52,211,153,.09); border-color: rgba(52,211,153,.32); color: #fff; }
+    .nb-item .nb-name { display: block; font-size: 12.5px; font-weight: 620; line-height: 1.35; }
+    .nb-item .nb-path {
+      display: block; margin-top: 3px;
+      font-family: ui-monospace, monospace; font-size: 10px;
+      color: var(--muted); overflow-wrap: anywhere;
+    }
+    .nb-item .plat {
+      display: inline-block; margin-right: 6px;
+      font-size: 9px; font-weight: 800; letter-spacing: .06em;
+      padding: 1px 5px; border-radius: 5px;
+    }
+    .plat.colab { color: #fbbf24; background: rgba(251,191,36,.12); }
+    .plat.kaggle { color: var(--cyan); background: rgba(6,182,212,.12); }
+    .plat.extra { color: var(--violet); background: rgba(139,92,246,.12); }
+
+    .side-foot { margin: 18px 4px 0; padding-top: 14px; border-top: 1px solid var(--line-soft); color: var(--muted); font-size: 11px; }
+
+    main { min-width: 0; padding: 26px clamp(16px, 3vw, 40px) 80px; }
+
+    .panel { max-width: 1040px; margin: 0 auto; }
+
+    .nb-head {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(18,22,31,.9), rgba(12,14,19,.9));
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      margin-bottom: 18px;
+    }
+    .nb-kicker { color: var(--emerald); font-family: ui-monospace, monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+    .nb-title { margin: 6px 0 10px; font-size: clamp(20px, 3vw, 28px); line-height: 1.25; letter-spacing: -.02em; }
+    .nb-path { font-family: ui-monospace, monospace; font-size: 11px; color: var(--muted); overflow-wrap: anywhere; }
+    .chips { display: flex; flex-wrap: wrap; gap: 7px; margin: 14px 0 16px; }
+    .chip {
+      padding: 3px 9px; border-radius: 999px;
+      border: 1px solid var(--line); background: var(--bg);
+      color: #aab3c6; font-size: 11px; font-family: ui-monospace, monospace;
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 9px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 8px 13px; border-radius: 10px;
+      border: 1px solid var(--line); background: var(--panel-2);
+      color: #d4dae6; font-size: 12px; font-weight: 650;
+      transition: transform .14s, border-color .14s, background .14s;
+    }
+    .btn:hover { transform: translateY(-1px); border-color: rgba(52,211,153,.45); text-decoration: none; }
+    .btn.emerald { background: rgba(52,211,153,.1); border-color: rgba(52,211,153,.4); color: var(--emerald); }
+    .btn.cyan { background: rgba(6,182,212,.08); border-color: rgba(6,182,212,.32); color: var(--cyan); }
+
+    .cells { display: flex; flex-direction: column; gap: 14px; }
+
+    .cell {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(12,14,19,.86);
+      overflow: hidden;
+    }
+    .cell-head {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--line-soft);
+      background: rgba(18,22,31,.7);
+      min-height: 39px;
+    }
+    .cell-no {
+      flex: 0 0 auto;
+      font-family: ui-monospace, monospace; font-size: 10px;
+      color: var(--muted); letter-spacing: .06em;
+    }
+    .cell-label {
+      flex: 1 1 auto; min-width: 0;
+      font-size: 12px; font-weight: 640; color: #dbe1ec;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .cell-label.muted { color: var(--muted); font-weight: 500; }
+
+    .copy-btn {
+      flex: 0 0 auto;
+      padding: 4px 10px; border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--bg); color: #aab3c6;
+      font-size: 11px; font-weight: 650;
+      transition: color .15s, border-color .15s, background .15s;
+    }
+    .copy-btn:hover { color: var(--emerald); border-color: rgba(52,211,153,.5); }
+    .copy-btn.done { color: var(--emerald); border-color: rgba(52,211,153,.55); background: rgba(52,211,153,.1); }
+    .copy-btn.fail { color: #f87171; border-color: rgba(248,113,113,.5); }
+
+    .cell-body { padding: 14px 16px; }
+
+    pre {
+      margin: 0; padding: 14px 16px;
+      max-height: 560px; overflow: auto;
+      background: #080a0f !important;
+      border-radius: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12.5px; line-height: 1.62;
+      tab-size: 4;
+    }
+    pre code.hljs { background: transparent !important; padding: 0 !important; }
+
+    .markdown-body { padding: 16px 18px; font-size: 13.5px; }
+    .markdown-body > :first-child { margin-top: 0; }
+    .markdown-body > :last-child { margin-bottom: 0; }
+    .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 { line-height: 1.3; letter-spacing: -.015em; }
+    .markdown-body h1 { font-size: 22px; margin: 0 0 12px; }
+    .markdown-body h2 { font-size: 18px; margin: 22px 0 10px; padding-top: 6px; border-top: 1px solid var(--line-soft); }
+    .markdown-body h3 { font-size: 15px; margin: 18px 0 8px; }
+    .markdown-body p, .markdown-body ul, .markdown-body ol { margin: 10px 0; }
+    .markdown-body li { margin: 4px 0; }
+    .markdown-body code {
+      font-family: ui-monospace, monospace; font-size: .92em;
+      background: var(--panel-2); border: 1px solid var(--line);
+      border-radius: 5px; padding: 1px 5px;
+    }
+    .markdown-body pre { border: 1px solid var(--line-soft); border-radius: 10px; padding: 12px 14px; }
+    .markdown-body pre code { background: none; border: 0; padding: 0; }
+    .markdown-body table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 12.5px; }
+    .markdown-body th, .markdown-body td { border: 1px solid var(--line); padding: 6px 9px; text-align: left; }
+    .markdown-body th { background: var(--panel-2); color: #dbe1ec; }
+    .markdown-body blockquote { margin: 10px 0; padding: 2px 12px; border-left: 3px solid var(--emerald); color: var(--muted); }
+    .markdown-body img { max-width: 100%; }
+
+    .out-block { border-top: 1px solid var(--line-soft); padding: 10px 16px; }
+    .out-label { font-family: ui-monospace, monospace; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 6px; }
+    .out-text {
+      margin: 0; white-space: pre-wrap; overflow-wrap: anywhere;
+      font-family: ui-monospace, monospace; font-size: 11.5px;
+      color: #aab3c6; max-height: 260px; overflow: auto;
+    }
+
+    .state { max-width: 620px; margin: 90px auto; text-align: center; padding: 24px; }
+    .state .icon {
+      width: 52px; height: 52px; margin: 0 auto 16px;
+      display: grid; place-items: center; border-radius: 15px;
+      border: 1px solid var(--line); background: var(--panel);
+      color: var(--emerald); font-size: 22px;
+    }
+    .state h2 { margin: 0 0 8px; font-size: 19px; }
+    .state p { margin: 0 0 16px; color: var(--muted); font-size: 13px; }
+    .spinner {
+      width: 28px; height: 28px; margin: 0 auto 18px;
+      border: 3px solid var(--line); border-top-color: var(--emerald);
+      border-radius: 50%; animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .hidden { display: none !important; }
+
+    #toast {
+      position: fixed; right: 22px; bottom: 22px; z-index: 60;
+      padding: 10px 15px; border-radius: 11px;
+      border: 1px solid rgba(52,211,153,.45);
+      background: #0f1518; color: var(--emerald);
+      font-size: 12px; font-weight: 650;
+      box-shadow: 0 12px 35px rgba(0,0,0,.5);
+      opacity: 0; transform: translateY(10px);
+      transition: opacity .2s, transform .2s;
+      pointer-events: none;
+    }
+    #toast.show { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; height: auto; max-height: 330px; border-right: 0; border-bottom: 1px solid var(--line); }
+      .brand p { display: none; }
+      .topbar { padding: 10px 14px; }
+      main { padding: 18px 14px 60px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">ip</div>
+      <div>
+        <h1>Notebook Viewer</h1>
+        <p>read-only mirror · every cell copyable</p>
+      </div>
+    </div>
+    <nav class="top-actions">
+      <a class="nav-btn" href="../store/index.html">Store</a>
+      <a class="nav-btn" href="../colab_ai_chat.html">Chat client</a>
+      <a class="nav-btn primary" href="https://github.com/SudhirDevOps1/t4-gpu-llm-api" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="side-title">Notebooks <span id="nbCount"></span></div>
+      <div class="search-wrap"><input id="nbSearch" type="text" placeholder="Filter notebooks..." autocomplete="off"></div>
+      <div id="nbList"></div>
+      <div class="side-foot">
+        Source: <code>main</code> branch. Cells are rendered from the raw <code>.ipynb</code> — no execution, no hidden state.
+      </div>
+    </aside>
+
+    <main>
+      <div class="panel">
+        <section id="stateLoading" class="state">
+          <div class="spinner"></div>
+          <h2>Rendering notebook…</h2>
+          <p id="loadingPath">Fetching .ipynb from GitHub Pages…</p>
+        </section>
+
+        <section id="stateError" class="state hidden">
+          <div class="icon">!</div>
+          <h2>Notebook load nahi hua</h2>
+          <p id="errorText"></p>
+          <button class="btn emerald" id="retryBtn" type="button">Retry</button>
+        </section>
+
+        <section id="viewer" class="hidden">
+          <div class="nb-head">
+            <div class="nb-kicker">Jupyter notebook · read only</div>
+            <h2 class="nb-title" id="docTitle">—</h2>
+            <div class="nb-path" id="docPath"></div>
+            <div class="chips" id="docChips"></div>
+            <div class="actions">
+              <button class="btn emerald" id="copyAllBtn" type="button">Copy all code</button>
+              <a class="btn cyan" id="colabBtn" href="#" target="_blank" rel="noopener">Open in Colab ↗</a>
+              <a class="btn" id="rawBtn" href="#" target="_blank" rel="noopener">Raw .ipynb ↗</a>
+              <button class="btn" id="shareBtn" type="button">Copy page link</button>
+            </div>
+          </div>
+          <div class="cells" id="cells"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.12/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.3/dist/purify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.11.1/highlight.min.js"></script>
+  <script>
+    (function () {
+      "use strict";
+
+      var REPO = "SudhirDevOps1/t4-gpu-llm-api";
+      var BRANCH = "main";
+
+      var NOTEBOOKS = [
+        { path: "t4-gpu-llm-api.ipynb", label: "01 · LLM Server (root)", plat: "colab" },
+        { path: "colab/01_t4_gpu_llm_api.ipynb", label: "01 · LLM Server & API Hub", plat: "colab" },
+        { path: "colab/02_zero_shot_voice_tts.ipynb", label: "02 · Kokoro TTS Studio", plat: "colab" },
+        { path: "colab/03_qwen_image_gen_studio.ipynb", label: "03 · SDXL-Turbo Image Studio", plat: "colab" },
+        { path: "colab/04_wan_ltx_video_studio.ipynb", label: "04 · Wan2.1 Text-to-Video", plat: "colab" },
+        { path: "colab/05_comfyui_cloud_studio.ipynb", label: "05 · ComfyUI Cloud Studio", plat: "colab" },
+        { path: "colab/06_rag_knowledge_agent.ipynb", label: "06 · RAG Knowledge Agent", plat: "colab" },
+        { path: "colab/07_qlora_training_studio.ipynb", label: "07 · QLoRA 4-bit Training", plat: "colab" },
+        { path: "colab/08_f5_chatterbox_hindi_voice.ipynb", label: "08 · Chatterbox Hindi Voice", plat: "colab" },
+        { path: "colab/09_Hunyuan3D_2mini_Turbo_Colab_T4.ipynb", label: "09 · Hunyuan3D Image → 3D", plat: "colab" },
+        { path: "kaggle/01_dual_t4_llm_engine.ipynb", label: "K1 · Dual T4 LLM Engine", plat: "kaggle" },
+        { path: "kaggle/02_comfyui_dual_t4.ipynb", label: "K2 · Dual T4 ComfyUI", plat: "kaggle" },
+        { path: "Copy of TurboVoiceCloner (1).ipynb", label: "Extra · Voice Cloner copy", plat: "extra" }
+      ];
+
+      var $ = function (id) { return document.getElementById(id); };
+      var currentPath = null;
+      var currentNotebook = null;
+      var toastTimer = null;
+
+      function toast(message) {
+        var el = $("toast");
+        el.textContent = message;
+        el.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () { el.classList.remove("show"); }, 1900);
+      }
+
+      function rawUrl(path) {
+        return "https://raw.githubusercontent.com/" + REPO + "/" + BRANCH + "/" + path;
+      }
+
+      function colabUrl(path) {
+        return "https://colab.research.google.com/github/" + REPO + "/blob/" + BRANCH + "/" + path;
+      }
+
+      function escapeHtml(value) {
+        var div = document.createElement("div");
+        div.textContent = value == null ? "" : String(value);
+        return div.innerHTML;
+      }
+
+      function renderSidebar() {
+        var query = $("nbSearch").value.trim().toLowerCase();
+        var list = $("nbList");
+        list.innerHTML = "";
+        var shown = 0;
+        NOTEBOOKS.forEach(function (nb) {
+          if (query && (nb.label + " " + nb.path).toLowerCase().indexOf(query) === -1) return;
+          shown++;
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "nb-item" + (nb.path === currentPath ? " active" : "");
+          var name = document.createElement("span");
+          name.className = "nb-name";
+          var plat = document.createElement("span");
+          plat.className = "plat " + nb.plat;
+          plat.textContent = nb.plat.toUpperCase();
+          name.appendChild(plat);
+          name.appendChild(document.createTextNode(nb.label.replace(/^\d+ · /, "").replace(/^K\d+ · /, "")));
+          var path = document.createElement("span");
+          path.className = "nb-path";
+          path.textContent = nb.path;
+          btn.appendChild(name);
+          btn.appendChild(path);
+          btn.addEventListener("click", function () {
+            location.hash = encodeURIComponent(nb.path);
+          });
+          list.appendChild(btn);
+        });
+        $("nbCount").textContent = shown + "/" + NOTEBOOKS.length;
+      }
+
+      function showState(which) {
+        $("stateLoading").classList.toggle("hidden", which !== "loading");
+        $("stateError").classList.toggle("hidden", which !== "error");
+        $("viewer").classList.toggle("hidden", which !== "viewer");
+      }
+
+      function loadNotebook(path) {
+        var localUrl = new URL("../" + path, location.href).href;
+        var urls = [localUrl, rawUrl(path)];
+        var lastError = null;
+        var attempt = function (index) {
+          if (index >= urls.length) {
+            return Promise.reject(lastError || new Error("unknown load error"));
+          }
+          return fetch(urls[index], { cache: "no-store" })
+            .then(function (res) {
+              if (!res.ok) throw new Error("HTTP " + res.status + " — " + urls[index]);
+              return res.text();
+            })
+            .then(function (text) { return JSON.parse(text); })
+            .catch(function (err) {
+              lastError = err;
+              return attempt(index + 1);
+            });
+        };
+        return attempt(0);
+      }
+
+      function sourceOf(cell) {
+        if (Array.isArray(cell.source)) return cell.source.join("");
+        return cell.source || "";
+      }
+
+      function cellTitle(cell, index) {
+        var src = sourceOf(cell);
+        var form = src.match(/^#@title\s+(.+)$/m);
+        if (form) return form[1].trim();
+        var heading = src.match(/^#{1,4}\s+(.+)$/m);
+        if (heading) return heading[1].trim();
+        return cell.cell_type === "code" ? "Code cell" : "Markdown cell";
+      }
+
+      function makeCopyButton(text, label) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "copy-btn";
+        btn.textContent = label || "Copy";
+        btn.setAttribute("aria-label", "Copy cell source");
+        btn.addEventListener("click", function () {
+          copyText(text, btn);
+        });
+        return btn;
+      }
+
+      function copyText(text, btn) {
+        var done = function () {
+          if (btn) {
+            btn.textContent = "Copied ✓";
+            btn.classList.add("done");
+            setTimeout(function () {
+              btn.textContent = "Copy";
+              btn.classList.remove("done");
+            }, 1500);
+          }
+          toast("Copied to clipboard");
+        };
+        var fail = function () {
+          if (btn) {
+            btn.textContent = "Failed";
+            btn.classList.add("fail");
+            setTimeout(function () { btn.classList.remove("fail"); }, 1500);
+          }
+          toast("Copy blocked — select the code manually");
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(function () { legacyCopy(text, done, fail); });
+        } else {
+          legacyCopy(text, done, fail);
+        }
+      }
+
+      function legacyCopy(text, done, fail) {
+        try {
+          var area = document.createElement("textarea");
+          area.value = text;
+          area.setAttribute("readonly", "");
+          area.style.position = "fixed";
+          area.style.opacity = "0";
+          document.body.appendChild(area);
+          area.select();
+          var ok = document.execCommand("copy");
+          document.body.removeChild(area);
+          ok ? done() : fail();
+        } catch (e) {
+          fail();
+        }
+      }
+
+      function highlightCode(codeEl, language) {
+        try {
+          if (window.hljs) {
+            if (language && window.hljs.getLanguage(language)) {
+              window.hljs.highlightElement(codeEl);
+            } else {
+              window.hljs.highlightAuto(codeEl.textContent, ["python", "bash"]);
+            }
+          }
+        } catch (e) { /* highlighting is cosmetic */ }
+      }
+
+      function newCellShell(cell, index) {
+        var wrap = document.createElement("article");
+        wrap.className = "cell";
+        wrap.id = "cell-" + (index + 1);
+
+        var head = document.createElement("div");
+        head.className = "cell-head";
+
+        var no = document.createElement("span");
+        no.className = "cell-no";
+        no.textContent = "CELL " + String(index + 1).padStart(2, "0");
+
+        var label = document.createElement("span");
+        label.className = "cell-label";
+        label.textContent = cellTitle(cell, index);
+
+        head.appendChild(no);
+        head.appendChild(label);
+        wrap.appendChild(head);
+        return { wrap: wrap, head: head, label: label };
+      }
+
+      function renderMarkdown(cell, index, container) {
+        var shell = newCellShell(cell, index);
+        shell.label.classList.add("muted");
+        shell.head.appendChild(makeCopyButton(sourceOf(cell), "Copy MD"));
+
+        var body = document.createElement("div");
+        body.className = "markdown-body";
+        var html = window.marked ? window.marked.parse(sourceOf(cell), { breaks: true }) : escapeHtml(sourceOf(cell));
+        body.innerHTML = window.DOMPurify ? window.DOMPurify.sanitize(html) : html;
+        body.querySelectorAll("a").forEach(function (a) {
+          a.target = "_blank";
+          a.rel = "noopener";
+        });
+        body.querySelectorAll("pre code").forEach(function (code) { highlightCode(code); });
+        shell.wrap.appendChild(body);
+        container.appendChild(shell.wrap);
+      }
+
+      function renderCode(cell, index, container) {
+        var shell = newCellShell(cell, index);
+        shell.head.appendChild(makeCopyButton(sourceOf(cell), "Copy"));
+
+        var pre = document.createElement("pre");
+        var code = document.createElement("code");
+        code.className = "language-python";
+        code.textContent = sourceOf(cell);
+        pre.appendChild(code);
+        shell.wrap.appendChild(pre);
+        container.appendChild(shell.wrap);
+        highlightCode(code, "python");
+      }
+
+      function renderOutputs(cell, shell) {
+        if (!cell.outputs || !cell.outputs.length) return;
+        cell.outputs.forEach(function (out) {
+          var block = document.createElement("div");
+          block.className = "out-block";
+          var label = document.createElement("div");
+          label.className = "out-label";
+          label.textContent = "output · " + (out.output_type || "stream");
+          block.appendChild(label);
+
+          var text = "";
+          if (out.text) {
+            text = Array.isArray(out.text) ? out.text.join("") : String(out.text);
+          } else if (out.data && out.data["text/plain"]) {
+            var raw = out.data["text/plain"];
+            text = Array.isArray(raw) ? raw.join("") : String(raw);
+          } else if (out.data && out.data["text/html"]) {
+            var rawHtml = out.data["text/html"];
+            text = Array.isArray(rawHtml) ? rawHtml.join("") : String(rawHtml);
+          }
+          var pre = document.createElement("pre");
+          pre.className = "out-text";
+          pre.textContent = text || "(empty output)";
+          block.appendChild(pre);
+          shell.wrap.appendChild(block);
+        });
+      }
+
+      function renderNotebook(nb, path) {
+        currentNotebook = nb;
+        var cells = nb.cells || [];
+        var firstMarkdown = cells.find(function (c) { return c.cell_type === "markdown"; });
+        var title = "Notebook";
+        if (firstMarkdown) {
+          var match = sourceOf(firstMarkdown).match(/^#\s+(.+)$/m);
+          if (match) title = match[1].trim();
+        }
+        document.title = title + " — Notebook Viewer";
+        $("docTitle").textContent = title;
+        $("docPath").textContent = path;
+
+        var codeCount = cells.filter(function (c) { return c.cell_type === "code"; }).length;
+        var chips = $("docChips");
+        chips.innerHTML = "";
+        [
+          cells.length + " cells",
+          codeCount + " code cells",
+          nb.nbformat + "." + nb.nbformat_minor,
+          path.split("/")[0]
+        ].forEach(function (value) {
+          var chip = document.createElement("span");
+          chip.className = "chip";
+          chip.textContent = value;
+          chips.appendChild(chip);
+        });
+
+        $("colabBtn").href = colabUrl(path);
+        $("rawBtn").href = rawUrl(path);
+        var meta = NOTEBOOKS.find(function (n) { return n.path === path; });
+        $("shareBtn").onclick = function () { copyText(location.href, $("shareBtn")); };
+
+        var container = $("cells");
+        container.innerHTML = "";
+        cells.forEach(function (cell, index) {
+          if (cell.cell_type === "markdown") {
+            renderMarkdown(cell, index, container);
+          } else if (cell.cell_type === "code") {
+            renderCode(cell, index, container);
+            if (cell.outputs && cell.outputs.length) {
+              renderOutputs(cell, container.lastChild);
+            }
+          } else {
+            var shell = newCellShell(cell, index);
+            var body = document.createElement("div");
+            body.className = "cell-body";
+            body.textContent = "Unsupported cell type: " + cell.cell_type;
+            shell.wrap.appendChild(body);
+            container.appendChild(shell.wrap);
+          }
+        });
+
+        var allCode = cells.filter(function (c) { return c.cell_type === "code"; })
+          .map(function (c, i) { return "# ── cell " + (i + 1) + " ──\n" + sourceOf(c); })
+          .join("\n\n");
+        $("copyAllBtn").onclick = function () { copyText(allCode, $("copyAllBtn")); };
+        $("copyAllBtn").dataset.copy = allCode;
+
+        showState("viewer");
+        renderSidebar();
+      }
+
+      function pathFromHash() {
+        var raw = location.hash.replace(/^#/, "");
+        if (!raw) return NOTEBOOKS[0].path;
+        try { return decodeURIComponent(raw); } catch (e) { return raw; }
+      }
+
+      function loadFromHash() {
+        var path = pathFromHash();
+        if (path === currentPath) return;
+        currentPath = path;
+        currentNotebook = null;
+        renderSidebar();
+        showState("loading");
+        $("loadingPath").textContent = path;
+        loadNotebook(path)
+          .then(function (nb) { renderNotebook(nb, path); })
+          .catch(function (err) {
+            $("errorText").textContent = (err && err.message ? err.message : String(err)) + " — " + path;
+            showState("error");
+          });
+      }
+
+      $("retryBtn").addEventListener("click", function () {
+        var saved = currentPath;
+        currentPath = null;
+        location.hash = encodeURIComponent(saved);
+        loadFromHash();
+      });
+      $("nbSearch").addEventListener("input", renderSidebar);
+      window.addEventListener("hashchange", loadFromHash);
+
+      renderSidebar();
+      loadFromHash();
+    })();
+  </script>
+</body>
+</html>

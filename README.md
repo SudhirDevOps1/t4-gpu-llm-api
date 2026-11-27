@@ -31,6 +31,20 @@ The root [`index.html`](index.html) redirects here; the browser chat client live
 
 ---
 
+## 📖 Notebook viewer (GitHub Pages)
+
+👉 [**Open the Notebook Viewer**](viewer/index.html)
+
+A read-only page that renders any `.ipynb` from this repo directly in the browser:
+
+- **Every cell copyable** — code cells get `Copy`, markdown cells get `Copy MD`, plus a `Copy all code` button.
+- **Syntax highlighting** for Python and shell-magic lines, rendered Markdown tables, images and links.
+- **Searchable notebook list** and shareable `#path` links, e.g. `viewer/index.html#colab%2F04_wan_ltx_video_studio.ipynb`.
+- **Open in Colab** and **Raw .ipynb** links per notebook.
+- Works from GitHub Pages without Jupyter — notebooks are fetched from the site itself, with a raw GitHub fallback.
+
+---
+
 ## 📚 Notebook catalog
 
 | # | Notebook | What really runs | Licence | VRAM | Launch |
@@ -126,6 +140,7 @@ Notes:
 ├── index.html                         # redirects to store/index.html
 ├── colab_ai_chat.html                 # standalone browser chat client
 ├── store/index.html                   # interactive notebook storefront
+├── viewer/index.html                  # full .ipynb renderer with per-cell Copy buttons
 ├── core/
 │   ├── auth_proxy.py                  # tested Basic/Bearer HTTP+WS reverse proxy
 │   ├── security.py                    # reference secret helper (Colab/Kaggle/env/getpass)
@@ -152,7 +167,8 @@ Honest summary of what has and has not been checked in this pass:
 - `t4-gpu-llm-api.ipynb` and `colab/01_t4_gpu_llm_api.ipynb` are byte-identical.
 - `python scripts/clean_notebooks.py --check` passes for 12 notebooks.
 - `core/auth_proxy.py` was integration-tested against a local aiohttp backend: 401 without auth, 200 for Basic and Bearer, 401 for a wrong password, POST body forwarding, streaming responses, and WebSocket text + binary echo all passed.
-- `store/index.html` JavaScript parses with `node --check`; the 10 catalog entries and their links were evaluated and checked. No `kaggle.com/code/new` placeholders remain.
+- `store/index.html` JavaScript parses with `node --check`; the 11 catalog entries and their links were evaluated and checked. No `kaggle.com/code/new` placeholders remain.
+- `viewer/index.html` JavaScript parses with `node --check`; the page was opened in a local browser and successfully loaded a notebook (title and viewer rendered).
 
 **Not checked (needs a real runtime)**
 
